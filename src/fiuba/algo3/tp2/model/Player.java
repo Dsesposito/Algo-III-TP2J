@@ -6,21 +6,35 @@ public class Player {
 
     private JudicialState judicialState;
 
+    private Cell cell;
+
     public Player(String name){
         this.name = name;
         this.judicialState = new FreeState();
+        Cell cell = new Cell("Start");
+        this.cell = cell;
     }
 
     public void goToJail(){
         this.judicialState = new ImprisonedState();
+        Cell cell = new Cell("Jail");
+        this.cell = cell;
     }
 
     public void moveFoward(){
         judicialState.moveFoward(this);
     }
 
+    public void doAction(){
+        judicialState.doAction(this);
+    }
+
     public String getName(){
         return this.name;
+    }
+
+    public Cell getCell(){
+        return this.cell;
     }
 
     @Override

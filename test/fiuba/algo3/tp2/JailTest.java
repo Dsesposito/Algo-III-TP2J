@@ -1,5 +1,6 @@
 package fiuba.algo3.tp2;
 
+import fiuba.algo3.tp2.model.Exceptions.PlayerActionInJailException;
 import fiuba.algo3.tp2.model.Exceptions.PlayerMovementInJailException;
 import fiuba.algo3.tp2.model.Player;
 import org.junit.Rule;
@@ -20,6 +21,14 @@ public class JailTest {
 
         player1.moveFoward();
 
+    }
+
+    @Test
+    public void test02LandsOnPoliceAndCanNotDoActions() {
+        Player player1 = new Player("Lucas");
+        player1.goToJail();
+        thrown.expect(PlayerActionInJailException.class);
+        player1.doAction();
     }
 
 }

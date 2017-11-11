@@ -6,4 +6,9 @@ public class FreeState implements JudicialState {
     public void moveFoward(Player player) {
 
     }
+
+    @Override
+    public void doAction(Player player) {
+
+    }
 }
