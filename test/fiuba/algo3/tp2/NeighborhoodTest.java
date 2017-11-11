@@ -8,7 +8,7 @@ import org.junit.Test;
 public class NeighborhoodTest {
 
     @Test
-    public void testBuyNeighborhoodHeMustBeTheOwner(){
+    public void test01BuyNeighborhoodHeMustBeTheOwner(){
         Player player1 = new Player("Diego");
         Neighborhood bsassur = new Neighborhood("Buenos Aires - Sur");
         bsassur.buy(player1);
