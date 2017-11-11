@@ -11,12 +11,24 @@ public class Player {
         this.judicialState = new FreeState();
     }
 
-    public void goToJail(){
-        this.judicialState = new ImprisonedState();
+    public void goToJail(Jail jail){
+        this.judicialState = new ImprisonedState(jail);
+    }
+
+    public void releasedFromJail(){
+        this.judicialState = new FreeState();
+    }
+
+    public Boolean isInJail(){
+        return judicialState.isInJail(this);
     }
 
     public void moveFoward(){
         judicialState.moveFoward(this);
+    }
+
+    public void nextTurn(){
+        judicialState.nextTurn(this);
     }
 
     public String getName(){

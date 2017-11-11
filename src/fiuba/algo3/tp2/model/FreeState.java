@@ -6,4 +6,14 @@ public class FreeState implements JudicialState {
     public void moveFoward(Player player) {
 
     }
+
+    @Override
+    public void nextTurn(Player player) {
+
+    }
+
+    @Override
+    public Boolean isInJail(Player player) {
+        return false;
+    }
 }
