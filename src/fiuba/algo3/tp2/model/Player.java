@@ -4,8 +4,23 @@ public class Player {
 
     private String name;
 
+    private JudicialState judicialState;
+
     public Player(String name){
         this.name = name;
+        this.judicialState = new FreeState();
+    }
+
+    public void goToJail(){
+        this.judicialState = new ImprisonedState();
+    }
+
+    public void moveFoward(){
+        judicialState.moveFoward(this);
+    }
+
+    public String getName(){
+        return this.name;
     }
 
     @Override
