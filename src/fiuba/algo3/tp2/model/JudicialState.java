@@ -7,4 +7,6 @@ public interface JudicialState {
     public void nextTurn(Player player);
 
     public Boolean isInJail(Player player);
+
+    public void doAction(Player player);
 }

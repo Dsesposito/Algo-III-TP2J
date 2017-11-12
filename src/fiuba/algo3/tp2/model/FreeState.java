@@ -16,4 +16,9 @@ public class FreeState implements JudicialState {
     public Boolean isInJail(Player player) {
         return false;
     }
+
+    @Override
+    public void doAction(Player player) {
+
+    }
 }
