@@ -1,5 +1,6 @@
 package fiuba.algo3.tp2.model;
 
+import fiuba.algo3.tp2.Global;
 import fiuba.algo3.tp2.model.Exceptions.PlayerNotAbleToPayBailException;
 
 import java.util.ArrayList;
@@ -9,6 +10,8 @@ import java.util.NoSuchElementException;
 public class Jail {
 
     List<Prisoner> prisioners ;
+
+    private static Double bailCost = Global.config.getDouble("bailCost");
 
     public Jail(){
         prisioners = new ArrayList<>();
@@ -43,6 +46,7 @@ public class Jail {
             throw new PlayerNotAbleToPayBailException("The player " + player.getName() + " is not able to pay bail, he must wait");
         }
 
+        player.payToBank(new Money(bailCost));
         player.releasedFromJail();
 
     }

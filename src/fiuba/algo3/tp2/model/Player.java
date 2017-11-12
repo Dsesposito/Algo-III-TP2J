@@ -1,32 +1,29 @@
 package fiuba.algo3.tp2.model;
 
+import fiuba.algo3.tp2.Global;
+
 public class Player {
 
     private String name;
     private JudicialState judicialState;
     private Cell cell;
-    private double money;
+    private Money money;
+
+    private static Double initMoney = Global.config.getDouble("initPlayerMoney");
 
     public Player(String name){
         this.name = name;
-        this.money = 100000;
+        this.money = new Money(initMoney);
         this.judicialState = new FreeState();
         this.cell = new Cell("Start");
     }
 
-    // setters
-    public void setMoney(double money){
-        this.money = money;
-    }
-
-    // getters
-
-    public double getMoney(){
-        return this.money;
-    }
-
     public String getName(){
         return this.name;
+    }
+
+    public void payToBank(Money money){
+        this.money.subtract(money);
     }
 
     public Cell getCell(){

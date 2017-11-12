@@ -1,13 +1,16 @@
 package fiuba.algo3.tp2.model;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import fiuba.algo3.tp2.Global;
+
 public class Prisoner {
 
     private Player imprisonedPlayer;
 
     private Long numberOfTurns;
 
-    private static Long maxNumberOfTurnsInJail = 3L;
-    private static Long minNumberOfTurnsInJail = 1L;
+    private static Long maxNumberOfTurnsInJail = Global.config.getLong("maxNumberOfTurnsInJail");
+    private static Long minNumberOfTurnsInJail = Global.config.getLong("minNumberOfTurnsInJail");
 
     public Prisoner (Player player){
         imprisonedPlayer = player;
