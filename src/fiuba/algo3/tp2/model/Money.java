@@ -10,6 +10,14 @@ public class Money {
         this.value = money;
     }
 
+    public static Money withValue(Double value){
+        return new Money(value);
+    }
+
+    public Money copy(){
+        return new Money(this.value);
+    }
+
     public void subtract(Money money){
         Double diff = this.value - money.value;
         if(diff < 0){
@@ -17,5 +25,22 @@ public class Money {
         }
         this.value = diff;
     }
+
+    public void subtract(Double value){
+        this.subtract(new Money(value));
+    }
+
+    public void add(Money money){
+        this.value = this.value + money.value;
+    }
+
+    public void add(Double value){
+        this.add(new Money(value));
+    }
+
+    public Double getValue(){
+        return this.value;
+    }
+
 
 }

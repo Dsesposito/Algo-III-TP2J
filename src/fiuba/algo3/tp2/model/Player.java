@@ -22,8 +22,16 @@ public class Player {
         return this.name;
     }
 
+    public Money getMoney() {
+        return this.money;
+    }
+
     public void payToBank(Money money){
         this.money.subtract(money);
+    }
+
+    public void incrementMoney(Money money){
+        this.money.add(money);
     }
 
     public Cell getCell(){
