@@ -8,11 +8,28 @@ public class Player {
 
     private Cell cell;
 
+    private double money;
+
     public Player(String name){
         this.name = name;
+        this.money = 100000;
         this.judicialState = new FreeState();
         Cell cell = new Cell("Start");
         this.cell = cell;
+    }
+
+    // getters
+    public String getName(){
+        return this.name;
+    }
+
+    public double getMoney(){
+        return this.money;
+    }
+
+    // setters
+    public void setMoney(double money){
+        this.money = money;
     }
 
     public void goToJail(){
@@ -41,9 +58,6 @@ public class Player {
         judicialState.nextTurn(this);
     }
 
-    public String getName(){
-        return this.name;
-    }
 
     public Cell getCell(){
         return this.cell;
