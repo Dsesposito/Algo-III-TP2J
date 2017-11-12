@@ -38,9 +38,10 @@ public class JailTest {
     }
 
     @Test
-    public void test02LandsOnPoliceAndCanNotDoActions() {
+    public void test03LandsOnPoliceAndCanNotDoActions() {
         Player player1 = new Player("Lucas");
-        player1.goToJail();
+        Jail jail = new Jail();
+        player1.goToJail(jail);
         thrown.expect(PlayerActionInJailException.class);
         player1.doAction();
     }

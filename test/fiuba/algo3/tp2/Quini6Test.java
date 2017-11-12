@@ -1,12 +1,9 @@
-package fiuba.algo3.tp2.model;
+package fiuba.algo3.tp2;
 import fiuba.algo3.tp2.model.Player;
 import fiuba.algo3.tp2.model.Quini6;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * Created by lucas on 11/11/17.
- */
 public class Quini6Test {
     private static final double DELTA = 1e-15;
     @Test
@@ -43,4 +40,3 @@ public class Quini6Test {
         Assert.assertEquals(money + 50000 + 30000, player1.getMoney(), DELTA);
     }
 }
-

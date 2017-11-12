@@ -3,28 +3,15 @@ package fiuba.algo3.tp2.model;
 public class Player {
 
     private String name;
-
     private JudicialState judicialState;
-
     private Cell cell;
-
     private double money;
 
     public Player(String name){
         this.name = name;
         this.money = 100000;
         this.judicialState = new FreeState();
-        Cell cell = new Cell("Start");
-        this.cell = cell;
-    }
-
-    // getters
-    public String getName(){
-        return this.name;
-    }
-
-    public double getMoney(){
-        return this.money;
+        this.cell = new Cell("Start");
     }
 
     // setters
@@ -32,10 +19,24 @@ public class Player {
         this.money = money;
     }
 
-    public void goToJail(){
-        this.judicialState = new ImprisonedState();
-        Cell cell = new Cell("Jail");
-        this.cell = cell;
+    // getters
+
+    public double getMoney(){
+        return this.money;
+    }
+
+    public String getName(){
+        return this.name;
+    }
+
+    public Cell getCell(){
+        return this.cell;
+    }
+
+
+    public void goToJail(Jail jail){
+        this.judicialState = new ImprisonedState(jail);
+        this.cell = new Cell("Jail");
     }
 
     public void releasedFromJail(){
@@ -56,11 +57,6 @@ public class Player {
 
     public void nextTurn(){
         judicialState.nextTurn(this);
-    }
-
-
-    public Cell getCell(){
-        return this.cell;
     }
 
     @Override
