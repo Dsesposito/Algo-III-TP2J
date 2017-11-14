@@ -6,8 +6,9 @@ public class Player {
 
     private String name;
     private JudicialState judicialState;
-    private Cell cell;
+    private Cell currentCell;
     private Money money;
+    private MotionAlgorithm motionAlgorithm;
 
     private static Double initMoney = Global.config.getDouble("initPlayerMoney");
 
@@ -15,7 +16,8 @@ public class Player {
         this.name = name;
         this.money = new Money(initMoney);
         this.judicialState = new FreeState();
-        this.cell = new Cell("Start");
+        this.currentCell = new Cell("Start");
+        this.motionAlgorithm = new NormalFoward();
     }
 
     public String getName(){
@@ -34,14 +36,26 @@ public class Player {
         this.money.add(money);
     }
 
-    public Cell getCell(){
-        return this.cell;
+    public Cell getCurrentCell(){
+        return this.currentCell;
+    }
+
+    public Boolean isInCell(Cell cell){
+        return cell.equals(this.currentCell);
+    }
+
+    public void goToCell(Cell cell){
+        this.currentCell = cell;
+    }
+
+    public void move(Long diceResult){
+        this.motionAlgorithm.move(this,diceResult);
     }
 
 
     public void goToJail(Jail jail){
         this.judicialState = new ImprisonedState(jail);
-        this.cell = new Cell("Jail");
+        this.currentCell = new Cell("Jail");
     }
 
     public void releasedFromJail(){

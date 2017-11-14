@@ -1,4 +1,5 @@
 package fiuba.algo3.tp2;
+import fiuba.algo3.tp2.model.Cell;
 import fiuba.algo3.tp2.model.Exceptions.PlayerActionInJailException;
 import fiuba.algo3.tp2.model.Player;
 import fiuba.algo3.tp2.model.Jail;
@@ -25,7 +26,9 @@ public class PoliceTest {
         Player player1 = new Player("Lucas");
         Jail jail = new Jail();
         player1.goToJail(jail);
-        Assert.assertEquals("Jail", player1.getCell().getName());
+        Cell jailCell = new Cell("Jail");
+        Assert.assertTrue(player1.isInCell(jailCell));
+        Assert.assertEquals("Jail", player1.getCurrentCell().getName());
     }
 
 
