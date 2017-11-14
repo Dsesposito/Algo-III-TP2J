@@ -1,6 +1,5 @@
 package fiuba.algo3.tp2.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fiuba.algo3.tp2.Global;
 
 public class Prisoner {
