@@ -26,9 +26,8 @@ public class PoliceTest {
         Player player1 = new Player("Lucas");
         Jail jail = new Jail();
         player1.goToJail(jail);
-        Cell jailCell = new Cell("Jail");
+        Cell jailCell = new Cell("Carcel");
         Assert.assertTrue(player1.isInCell(jailCell));
-        Assert.assertEquals("Jail", player1.getCurrentCell().getName());
     }
 
 

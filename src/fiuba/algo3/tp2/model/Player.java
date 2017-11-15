@@ -16,7 +16,7 @@ public class Player {
         this.name = name;
         this.money = new Money(initMoney);
         this.judicialState = new FreeState();
-        this.currentCell = new Cell("Start");
+        this.currentCell = new Cell("Salida");
         this.motionAlgorithm = new NormalFoward();
     }
 
@@ -55,7 +55,7 @@ public class Player {
 
     public void goToJail(Jail jail){
         this.judicialState = new ImprisonedState(jail);
-        this.currentCell = new Cell("Jail");
+        this.currentCell = new Cell("Carcel");
     }
 
     public void releasedFromJail(){
