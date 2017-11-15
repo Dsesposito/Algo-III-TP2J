@@ -25,7 +25,7 @@ public class PoliceTest {
         Player player1 = new Player("Lucas");
         Jail jail = new Jail();
         player1.goToJail(jail);
-        Assert.assertEquals("Jail", player1.getCell().getName());
+        Assert.assertEquals("Carcel", player1.getCell().getName());
     }
 
 

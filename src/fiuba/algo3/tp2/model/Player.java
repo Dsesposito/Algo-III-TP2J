@@ -15,7 +15,7 @@ public class Player {
         this.name = name;
         this.money = new Money(initMoney);
         this.judicialState = new FreeState();
-        this.cell = new Cell("Start");
+        this.cell = new Cell("Salida");
     }
 
     public String getName(){
@@ -41,7 +41,7 @@ public class Player {
 
     public void goToJail(Jail jail){
         this.judicialState = new ImprisonedState(jail);
-        this.cell = new Cell("Jail");
+        this.cell = new Cell("Carcel");
     }
 
     public void releasedFromJail(){
