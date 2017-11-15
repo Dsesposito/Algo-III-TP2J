@@ -1,5 +1,6 @@
 package fiuba.algo3.tp2;
 
+import fiuba.algo3.tp2.model.Board;
 import fiuba.algo3.tp2.model.Cell;
 import fiuba.algo3.tp2.model.Player;
 import org.junit.Assert;
@@ -17,7 +18,9 @@ public class DynamicFowardTest {
 
         Player player1 = new Player("Diego");
 
-        Cell dynamicFowardCell = new Cell("DynamicFoward");
+        Board board = new Board();
+
+        Cell dynamicFowardCell = new Cell("Avance Dinamico",board);
 
         Long face1 = 2L;
         Long face2 = 4L;

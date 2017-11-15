@@ -16,7 +16,8 @@ public class Player {
         this.name = name;
         this.money = new Money(initMoney);
         this.judicialState = new FreeState();
-        this.currentCell = new Cell("Salida");
+        this.currentCell = new Cell("Salida"); //TODO: Refactor para que utilice la instancia ya
+        // creada de la celda "Salida"
         this.motionAlgorithm = new NormalFoward();
     }
 
@@ -49,6 +50,15 @@ public class Player {
     }
 
     public void move(Long diceResult){
+
+        //TODO: Aplicar Double Dispatch para sacar el if
+        if(currentCell.isCell("Avance Dinamico")){
+            this.motionAlgorithm = DynamicFowardAlgorithmFactory.getAlgorithm(diceResult);
+        }
+        else if(currentCell.isCell("Retroceso Dinamico")){
+            //TODO implementar backwardalgorithmfactory
+        }
+
         this.motionAlgorithm.move(this,diceResult);
     }
 

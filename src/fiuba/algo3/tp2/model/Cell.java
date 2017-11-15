@@ -3,17 +3,24 @@ package fiuba.algo3.tp2.model;
 public class Cell{
 
     private String name;
-    //private Board board;
+    private Board board;
 
-    public Cell(String name/*,Board board*/){
+    public Cell (String name){
         this.name = name;
-        //this.board = board;
+    }
+
+    public Cell(String name,Board board){
+        this.name = name;
+        this.board = board;
 
     }
 
     public Cell moveFowardXCells(Long numberOfCellsToMoveFoward){
-        //Usar board para obtener la celda correspondiente
-        return null; // TODO modificar
+        return board.moveFowardXCells(this,numberOfCellsToMoveFoward);
+    }
+
+    public Boolean isCell(String cellName){
+        return this.getName().equals(cellName);
     }
 
     public String getName(){
