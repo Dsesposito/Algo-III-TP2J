@@ -19,7 +19,7 @@ public class AlgoPoly {
     }
 
     public Boolean isAbleToAddPlayer(){
-        return (getQuantityOfPlayers() <= maxNumberOfPlayers);
+        return (getQuantityOfPlayers() < maxNumberOfPlayers);
     }
 
     public Integer getQuantityOfPlayers(){
