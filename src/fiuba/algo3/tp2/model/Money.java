@@ -38,6 +38,10 @@ public class Money {
         this.add(new Money(value));
     }
 
+    public Double modulus(Long divisor){
+        return (this.value % divisor);
+    }
+
     public Double getValue(){
         return this.value;
     }

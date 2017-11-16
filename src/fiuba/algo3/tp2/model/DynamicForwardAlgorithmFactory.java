@@ -1,18 +1,18 @@
 package fiuba.algo3.tp2.model;
 
-public class DynamicFowardAlgorithmFactory {
+public class DynamicForwardAlgorithmFactory {
 
     public static MotionAlgorithm getAlgorithm(Long diceResult){
         if(diceResult >= 2 && diceResult <= 6 ){
-            return new DynamicFowardPlus2();
+            return new DynamicForwardPlus2();
         }
         else if(diceResult >= 7 && diceResult <= 10){
-            return new DynamicFowardCash();
+            return new DynamicForwardCash();
         }
         else if(diceResult == 11 || diceResult == 12){
-            return new DynamicFowardProperties();
+            return new DynamicForwardProperties();
         }
-        return new NormalFoward();
+        return new NormalForward();
     }
 
 }

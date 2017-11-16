@@ -15,7 +15,7 @@ public class Cell{
 
     }
 
-    public Cell moveFowardXCells(Long numberOfCellsToMoveFoward){
+    public Cell moveForwardXCells(Long numberOfCellsToMoveFoward){
         return board.moveFowardXCells(this,numberOfCellsToMoveFoward);
     }
 

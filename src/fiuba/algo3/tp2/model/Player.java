@@ -2,6 +2,9 @@ package fiuba.algo3.tp2.model;
 
 import fiuba.algo3.tp2.Global;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player {
 
     private String name;
@@ -9,6 +12,7 @@ public class Player {
     private Cell currentCell;
     private Money money;
     private MotionAlgorithm motionAlgorithm;
+    private List<Neighborhood> neighborhoods;
 
     private static Double initMoney = Global.config.getDouble("initPlayerMoney");
 
@@ -16,9 +20,9 @@ public class Player {
         this.name = name;
         this.money = new Money(initMoney);
         this.judicialState = new FreeState();
-        this.currentCell = new Cell("Salida"); //TODO: Refactor para que utilice la instancia ya
-        // creada de la celda "Salida"
-        this.motionAlgorithm = new NormalFoward();
+        this.currentCell = new Cell("Salida"); //TODO: Refactor para que utilice la instancia
+        this.motionAlgorithm = new NormalForward();
+        this.neighborhoods = new ArrayList<>();
     }
 
     public String getName(){
@@ -53,7 +57,7 @@ public class Player {
 
         //TODO: Aplicar Double Dispatch para sacar el if
         if(currentCell.isCell("Avance Dinamico")){
-            this.motionAlgorithm = DynamicFowardAlgorithmFactory.getAlgorithm(diceResult);
+            this.motionAlgorithm = DynamicForwardAlgorithmFactory.getAlgorithm(diceResult);
         }
         else if(currentCell.isCell("Retroceso Dinamico")){
             //TODO implementar backwardalgorithmfactory
@@ -86,6 +90,15 @@ public class Player {
 
     public void nextTurn(){
         judicialState.nextTurn(this);
+    }
+
+    public void addNeighborhood(Neighborhood neighborhood){
+        this.neighborhoods.add(neighborhood);
+    }
+
+    public Long getNumberOfProperties(){
+        Long numHousesAndHotels = this.neighborhoods.stream().mapToLong(neighborhoodItem -> (neighborhoodItem.getNumberOfHotel() + neighborhoodItem.getNumberOfHouses())).sum();
+        return (numHousesAndHotels + this.neighborhoods.size());
     }
 
     @Override
