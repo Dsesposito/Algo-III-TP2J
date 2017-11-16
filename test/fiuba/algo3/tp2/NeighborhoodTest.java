@@ -1,9 +1,8 @@
 package fiuba.algo3.tp2;
 
-import fiuba.algo3.tp2.model.Neighborhood;
+import fiuba.algo3.tp2.model.Cells.Neighborhood;
 import fiuba.algo3.tp2.model.Player;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 public class NeighborhoodTest {

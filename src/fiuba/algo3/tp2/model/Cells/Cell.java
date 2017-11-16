@@ -1,4 +1,6 @@
-package fiuba.algo3.tp2.model;
+package fiuba.algo3.tp2.model.Cells;
+
+import fiuba.algo3.tp2.model.Board;
 
 public class Cell{
 
@@ -15,8 +17,12 @@ public class Cell{
 
     }
 
-    public Cell moveForwardXCells(Long numberOfCellsToMoveFoward){
-        return board.moveFowardXCells(this,numberOfCellsToMoveFoward);
+    public Cell moveForwardXCells(Long numberOfCellsToMoveForward){
+        return board.moveForwardXCells(this,numberOfCellsToMoveForward);
+    }
+
+    public Cell moveBackwardXCells(Long numberOfCellsToGoesBack){
+        return board.moveBackwardXCells(this,numberOfCellsToGoesBack);
     }
 
     public Boolean isCell(String cellName){

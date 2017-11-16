@@ -1,7 +1,9 @@
-package fiuba.algo3.tp2.model;
+package fiuba.algo3.tp2.model.JudicialState;
 
 import fiuba.algo3.tp2.model.Exceptions.PlayerActionInJailException;
 import fiuba.algo3.tp2.model.Exceptions.PlayerMovementInJailException;
+import fiuba.algo3.tp2.model.Cells.Jail;
+import fiuba.algo3.tp2.model.Player;
 
 public class ImprisonedState implements JudicialState {
 

@@ -1,15 +1,15 @@
 package fiuba.algo3.tp2;
 
 import fiuba.algo3.tp2.model.Board;
-import fiuba.algo3.tp2.model.Cell;
-import fiuba.algo3.tp2.model.Neighborhood;
+import fiuba.algo3.tp2.model.Cells.Cell;
+import fiuba.algo3.tp2.model.Cells.Neighborhood;
 import fiuba.algo3.tp2.model.Player;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
-public class DynamicFowardTest {
+public class DynamicForwardTest {
 
     @Rule
     public final ExpectedException thrown = ExpectedException.none();
