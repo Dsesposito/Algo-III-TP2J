@@ -2,12 +2,17 @@ package fiuba.algo3.tp2.model;
 
 import fiuba.algo3.tp2.Global;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Player {
 
     private String name;
     private JudicialState judicialState;
-    private Cell cell;
+    private Cell currentCell;
     private Money money;
+    private MotionAlgorithm motionAlgorithm;
+    private List<Neighborhood> neighborhoods;
 
     private static Double initMoney = Global.config.getDouble("initPlayerMoney");
 
@@ -15,7 +20,9 @@ public class Player {
         this.name = name;
         this.money = new Money(initMoney);
         this.judicialState = new FreeState();
-        this.cell = new Cell("Start");
+        this.currentCell = new Cell("Salida"); //TODO: Refactor para que utilice la instancia
+        this.motionAlgorithm = new NormalForward();
+        this.neighborhoods = new ArrayList<>();
     }
 
     public String getName(){
@@ -34,14 +41,35 @@ public class Player {
         this.money.add(money);
     }
 
-    public Cell getCell(){
-        return this.cell;
+    public Cell getCurrentCell(){
+        return this.currentCell;
+    }
+
+    public Boolean isInCell(Cell cell){
+        return cell.equals(this.currentCell);
+    }
+
+    public void goToCell(Cell cell){
+        this.currentCell = cell;
+    }
+
+    public void move(Long diceResult){
+
+        //TODO: Aplicar Double Dispatch para sacar el if
+        if(currentCell.isCell("Avance Dinamico")){
+            this.motionAlgorithm = DynamicForwardAlgorithmFactory.getAlgorithm(diceResult);
+        }
+        else if(currentCell.isCell("Retroceso Dinamico")){
+            //TODO implementar backwardalgorithmfactory
+        }
+
+        this.motionAlgorithm.move(this,diceResult);
     }
 
 
     public void goToJail(Jail jail){
         this.judicialState = new ImprisonedState(jail);
-        this.cell = new Cell("Jail");
+        this.currentCell = new Cell("Carcel");
     }
 
     public void releasedFromJail(){
@@ -62,6 +90,15 @@ public class Player {
 
     public void nextTurn(){
         judicialState.nextTurn(this);
+    }
+
+    public void addNeighborhood(Neighborhood neighborhood){
+        this.neighborhoods.add(neighborhood);
+    }
+
+    public Long getNumberOfProperties(){
+        Long numHousesAndHotels = this.neighborhoods.stream().mapToLong(neighborhoodItem -> (neighborhoodItem.getNumberOfHotel() + neighborhoodItem.getNumberOfHouses())).sum();
+        return (numHousesAndHotels + this.neighborhoods.size());
     }
 
     @Override
