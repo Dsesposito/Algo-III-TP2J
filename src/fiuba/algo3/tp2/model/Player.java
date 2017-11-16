@@ -65,7 +65,10 @@ public class Player {
 
     public void move(Long diceResult){
 
-        //TODO: Aplicar Double Dispatch para sacar el if
+        //TODO: Aplicar Double Dispatch para sacar el if. Hay un bug aca. Si caes en avance dinámico
+        //o retroceso dinamico habiendo sacado uno, en la proxima jugada cuando te muevas se va a mover
+        //segun el algoritmo correspondiente a los dados sacados y esto no deberia ser asi, sino que
+        //deberia avanzar con el algoritmo normal foward.
         if(currentCell.isCell("Avance Dinamico")){
             this.motionAlgorithm = DynamicForwardAlgorithmFactory.getAlgorithm(diceResult);
         }
