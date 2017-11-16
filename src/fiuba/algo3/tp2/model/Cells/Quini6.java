@@ -1,5 +1,7 @@
-package fiuba.algo3.tp2.model;
+package fiuba.algo3.tp2.model.Cells;
 import fiuba.algo3.tp2.Global;
+import fiuba.algo3.tp2.model.Money;
+import fiuba.algo3.tp2.model.Player;
 
 import java.util.HashMap;
 import java.util.Map;

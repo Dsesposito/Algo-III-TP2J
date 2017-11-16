@@ -1,6 +1,16 @@
 package fiuba.algo3.tp2.model;
 
 import fiuba.algo3.tp2.Global;
+import fiuba.algo3.tp2.model.Cells.Cell;
+import fiuba.algo3.tp2.model.Cells.Jail;
+import fiuba.algo3.tp2.model.Cells.Neighborhood;
+import fiuba.algo3.tp2.model.JudicialState.FreeState;
+import fiuba.algo3.tp2.model.JudicialState.ImprisonedState;
+import fiuba.algo3.tp2.model.JudicialState.JudicialState;
+import fiuba.algo3.tp2.model.MotionAlgorithm.DynamicBackwardAlgorithmFactory;
+import fiuba.algo3.tp2.model.MotionAlgorithm.DynamicForwardAlgorithmFactory;
+import fiuba.algo3.tp2.model.MotionAlgorithm.MotionAlgorithm;
+import fiuba.algo3.tp2.model.MotionAlgorithm.NormalForward;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +70,7 @@ public class Player {
             this.motionAlgorithm = DynamicForwardAlgorithmFactory.getAlgorithm(diceResult);
         }
         else if(currentCell.isCell("Retroceso Dinamico")){
-            //TODO implementar backwardalgorithmfactory
+            this.motionAlgorithm = DynamicBackwardAlgorithmFactory.getAlgorithm(diceResult);
         }
 
         this.motionAlgorithm.move(this,diceResult);

@@ -1,4 +1,6 @@
-package fiuba.algo3.tp2.model;
+package fiuba.algo3.tp2.model.JudicialState;
+
+import fiuba.algo3.tp2.model.Player;
 
 public interface JudicialState {
 

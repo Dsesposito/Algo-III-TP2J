@@ -1,10 +1,9 @@
 package fiuba.algo3.tp2;
 
 
-import fiuba.algo3.tp2.model.Exceptions.PlayerActionInJailException;
 import fiuba.algo3.tp2.model.Exceptions.InsufficientFundsException;
 import fiuba.algo3.tp2.model.Exceptions.PlayerMovementInJailException;
-import fiuba.algo3.tp2.model.Jail;
+import fiuba.algo3.tp2.model.Cells.Jail;
 import fiuba.algo3.tp2.model.Money;
 import fiuba.algo3.tp2.model.Player;
 import org.junit.Assert;
