@@ -1,4 +1,6 @@
 package fiuba.algo3.tp2;
+import fiuba.algo3.tp2.model.Board;
+import fiuba.algo3.tp2.model.Cells.StartPoint;
 import fiuba.algo3.tp2.model.Money;
 import fiuba.algo3.tp2.model.Player;
 import fiuba.algo3.tp2.model.Cells.Quini6;
@@ -10,9 +12,10 @@ public class Quini6Test {
     @Test
     public void test01PlayerLandsOnQuini6OneTimeAndHisMoneyIsIncrementedBy50000() {
 
-        Player player1 = new Player("lucas");
+        Board board = new Board();
+        Player player1 = new Player("lucas",board.getStartCell());
 
-        Quini6 quini6 = new Quini6();
+        Quini6 quini6 = board.getQuini6();
         quini6.newWinner(player1);
 
         Money money = player1.getMoney();
@@ -23,9 +26,10 @@ public class Quini6Test {
     @Test
     public void test02PlayerLandsOnQuini6OneTimeAndHisMoneyIsIncrementedBy30000() {
 
-        Player player1 = new Player("lucas");
+        Board board = new Board();
+        Player player1 = new Player("lucas",board.getStartCell());
 
-        Quini6 quini6 = new Quini6();
+        Quini6 quini6 = board.getQuini6();
         quini6.newWinner(player1);
         quini6.newWinner(player1);
 
@@ -37,9 +41,10 @@ public class Quini6Test {
     @Test
     public void test03PlayerLandsOnQuini6OneTimeAndHisMoneyIsNotIncremented() {
 
-        Player player1 = new Player("lucas");
+        Board board = new Board();
+        Player player1 = new Player("lucas",board.getStartCell());
 
-        Quini6 quini6 = new Quini6();
+        Quini6 quini6 = board.getQuini6();
         quini6.newWinner(player1);
         quini6.newWinner(player1);
         quini6.newWinner(player1);

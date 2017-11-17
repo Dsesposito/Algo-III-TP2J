@@ -1,4 +1,5 @@
 package fiuba.algo3.tp2;
+import fiuba.algo3.tp2.model.Board;
 import fiuba.algo3.tp2.model.Cells.Cell;
 import fiuba.algo3.tp2.model.Exceptions.PlayerActionInJailException;
 import fiuba.algo3.tp2.model.Player;
@@ -14,8 +15,9 @@ public class PoliceTest {
 
     @Test
     public void test01LandsOnPoliceAndCanNotDoActions() {
-        Player player1 = new Player("Lucas");
-        Jail jail = new Jail();
+        Board board = new Board();
+        Player player1 = new Player("Lucas",board.getStartCell());
+        Jail jail = board.getJail();
         player1.goToJail(jail);
         thrown.expect(PlayerActionInJailException.class);
         player1.doAction();
@@ -23,11 +25,11 @@ public class PoliceTest {
 
     @Test
     public void test02LandsOnPoliceAndTheNewPositionIsJail() {
-        Player player1 = new Player("Lucas");
-        Jail jail = new Jail();
+        Board board = new Board();
+        Player player1 = new Player("Lucas",board.getStartCell());
+        Jail jail = board.getJail();
         player1.goToJail(jail);
-        Cell jailCell = new Cell("Carcel");
-        Assert.assertTrue(player1.isInCell(jailCell));
+        Assert.assertTrue(player1.isInJail());
     }
 
 

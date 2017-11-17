@@ -1,6 +1,7 @@
 package fiuba.algo3.tp2.model.Cells;
 
 import fiuba.algo3.tp2.Global;
+import fiuba.algo3.tp2.model.Board;
 import fiuba.algo3.tp2.model.Exceptions.PlayerNotAbleToPayBailException;
 import fiuba.algo3.tp2.model.Money;
 import fiuba.algo3.tp2.model.Player;
@@ -10,13 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-public class Jail {
+public class Jail extends Cell {
 
     List<Prisoner> prisioners ;
 
     private static Double bailCost = Global.config.getDouble("bailCost");
 
-    public Jail(){
+    public Jail(String name, Board board){
+        super(name,board);
         prisioners = new ArrayList<>();
     }
 

@@ -7,10 +7,6 @@ public class Cell{
     private String name;
     private Board board;
 
-    public Cell (String name){
-        this.name = name;
-    }
-
     public Cell(String name,Board board){
         this.name = name;
         this.board = board;

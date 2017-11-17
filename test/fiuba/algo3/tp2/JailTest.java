@@ -1,6 +1,7 @@
 package fiuba.algo3.tp2;
 
 
+import fiuba.algo3.tp2.model.Board;
 import fiuba.algo3.tp2.model.Exceptions.InsufficientFundsException;
 import fiuba.algo3.tp2.model.Exceptions.PlayerMovementInJailException;
 import fiuba.algo3.tp2.model.Cells.Jail;
@@ -19,9 +20,10 @@ public class JailTest {
     @Test
     public void test01PlayerInJailCanNotMoveInFirstTurn(){
 
-        Player player1 = new Player("Diego");
+        Board board = new Board();
+        Player player1 = new Player("Diego",board.getStartCell());
 
-        Jail jail = new Jail();
+        Jail jail = board.getJail();
         player1.goToJail(jail);
 
         thrown.expect(PlayerMovementInJailException.class);
@@ -32,9 +34,10 @@ public class JailTest {
     @Test
     public void test02PlayerInJailPayBailAndThenMoves(){
 
-        Player player1 = new Player("Diego");
+        Board board = new Board();
+        Player player1 = new Player("Diego",board.getStartCell());
 
-        Jail jail = new Jail();
+        Jail jail = board.getJail();
         jail.addPrisoner(player1);
 
         player1.nextTurn();
@@ -51,12 +54,13 @@ public class JailTest {
     @Test
     public void test03PlayerTryPayBailButHeHasInsufficientFunds(){
 
-        Player player1 = new Player("Diego");
+        Board board = new Board();
+        Player player1 = new Player("Diego",board.getStartCell());
 
         Money money = new Money(60000.0);
         player1.payToBank(money);
 
-        Jail jail = new Jail();
+        Jail jail = board.getJail();
         jail.addPrisoner(player1);
 
         player1.nextTurn();

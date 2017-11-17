@@ -2,6 +2,7 @@ package fiuba.algo3.tp2;
 
 import fiuba.algo3.tp2.model.Board;
 import fiuba.algo3.tp2.model.Cells.Cell;
+import fiuba.algo3.tp2.model.Cells.DynamicForward;
 import fiuba.algo3.tp2.model.Cells.Neighborhood;
 import fiuba.algo3.tp2.model.Player;
 import org.junit.Assert;
@@ -17,11 +18,11 @@ public class DynamicForwardTest {
     @Test
     public void test01LandsOnDynamicForwardAndMoveTwoMoreCellsLessThanTheSumOfTheDice() {
 
-        Player player1 = new Player("Diego");
-
         Board board = new Board();
+        Player player1 = new Player("Diego",board.getStartCell());
 
-        Cell dynamicForwardCell = new Cell("Avance Dinamico",board);
+
+        DynamicForward dynamicForwardCell = board.getDynamicForward();
 
         Long face1 = 2L;
         Long face2 = 4L;
@@ -39,12 +40,12 @@ public class DynamicForwardTest {
     }
 
     @Test
-    public void test02LandsOnDynamicForwardAndMovesXCellsDependingOnPlayerAmountOfMoney(){
-        Player player1 = new Player("Diego");
+    public void test02LandsOnDynamicForwardAndMovesXCellsDependingOnPlayerAmountOfMoney() {
 
         Board board = new Board();
+        Player player1 = new Player("Diego",board.getStartCell());
 
-        Cell dynamicForwardCell = new Cell("Avance Dinamico",board);
+        DynamicForward dynamicForwardCell = board.getDynamicForward();
 
         Long face1 = 5L;
         Long face2 = 4L;
@@ -62,16 +63,17 @@ public class DynamicForwardTest {
 
     @Test
     public void test03LandsOnDynamicForwardAndMovesXCellsDependingOnPlayerAmountOfProperties(){
-        Player player1 = new Player("Diego");
 
         Board board = new Board();
 
-        Cell dynamicForwardCell = new Cell("Avance Dinamico",board);
-        Neighborhood bsassur = new Neighborhood("Buenos Aires - Sur");
+        Player player1 = new Player("Diego",board.getStartCell());
+
+        DynamicForward dynamicForwardCell = board.getDynamicForward();
+        Neighborhood bsassur = board.getNeighborhoodByName("Bs. As. - Zona Sur");
         bsassur.buy(player1);
         bsassur.buyHouse();
         bsassur.buyHouse();
-        Neighborhood neuquen = new Neighborhood("Neuquen");
+        Neighborhood neuquen = board.getNeighborhoodByName("Neuquén");
         neuquen.buy(player1);
         neuquen.buyHotel();
 

@@ -1,8 +1,9 @@
 package fiuba.algo3.tp2.model.Cells;
 
+import fiuba.algo3.tp2.model.Board;
 import fiuba.algo3.tp2.model.Player;
 
-public class Neighborhood {
+public class Neighborhood extends Cell {
 
     private Player owner;
 
@@ -12,7 +13,8 @@ public class Neighborhood {
 
     private Boolean hasHotelBuilt;
 
-    public Neighborhood(String name){
+    public Neighborhood(String name,Board board){
+        super(name, board);
         this.name = name;
         this.numberOfBuiltHouses = 0L;
         this.hasHotelBuilt = false;

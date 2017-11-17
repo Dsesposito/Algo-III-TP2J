@@ -26,11 +26,11 @@ public class Player {
 
     private static Double initMoney = Global.config.getDouble("initPlayerMoney");
 
-    public Player(String name){
+    public Player(String name,Cell startCell){
         this.name = name;
         this.money = new Money(initMoney);
         this.judicialState = new FreeState();
-        this.currentCell = new Cell("Salida"); //TODO: Refactor para que utilice la instancia
+        this.currentCell = startCell;
         this.motionAlgorithm = new NormalForward();
         this.neighborhoods = new ArrayList<>();
     }
@@ -69,10 +69,10 @@ public class Player {
         //o retroceso dinamico habiendo sacado uno, en la proxima jugada cuando te muevas se va a mover
         //segun el algoritmo correspondiente a los dados sacados y esto no deberia ser asi, sino que
         //deberia avanzar con el algoritmo normal foward.
-        if(currentCell.isCell("Avance Dinamico")){
+        if(currentCell.isCell("Avance Dinámico")){
             this.motionAlgorithm = DynamicForwardAlgorithmFactory.getAlgorithm(diceResult);
         }
-        else if(currentCell.isCell("Retroceso Dinamico")){
+        else if(currentCell.isCell("Retroceso Dinámico")){
             this.motionAlgorithm = DynamicBackwardAlgorithmFactory.getAlgorithm(diceResult);
         }
 
@@ -82,7 +82,6 @@ public class Player {
 
     public void goToJail(Jail jail){
         this.judicialState = new ImprisonedState(jail);
-        this.currentCell = new Cell("Carcel");
     }
 
     public void releasedFromJail(){
