@@ -2,11 +2,12 @@ package fiuba.algo3.tp2.model.MotionAlgorithm;
 
 import fiuba.algo3.tp2.model.Cells.Cell;
 import fiuba.algo3.tp2.model.Player;
+import fiuba.algo3.tp2.model.Turn;
 
 public class DynamicBackwardProperties implements MotionAlgorithm {
     @Override
-    public void move(Player player, Long diceResult) {
-        Cell futureCell = player.getCurrentCell().moveBackwardXCells(player.getNumberOfProperties());
-        player.goToCell(futureCell);
+    public void move(Player player, Turn turn) {
+        Cell futureCell = player.getCurrentCell().getCellXPositionsFurtherBackward(player.getNumberOfProperties());
+        futureCell.playerLandsOnCell(player,turn);
     }
 }

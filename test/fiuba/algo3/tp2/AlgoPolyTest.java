@@ -1,6 +1,8 @@
 package fiuba.algo3.tp2;
 
 import fiuba.algo3.tp2.model.AlgoPoly;
+import fiuba.algo3.tp2.model.Cells.Cell;
+import fiuba.algo3.tp2.model.Cells.StartPoint;
 import fiuba.algo3.tp2.model.Exceptions.AlgoPolyPlayerQuantityException;
 import fiuba.algo3.tp2.model.Player;
 import org.junit.Assert;
@@ -17,13 +19,9 @@ public class AlgoPolyTest {
     public void test01AddThreePlayersToGame(){
         AlgoPoly game = new AlgoPoly();
 
-        Player player1 = new Player("Lucas");
-        Player player2 = new Player("Diego");
-        Player player3 = new Player("Guido");
-
-        game.addPlayerToGame(player1);
-        game.addPlayerToGame(player2);
-        game.addPlayerToGame(player3);
+        game.addPlayerToGame("Lucas");
+        game.addPlayerToGame("Diego");
+        game.addPlayerToGame("Guido");
 
         Assert.assertTrue(game.getQuantityOfPlayers() == 3);
     }
@@ -32,17 +30,11 @@ public class AlgoPolyTest {
     public void test02AddFourPlayersToGame(){
         AlgoPoly game = new AlgoPoly();
 
-        Player player1 = new Player("Lucas");
-        Player player2 = new Player("Diego");
-        Player player3 = new Player("Guido");
-        Player player4 = new Player("Gonzalo");
-
-        game.addPlayerToGame(player1);
-        game.addPlayerToGame(player2);
-        game.addPlayerToGame(player3);
-
+        game.addPlayerToGame("Lucas");
+        game.addPlayerToGame("Diego");
+        game.addPlayerToGame("Guido");
         thrown.expect(AlgoPolyPlayerQuantityException.class);
-        game.addPlayerToGame(player4);
+        game.addPlayerToGame("Gonazalo");
     }
 
 }

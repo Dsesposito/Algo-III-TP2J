@@ -1,6 +1,7 @@
 package fiuba.algo3.tp2.model;
 
 import fiuba.algo3.tp2.Global;
+import fiuba.algo3.tp2.model.Cells.*;
 import fiuba.algo3.tp2.model.Exceptions.AlgoPolyPlayerQuantityException;
 
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ public class AlgoPoly {
         board = new Board();
     }
 
+
     public Boolean isAbleToAddPlayer(){
         return (getQuantityOfPlayers() < maxNumberOfPlayers);
     }
@@ -26,11 +28,15 @@ public class AlgoPoly {
         return players.size();
     }
 
-    public void addPlayerToGame(Player player){
+    public void addPlayerToGame(String name){
         if(!isAbleToAddPlayer()){
             throw new AlgoPolyPlayerQuantityException("The maximium of three players have already been reached");
         }
-        players.add(player);
+        players.add(new Player(name,board.getStartCell()));
 
+    }
+
+    public Board getBoard(){
+        return this.board;
     }
 }

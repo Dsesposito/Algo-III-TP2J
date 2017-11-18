@@ -2,8 +2,10 @@ package fiuba.algo3.tp2;
 
 import fiuba.algo3.tp2.model.Board;
 import fiuba.algo3.tp2.model.Cells.Cell;
+import fiuba.algo3.tp2.model.Cells.DynamicForward;
 import fiuba.algo3.tp2.model.Cells.Neighborhood;
 import fiuba.algo3.tp2.model.Player;
+import fiuba.algo3.tp2.model.Turn;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -17,61 +19,64 @@ public class DynamicForwardTest {
     @Test
     public void test01LandsOnDynamicForwardAndMoveTwoMoreCellsLessThanTheSumOfTheDice() {
 
-        Player player1 = new Player("Diego");
-
         Board board = new Board();
+        Player player1 = new Player("Diego",board.getStartCell());
 
-        Cell dynamicForwardCell = new Cell("Avance Dinamico",board);
+
+        DynamicForward dynamicForwardCell = board.getDynamicForward();
 
         Long face1 = 2L;
         Long face2 = 4L;
 
-        player1.goToCell(dynamicForwardCell);
+        Turn turn = new Turn(player1);
+        turn.mockDice(face1,face2);
 
-        player1.move(face1+face2);
+        dynamicForwardCell.playerLandsOnCell(player1,turn);
 
         Long positionsToAdvance = (face1+face2) - 2;
 
-        Cell futureCell = dynamicForwardCell.moveForwardXCells(positionsToAdvance);
+        Cell futureCell = dynamicForwardCell.getCellXPositionsFurtherForward(positionsToAdvance);
 
         Assert.assertTrue(player1.isInCell(futureCell));
 
     }
 
     @Test
-    public void test02LandsOnDynamicForwardAndMovesXCellsDependingOnPlayerAmountOfMoney(){
-        Player player1 = new Player("Diego");
+    public void test02LandsOnDynamicForwardAndMovesXCellsDependingOnPlayerAmountOfMoney() {
 
         Board board = new Board();
+        Player player1 = new Player("Diego",board.getStartCell());
 
-        Cell dynamicForwardCell = new Cell("Avance Dinamico",board);
+        DynamicForward dynamicForwardCell = board.getDynamicForward();
 
         Long face1 = 5L;
         Long face2 = 4L;
 
-        player1.goToCell(dynamicForwardCell);
+        Turn turn = new Turn(player1);
+        turn.mockDice(face1,face2);
 
-        player1.move(face1+face2);
+        dynamicForwardCell.playerLandsOnCell(player1,turn);
 
         Long positionsToAdvance = (long) Math.floor(player1.getMoney().modulus(face1+face2));
 
-        Cell futureCell = dynamicForwardCell.moveForwardXCells(positionsToAdvance);
+        Cell futureCell = dynamicForwardCell.getCellXPositionsFurtherForward(positionsToAdvance);
 
         Assert.assertTrue(player1.isInCell(futureCell));
     }
 
     @Test
     public void test03LandsOnDynamicForwardAndMovesXCellsDependingOnPlayerAmountOfProperties(){
-        Player player1 = new Player("Diego");
 
         Board board = new Board();
 
-        Cell dynamicForwardCell = new Cell("Avance Dinamico",board);
-        Neighborhood bsassur = new Neighborhood("Buenos Aires - Sur");
+        Player player1 = new Player("Diego",board.getStartCell());
+
+        DynamicForward dynamicForwardCell = board.getDynamicForward();
+        Neighborhood bsassur = board.getNeighborhoodByName("Bs. As. - Zona Sur");
         bsassur.buy(player1);
         bsassur.buyHouse();
         bsassur.buyHouse();
-        Neighborhood neuquen = new Neighborhood("Neuquen");
+        Neighborhood neuquen = board.getNeighborhoodByName("Neuquén");
         neuquen.buy(player1);
         neuquen.buyHotel();
 
@@ -80,13 +85,14 @@ public class DynamicForwardTest {
         Long face1 = 6L;
         Long face2 = 6L;
 
-        player1.goToCell(dynamicForwardCell);
+        Turn turn = new Turn(player1);
+        turn.mockDice(face1,face2);
 
-        player1.move(face1+face2);
+        dynamicForwardCell.playerLandsOnCell(player1,turn);
 
         Long positionsToAdvance = numberOfPlayer1Properties;
 
-        Cell futureCell = dynamicForwardCell.moveForwardXCells(positionsToAdvance);
+        Cell futureCell = dynamicForwardCell.getCellXPositionsFurtherForward(positionsToAdvance);
 
         Assert.assertTrue(player1.isInCell(futureCell));
     }

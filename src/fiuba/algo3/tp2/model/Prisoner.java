@@ -1,6 +1,5 @@
 package fiuba.algo3.tp2.model;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fiuba.algo3.tp2.Global;
 
 public class Prisoner {
@@ -31,6 +30,21 @@ public class Prisoner {
 
     public void incrementTurn(){
         numberOfTurns++;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Prisoner prisoner = (Prisoner) o;
+
+        return imprisonedPlayer != null ? imprisonedPlayer.equals(prisoner.imprisonedPlayer) : prisoner.imprisonedPlayer == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return imprisonedPlayer != null ? imprisonedPlayer.hashCode() : 0;
     }
 
 }
