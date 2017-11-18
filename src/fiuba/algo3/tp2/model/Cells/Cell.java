@@ -1,8 +1,10 @@
 package fiuba.algo3.tp2.model.Cells;
 
 import fiuba.algo3.tp2.model.Board;
+import fiuba.algo3.tp2.model.Player;
+import fiuba.algo3.tp2.model.Turn;
 
-public class Cell{
+public abstract class Cell{
 
     private String name;
     private Board board;
@@ -13,21 +15,19 @@ public class Cell{
 
     }
 
-    public Cell moveForwardXCells(Long numberOfCellsToMoveForward){
-        return board.moveForwardXCells(this,numberOfCellsToMoveForward);
+    public Cell getCellXPositionsFurtherForward(Long numberOfCellsToMoveForward){
+        return board.getCellXPositionsFurtherForward(this,numberOfCellsToMoveForward);
     }
 
-    public Cell moveBackwardXCells(Long numberOfCellsToGoesBack){
-        return board.moveBackwardXCells(this,numberOfCellsToGoesBack);
-    }
-
-    public Boolean isCell(String cellName){
-        return this.getName().equals(cellName);
+    public Cell getCellXPositionsFurtherBackward(Long numberOfCellsToGoesBack){
+        return board.getCellXPositionsFurtherBackward(this,numberOfCellsToGoesBack);
     }
 
     public String getName(){
         return this.name;
     }
+
+    public abstract void playerLandsOnCell(Player player,Turn actualTurn);
 
     @Override
     public boolean equals(Object o) {

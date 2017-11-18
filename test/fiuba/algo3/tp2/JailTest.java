@@ -2,11 +2,13 @@ package fiuba.algo3.tp2;
 
 
 import fiuba.algo3.tp2.model.Board;
+import fiuba.algo3.tp2.model.Cells.Police;
 import fiuba.algo3.tp2.model.Exceptions.InsufficientFundsException;
 import fiuba.algo3.tp2.model.Exceptions.PlayerMovementInJailException;
 import fiuba.algo3.tp2.model.Cells.Jail;
 import fiuba.algo3.tp2.model.Money;
 import fiuba.algo3.tp2.model.Player;
+import fiuba.algo3.tp2.model.Turn;
 import org.junit.Assert;
 import org.junit.Rule;
 import org.junit.Test;
@@ -23,12 +25,19 @@ public class JailTest {
         Board board = new Board();
         Player player1 = new Player("Diego",board.getStartCell());
 
-        Jail jail = board.getJail();
-        player1.goToJail(jail);
+        Police police = board.getPolice();
 
-        thrown.expect(PlayerMovementInJailException.class);
+        Long face1 = 6L;
+        Long face2 = 6L;
 
-        player1.moveFoward();
+        Turn turn = new Turn(player1);
+        turn.mockDice(face1,face2);
+
+        police.playerLandsOnCell(player1,turn);
+
+        player1.move(turn);
+
+        Assert.assertTrue(player1.isInCell(board.getJail()));
     }
 
     @Test
@@ -38,16 +47,26 @@ public class JailTest {
         Player player1 = new Player("Diego",board.getStartCell());
 
         Jail jail = board.getJail();
-        jail.addPrisoner(player1);
+        Police police = board.getPolice();
 
-        player1.nextTurn();
-        player1.nextTurn();
+        Long face1 = 6L;
+        Long face2 = 6L;
+
+        Turn turn = new Turn(player1);
+        turn.mockDice(face1,face2);
+
+        police.playerLandsOnCell(player1,turn);
+
+        player1.move(turn);
+        player1.move(turn);
 
         Assert.assertTrue(jail.isAbleToPayBail(player1));
 
         jail.playerPayBail(player1);
 
-        player1.moveFoward();
+        player1.move(turn);
+
+        Assert.assertFalse(player1.isInCell(board.getJail()));
     }
 
 
@@ -61,14 +80,49 @@ public class JailTest {
         player1.payToBank(money);
 
         Jail jail = board.getJail();
-        jail.addPrisoner(player1);
+        Police police = board.getPolice();
 
-        player1.nextTurn();
-        player1.nextTurn();
+        Long face1 = 6L;
+        Long face2 = 6L;
+
+        Turn turn = new Turn(player1);
+        turn.mockDice(face1,face2);
+
+        police.playerLandsOnCell(player1,turn);
+
+        player1.move(turn);
+        player1.move(turn);
 
         thrown.expect(InsufficientFundsException.class);
 
         jail.playerPayBail(player1);
+    }
+
+    @Test
+    public void test04PlayerWaitsForHisReleaseAndMoves(){
+        Board board = new Board();
+        Player player1 = new Player("Diego",board.getStartCell());
+
+        Money money = new Money(60000.0);
+        player1.payToBank(money);
+
+        Jail jail = board.getJail();
+        Police police = board.getPolice();
+
+        Long face1 = 6L;
+        Long face2 = 6L;
+
+        Turn turn = new Turn(player1);
+        turn.mockDice(face1,face2);
+
+        police.playerLandsOnCell(player1,turn);
+
+        player1.move(turn);
+        player1.move(turn);
+        player1.move(turn);
+        player1.move(turn);
+
+        Assert.assertFalse(player1.isInCell(board.getJail()));
     }
 
 }

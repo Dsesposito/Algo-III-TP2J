@@ -16,7 +16,7 @@ public class Board {
         this.initBoardCells();
     }
 
-    public Cell moveForwardXCells(Cell cell, Long numberOfCellsToMoveForward){
+    public Cell getCellXPositionsFurtherForward(Cell cell, Long numberOfCellsToMoveForward){
         //TODO: Refactor implementar desborde
         if(!cells.contains(cell)){
             throw new CellNotFoundException("The cell " + cell.getName() + " is invalid.");
@@ -25,7 +25,7 @@ public class Board {
         return cells.get((int) (cells.indexOf(cell) + numberOfCellsToMoveForward));
     }
 
-    public Cell moveBackwardXCells(Cell cell, Long numberOfCellsToMoveBackward){
+    public Cell getCellXPositionsFurtherBackward(Cell cell, Long numberOfCellsToMoveBackward){
         //TODO: Refactor implementar desborde
         if(!cells.contains(cell)){
             throw new CellNotFoundException("The cell " + cell.getName() + " is invalid.");
@@ -51,7 +51,7 @@ public class Board {
     }
 
     public Police getPolice(){
-        return (Police) cells.stream().filter(cell -> cell.getName().equals("Police")).findFirst().orElse(null);
+        return (Police) cells.stream().filter(cell -> cell.getName().equals("Policia")).findFirst().orElse(null);
     }
 
     public DynamicForward getDynamicForward(){

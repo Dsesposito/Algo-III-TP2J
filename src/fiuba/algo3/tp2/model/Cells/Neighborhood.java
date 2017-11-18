@@ -2,6 +2,7 @@ package fiuba.algo3.tp2.model.Cells;
 
 import fiuba.algo3.tp2.model.Board;
 import fiuba.algo3.tp2.model.Player;
+import fiuba.algo3.tp2.model.Turn;
 
 public class Neighborhood extends Cell {
 
@@ -18,6 +19,11 @@ public class Neighborhood extends Cell {
         this.name = name;
         this.numberOfBuiltHouses = 0L;
         this.hasHotelBuilt = false;
+    }
+
+    @Override
+    public void playerLandsOnCell(Player player, Turn actualTurn) {
+        player.landsOnNeighborhood(this);
     }
 
     public void buyHouse(){

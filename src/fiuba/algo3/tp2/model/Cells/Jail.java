@@ -1,11 +1,8 @@
 package fiuba.algo3.tp2.model.Cells;
 
 import fiuba.algo3.tp2.Global;
-import fiuba.algo3.tp2.model.Board;
+import fiuba.algo3.tp2.model.*;
 import fiuba.algo3.tp2.model.Exceptions.PlayerNotAbleToPayBailException;
-import fiuba.algo3.tp2.model.Money;
-import fiuba.algo3.tp2.model.Player;
-import fiuba.algo3.tp2.model.Prisoner;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +17,11 @@ public class Jail extends Cell {
     public Jail(String name, Board board){
         super(name,board);
         prisioners = new ArrayList<>();
+    }
+
+    @Override
+    public void playerLandsOnCell(Player player, Turn actualTurn) {
+        player.landsOnJail(this);
     }
 
     public Boolean isFreeToGo(Player player){
@@ -52,13 +54,15 @@ public class Jail extends Cell {
         }
 
         player.payToBank(new Money(bailCost));
+
+        prisioners.remove(prisoner);
+
         player.releasedFromJail();
 
     }
 
-    public void addPrisoner(Player player){
-        prisioners.add(new Prisoner(player));
-        player.goToJail(this);
+    public void addPrisioner(Player player){
+        this.prisioners.add(new Prisoner(player));
     }
 
     private Prisoner findPlayerInPrisoners(Player player){

@@ -3,6 +3,7 @@ import fiuba.algo3.tp2.Global;
 import fiuba.algo3.tp2.model.Board;
 import fiuba.algo3.tp2.model.Money;
 import fiuba.algo3.tp2.model.Player;
+import fiuba.algo3.tp2.model.Turn;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -21,12 +22,18 @@ public class Quini6 extends Cell {
         this.winners = new HashMap<>();
     }
 
+    @Override
+    public void playerLandsOnCell(Player player, Turn actualTurn) {
+        newWinner(player);
+        player.landsOnQuini6(this);
+    }
+
     public Integer getVictories(Player player){
         Integer victories = this.winners.get(player.getName());
         return ((victories == null) ? 0 : victories);
     }
 
-    public void newWinner(Player player){
+    private void newWinner(Player player){
         Integer victories = getVictories(player);
         this.winners.put(player.getName(), victories + 1);
 

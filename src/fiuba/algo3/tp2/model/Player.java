@@ -1,16 +1,8 @@
 package fiuba.algo3.tp2.model;
 
 import fiuba.algo3.tp2.Global;
-import fiuba.algo3.tp2.model.Cells.Cell;
-import fiuba.algo3.tp2.model.Cells.Jail;
-import fiuba.algo3.tp2.model.Cells.Neighborhood;
-import fiuba.algo3.tp2.model.JudicialState.FreeState;
-import fiuba.algo3.tp2.model.JudicialState.ImprisonedState;
-import fiuba.algo3.tp2.model.JudicialState.JudicialState;
-import fiuba.algo3.tp2.model.MotionAlgorithm.DynamicBackwardAlgorithmFactory;
-import fiuba.algo3.tp2.model.MotionAlgorithm.DynamicForwardAlgorithmFactory;
-import fiuba.algo3.tp2.model.MotionAlgorithm.MotionAlgorithm;
-import fiuba.algo3.tp2.model.MotionAlgorithm.NormalForward;
+import fiuba.algo3.tp2.model.Cells.*;
+import fiuba.algo3.tp2.model.MotionAlgorithm.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,7 +10,6 @@ import java.util.List;
 public class Player {
 
     private String name;
-    private JudicialState judicialState;
     private Cell currentCell;
     private Money money;
     private MotionAlgorithm motionAlgorithm;
@@ -29,7 +20,6 @@ public class Player {
     public Player(String name,Cell startCell){
         this.name = name;
         this.money = new Money(initMoney);
-        this.judicialState = new FreeState();
         this.currentCell = startCell;
         this.motionAlgorithm = new NormalForward();
         this.neighborhoods = new ArrayList<>();
@@ -59,49 +49,12 @@ public class Player {
         return cell.equals(this.currentCell);
     }
 
-    public void goToCell(Cell cell){
-        this.currentCell = cell;
-    }
-
-    public void move(Long diceResult){
-
-        //TODO: Aplicar Double Dispatch para sacar el if. Hay un bug aca. Si caes en avance dinámico
-        //o retroceso dinamico habiendo sacado uno, en la proxima jugada cuando te muevas se va a mover
-        //segun el algoritmo correspondiente a los dados sacados y esto no deberia ser asi, sino que
-        //deberia avanzar con el algoritmo normal foward.
-        if(currentCell.isCell("Avance Dinámico")){
-            this.motionAlgorithm = DynamicForwardAlgorithmFactory.getAlgorithm(diceResult);
-        }
-        else if(currentCell.isCell("Retroceso Dinámico")){
-            this.motionAlgorithm = DynamicBackwardAlgorithmFactory.getAlgorithm(diceResult);
-        }
-
-        this.motionAlgorithm.move(this,diceResult);
-    }
-
-
-    public void goToJail(Jail jail){
-        this.judicialState = new ImprisonedState(jail);
+    public void move(Turn turn){
+        this.motionAlgorithm.move(this,turn);
     }
 
     public void releasedFromJail(){
-        this.judicialState = new FreeState();
-    }
-
-    public Boolean isInJail(){
-        return judicialState.isInJail(this);
-    }
-
-    public void moveFoward(){
-        judicialState.moveFoward(this);
-    }
-
-    public void doAction(){
-        judicialState.doAction(this);
-    }
-
-    public void nextTurn(){
-        judicialState.nextTurn(this);
+        this.motionAlgorithm = new NormalForward();
     }
 
     public void addNeighborhood(Neighborhood neighborhood){
@@ -111,6 +64,59 @@ public class Player {
     public Long getNumberOfProperties(){
         Long numHousesAndHotels = this.neighborhoods.stream().mapToLong(neighborhoodItem -> (neighborhoodItem.getNumberOfHotel() + neighborhoodItem.getNumberOfHouses())).sum();
         return (numHousesAndHotels + this.neighborhoods.size());
+    }
+
+    public void landsOnDynamicBackward(DynamicBackward dynamicBackward,Turn turn) {
+        //Configuro el nuevo algoritmo de avance
+        this.motionAlgorithm = DynamicBackwardAlgorithmFactory.getAlgorithm(turn.getDiceResult());
+        this.currentCell = dynamicBackward;
+        //Vuelvo a mover
+        this.move(turn);
+        //Restablezco algoritmo de avance
+        this.motionAlgorithm = new NormalForward();
+    }
+
+    public void landsOnDynamicForward(DynamicForward dynamicForward, Turn turn){
+        //Configuro el nuevo algoritmo de avance
+        this.motionAlgorithm = DynamicForwardAlgorithmFactory.getAlgorithm(turn.getDiceResult());
+        this.currentCell = dynamicForward;
+        //Vuelvo a mover
+        this.move(turn);
+        //Restablezco algoritmo de avance
+        this.motionAlgorithm = new NormalForward();
+    }
+
+    public void landsOnJail(Jail jail) {
+        this.currentCell = jail;
+    }
+
+    public void landsOnLuxuryTax(LuxuryTax luxuryTax) {
+        this.currentCell = luxuryTax;
+    }
+
+    public void landsOnNeighborhood(Neighborhood neighborhood) {
+        this.currentCell = neighborhood;
+    }
+
+    public void landsOnPolice(Police police,Jail jail) {
+        this.motionAlgorithm = new Stopped(jail);
+        this.currentCell = jail;
+    }
+
+    public void landsOnQuini6(Quini6 quini6) {
+        this.currentCell = quini6;
+    }
+
+    public void landsOnRailWay(Railway railway) {
+        this.currentCell = railway;
+    }
+
+    public void landsOnService(Service service) {
+        this.currentCell = service;
+    }
+
+    public void landsOnStartPoint(StartPoint startPoint) {
+        this.currentCell = startPoint;
     }
 
     @Override

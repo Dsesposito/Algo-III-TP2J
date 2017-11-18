@@ -33,4 +33,19 @@ public class Prisoner {
         numberOfTurns++;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Prisoner prisoner = (Prisoner) o;
+
+        return imprisonedPlayer != null ? imprisonedPlayer.equals(prisoner.imprisonedPlayer) : prisoner.imprisonedPlayer == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return imprisonedPlayer != null ? imprisonedPlayer.hashCode() : 0;
+    }
+
 }
