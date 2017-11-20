@@ -45,7 +45,7 @@ public class NeighborhoodTest {
     }
 
     @Test
-    public void test04BuyBsAsSurAndBsAsNorteAndBuyAHouseAndTheMoneyDecrementBy5000(){
+    public void test04BuyBsAsSurAndBsAsNorteAndBuyAHouseAndOpponentLandsThereAndHisMoneyDecrement(){
         Board board = new Board();
         Player player1 = new Player("Diego", board.getStartCell());
         Player player2 = new Player("Lucas", board.getStartCell());
@@ -60,6 +60,45 @@ public class NeighborhoodTest {
         player2.landsOnNeighborhood(bsassur);
         double finish_money = player2.getMoney().getValue();
         Assert.assertEquals(finish_money, start_money-3000, DELTA);
+
+        player2.landsOnNeighborhood(bsasnorte);
+        finish_money = player2.getMoney().getValue();
+        Assert.assertEquals(finish_money, start_money-3000-3500, DELTA);
+
+    }
+
+    @Test
+    public void test05BuyBsAsSurAndBsAsNorteAndBuyTwoHousesInBsAsSurAndOpponentLandsThereAndHisMoneyDecrement(){
+        Board board = new Board();
+        Player player1 = new Player("Diego", board.getStartCell());
+        Player player2 = new Player("Lucas", board.getStartCell());
+        double start_money = player2.getMoney().getValue();
+        Neighborhood bsassur = board.getNeighborhoodByName("Bs. As. - Zona Sur");
+        Neighborhood bsasnorte = board.getNeighborhoodByName("Bs. As. - Zona Norte");
+        bsassur.buy(player1);
+        bsasnorte.buy(player1);
+        bsassur.buyHouse();
+        bsassur.buyHouse();
+
+        player2.landsOnNeighborhood(bsassur);
+        double finish_money = player2.getMoney().getValue();
+        Assert.assertEquals(finish_money, start_money-3500, DELTA);
+
+    }
+
+    @Test
+    public void test06BuyBsAsSurAndBsAsNorteAndHaveNotCompleteAllHousesAndBuyAHotelAndHisMoneyNotDecrement(){
+        Board board = new Board();
+        Player player1 = new Player("Diego", board.getStartCell());
+        Neighborhood bsassur = board.getNeighborhoodByName("Bs. As. - Zona Sur");
+        Neighborhood bsasnorte = board.getNeighborhoodByName("Bs. As. - Zona Norte");
+        bsassur.buy(player1);
+        bsasnorte.buy(player1);
+        bsassur.buyHouse();
+        double start_money = player1.getMoney().getValue();
+        bsassur.buyHotel();
+        double finish_money = player1.getMoney().getValue();
+        Assert.assertEquals(finish_money, start_money, DELTA);
     }
 
 }

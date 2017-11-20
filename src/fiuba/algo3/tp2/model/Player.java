@@ -100,6 +100,7 @@ public class Player {
 
     public void landsOnNeighborhood(Neighborhood neighborhood) {
         this.currentCell = neighborhood;
+        this.decrementMoney(neighborhood.getRentalPrice());
     }
 
     public void landsOnPolice(Police police,Jail jail) {

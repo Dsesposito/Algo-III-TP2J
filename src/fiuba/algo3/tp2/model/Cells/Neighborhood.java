@@ -20,13 +20,11 @@ public class Neighborhood extends Cell {
 
     private Money hotelPrice;
 
-    private Rental rentalPrice;
+    private Rental rent;
 
     private NeighborhoodZone zone;
 
-    private boolean available;
-
-    public Neighborhood(String name,Money landPrice,Money housePrice,Money hotelPrice, Rental rentalPrice, Board board){
+    public Neighborhood(String name,Money landPrice,Money housePrice,Money hotelPrice, Rental rent, Board board){
         super(name, board);
         this.name = name;
         this.numberOfBuiltHouses = 0L;
@@ -34,8 +32,7 @@ public class Neighborhood extends Cell {
         this.landPrice = landPrice;
         this.hotelPrice = hotelPrice;
         this.housePrice = housePrice;
-        this.rentalPrice = rentalPrice;
-        this.available = true;
+        this.rent = rent;
     }
 
     @Override
@@ -52,12 +49,14 @@ public class Neighborhood extends Cell {
         }
         this.numberOfBuiltHouses++;
         owner.decrementMoney(housePrice);
-        this.rentalPrice.updateRentalPrice(1);
+        this.rent.updateRentalPriceDueHouses(this.numberOfBuiltHouses - 1);
     }
 
     public void buyHotel(){
         this.numberOfBuiltHouses = 0L;
         this.hasHotelBuilt = true;
+        owner.decrementMoney(hotelPrice);
+        this.rent.updateRentalPriceDueHotels(0L);
     }
 
     public Long getNumberOfHouses(){
@@ -75,8 +74,6 @@ public class Neighborhood extends Cell {
         this.owner = player;
         player.addNeighborhood(this);
         player.getMoney().subtract(this.getLandPrice());
-        this.available = false;
-        this.rentalPrice.updateRentalPrice(0);
     }
 
     public Boolean isOwnedBy(Player player){
@@ -97,5 +94,8 @@ public class Neighborhood extends Cell {
 
     public Money getHotelPrice() {
         return hotelPrice;
+    }
+    public Money getRentalPrice() {
+        return rent.getRentalPrice();
     }
 }
