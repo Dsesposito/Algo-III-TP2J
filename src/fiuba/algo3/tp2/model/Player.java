@@ -41,6 +41,10 @@ public class Player {
         this.money.add(money);
     }
 
+    public void decrementMoney(Money money){
+        this.money.subtract(money);
+    }
+
     public Cell getCurrentCell(){
         return this.currentCell;
     }

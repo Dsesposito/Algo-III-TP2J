@@ -5,15 +5,19 @@ import fiuba.algo3.tp2.model.Cells.*;
 import fiuba.algo3.tp2.model.Exceptions.CellNotFoundException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class Board {
 
     List<Cell> cells;
+    List<NeighborhoodZone> zones;
 
     public Board() {
         cells = new ArrayList<>();
+        zones = new ArrayList<>();
         this.initBoardCells();
+        this.initZones();
     }
 
     public Cell getCellXPositionsFurtherForward(Cell cell, Long numberOfCellsToMoveForward){
@@ -69,23 +73,30 @@ public class Board {
     private void initBoardCells(){
         cells.add(new StartPoint("Salida",this));
         cells.add(new Quini6("Quini 6",this));
-        cells.add(new Neighborhood("Bs. As. - Zona Sur",this));
+        cells.add(new Neighborhood("Bs. As. - Zona Sur",Money.withValue(20000.0),Money.withValue(5000.0),Money.withValue(8000.0),this));
         cells.add(new Service("Edesur",this));
-        cells.add(new Neighborhood("Bs. As. - Zona Norte",this));
+        cells.add(new Neighborhood("Bs. As. - Zona Norte",Money.withValue(25000.0),Money.withValue(5500.0),Money.withValue(9000.0),this));
         cells.add(new Jail("Carcel",this));
-        cells.add(new Neighborhood("Cordoba - Sur",this));
+        cells.add(new Neighborhood("Cordoba - Sur",Money.withValue(18000.0),Money.withValue(2000.0),Money.withValue(3000.0),this));
         cells.add(new DynamicForward("Avance Dinámico",this));
         cells.add(new Railway("Subte",this));
-        cells.add(new Neighborhood("Cordoba - Norte",this));
+        cells.add(new Neighborhood("Cordoba - Norte",Money.withValue(20000.0),Money.withValue(2200.0),Money.withValue(3500.0),this));
         cells.add(new LuxuryTax("Impuesto De Lujo",this));
-        cells.add(new Neighborhood("Santa Fe",this));
+        cells.add(new Neighborhood("Santa Fe",Money.withValue(15000.0),Money.withValue(4000.0),Money.withValue(0.0),this));
         cells.add(new Service("Aysa",this));
-        cells.add(new Neighborhood("Salta - Norte",this));
-        cells.add(new Neighborhood("Salta - Sur",this));
+        cells.add(new Neighborhood("Salta - Norte",Money.withValue(23000.0),Money.withValue(4500.0),Money.withValue(7500.0),this));
+        cells.add(new Neighborhood("Salta - Sur",Money.withValue(23000.0),Money.withValue(4500.0),Money.withValue(7500.0),this));
         cells.add(new Police("Policia",this));
         cells.add(new Railway("Tren",this));
-        cells.add(new Neighborhood("Neuquén",this));
+        cells.add(new Neighborhood("Neuquén",Money.withValue(17000.0),Money.withValue(3800.0),Money.withValue(0.0),this));
         cells.add(new DynamicBackward("Retroceso Dinámico",this));
-        cells.add(new Neighborhood("Tucuman",this));
+        cells.add(new Neighborhood("Tucuman",Money.withValue(25000.0),Money.withValue(0.0),Money.withValue(0.0),this));
+    }
+
+    private void initZones(){
+        zones.add(new NeighborhoodZone("Bs. As.",Arrays.asList(this.getNeighborhoodByName("Bs. As. - Zona Sur"),this.getNeighborhoodByName("Bs. As. - Zona Norte"))));
+        zones.add(new NeighborhoodZone("Salta",Arrays.asList(this.getNeighborhoodByName("Salta - Sur"),this.getNeighborhoodByName("Salta - Norte"))));
+        zones.add(new NeighborhoodZone("Cordoba",Arrays.asList(this.getNeighborhoodByName("Cordoba - Sur"),this.getNeighborhoodByName("Cordoba - Norte"))));
+
     }
 }
