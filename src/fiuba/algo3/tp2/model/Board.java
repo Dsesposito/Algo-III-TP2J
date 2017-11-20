@@ -69,7 +69,13 @@ public class Board {
         return (Neighborhood) cells.stream().filter(cell -> cell.getName().equals(name)).findFirst().orElse(null);
     }
 
+
     private void initBoardCells() {
+        Railway train = new Railway("Tren",this, Money.withValue(38000.0),450.0,800.0);
+        Railway subway = new Railway("Subte",this, Money.withValue(40000.0),600.0,1100.0);
+        CellGroup.groupCells("Transporte ferroviario",Arrays.asList(train,subway));
+
+
         cells.add(new StartPoint("Salida", this));
 
         cells.add(new Quini6("Quini 6", this));
@@ -82,7 +88,7 @@ public class Board {
         rentalPricesHotels.add(Money.withValue(5000.0));
         cells.add(new Neighborhood("Bs. As. - Zona Sur", Money.withValue(20000.0), Money.withValue(5000.0), Money.withValue(8000.0), new Rental(Money.withValue(2000.0), rentalPricesHouses, rentalPricesHotels), this));
 
-        cells.add(new Service("Edesur", this));
+        cells.add(new Service("Edesur",this,Money.withValue(35000.0),500.0));
 
         List<Money> rentalPricesHouses1;
         rentalPricesHouses1 = new ArrayList<>();
@@ -100,11 +106,11 @@ public class Board {
         rentalPricesHotels2 = new ArrayList<>();
         rentalPricesHouses2.addAll(Arrays.asList(Money.withValue(1500.0), Money.withValue(2500.0)));
         rentalPricesHotels2.add(Money.withValue(3000.0));
-        cells.add(new Neighborhood("Cordoba - Sur",Money.withValue(18000.0),Money.withValue(2000.0), Money.withValue(3000.0), new Rental(Money.withValue(1000.0), rentalPricesHouses2, rentalPricesHotels2), this));
+        cells.add(new Neighborhood("Cordoba - Sur", Money.withValue(18000.0), Money.withValue(2000.0), Money.withValue(3000.0), new Rental(Money.withValue(1000.0), rentalPricesHouses2, rentalPricesHotels2), this));
 
-        cells.add(new DynamicForward("Avance Dinámico",this));
+        cells.add(new DynamicForward("Avance Dinámico", this));
 
-        cells.add(new Railway("Subte",this));
+        cells.add(subway);
 
         List<Money> rentalPricesHouses3;
         rentalPricesHouses3 = new ArrayList<>();
@@ -112,9 +118,9 @@ public class Board {
         rentalPricesHotels3 = new ArrayList<>();
         rentalPricesHouses3.addAll(Arrays.asList(Money.withValue(1800.0), Money.withValue(2900.0)));
         rentalPricesHotels3.add(Money.withValue(3500.0));
-        cells.add(new Neighborhood("Cordoba - Norte",Money.withValue(20000.0),Money.withValue(2200.0), Money.withValue(3500.0), new Rental(Money.withValue(1300.0), rentalPricesHouses3, rentalPricesHotels3), this));
+        cells.add(new Neighborhood("Cordoba - Norte", Money.withValue(20000.0), Money.withValue(2200.0), Money.withValue(3500.0), new Rental(Money.withValue(1300.0), rentalPricesHouses3, rentalPricesHotels3), this));
 
-        cells.add(new LuxuryTax("Impuesto De Lujo",this));
+        cells.add(new LuxuryTax("Impuesto De Lujo", this));
 
         List<Money> rentalPricesHouses4;
         rentalPricesHouses4 = new ArrayList<>();
@@ -122,9 +128,9 @@ public class Board {
         rentalPricesHotels4 = new ArrayList<>();
         rentalPricesHouses4.add(Money.withValue(3500.0));
         rentalPricesHotels4.add(Money.withValue(0.0));
-        cells.add(new Neighborhood("Santa Fe",Money.withValue(15000.0),Money.withValue(4000.0), Money.withValue(0.0), new Rental(Money.withValue(1500.0), rentalPricesHouses4, rentalPricesHotels4), this));
+        cells.add(new Neighborhood("Santa Fe", Money.withValue(15000.0), Money.withValue(4000.0), Money.withValue(0.0), new Rental(Money.withValue(1500.0), rentalPricesHouses4, rentalPricesHotels4), this));
 
-        cells.add(new Service("Aysa",this));
+        cells.add(new Service("Aysa",this, Money.withValue(30000.0),300.0));
 
         List<Money> rentalPricesHouses5;
         rentalPricesHouses5 = new ArrayList<>();
@@ -132,7 +138,7 @@ public class Board {
         rentalPricesHotels5 = new ArrayList<>();
         rentalPricesHouses.addAll(Arrays.asList(Money.withValue(3250.0), Money.withValue(3850.0)));
         rentalPricesHotels.add(Money.withValue(5500.0));
-        cells.add(new Neighborhood("Salta - Norte",Money.withValue(23000.0),Money.withValue(4500.0), Money.withValue(7500.0), new Rental(Money.withValue(2000.0), rentalPricesHouses5, rentalPricesHotels5), this));
+        cells.add(new Neighborhood("Salta - Norte", Money.withValue(23000.0), Money.withValue(4500.0), Money.withValue(7500.0), new Rental(Money.withValue(2000.0), rentalPricesHouses5, rentalPricesHotels5), this));
 
         List<Money> rentalPricesHouses6;
         rentalPricesHouses6 = new ArrayList<>();
@@ -140,11 +146,11 @@ public class Board {
         rentalPricesHotels6 = new ArrayList<>();
         rentalPricesHouses6.addAll(Arrays.asList(Money.withValue(3250.0), Money.withValue(3850.0)));
         rentalPricesHotels6.add(Money.withValue(5500.0));
-        cells.add(new Neighborhood("Salta - Sur",Money.withValue(23000.0),Money.withValue(4500.0), Money.withValue(7500.0), new Rental(Money.withValue(2000.0), rentalPricesHouses6, rentalPricesHotels6), this));
+        cells.add(new Neighborhood("Salta - Sur", Money.withValue(23000.0), Money.withValue(4500.0), Money.withValue(7500.0), new Rental(Money.withValue(2000.0), rentalPricesHouses6, rentalPricesHotels6), this));
 
-        cells.add(new Police("Policia",this));
+        cells.add(new Police("Policia", this));
 
-        cells.add(new Railway("Tren",this));
+        cells.add(train);
 
         List<Money> rentalPricesHouses7;
         rentalPricesHouses7 = new ArrayList<>();
@@ -152,9 +158,9 @@ public class Board {
         rentalPricesHotels7 = new ArrayList<>();
         rentalPricesHouses7.add(Money.withValue(3800.0));
         rentalPricesHotels7.add(Money.withValue(0.0));
-        cells.add(new Neighborhood("Neuquén",Money.withValue(17000.0),Money.withValue(3800.0), Money.withValue(0.0), new Rental(Money.withValue(1800.0), rentalPricesHouses7, rentalPricesHotels7), this));
+        cells.add(new Neighborhood("Neuquén", Money.withValue(17000.0), Money.withValue(3800.0), Money.withValue(0.0), new Rental(Money.withValue(1800.0), rentalPricesHouses7, rentalPricesHotels7), this));
 
-        cells.add(new DynamicBackward("Retroceso Dinámico",this));
+        cells.add(new DynamicBackward("Retroceso Dinámico", this));
 
         List<Money> rentalPricesHouses8;
         rentalPricesHouses8 = new ArrayList<>();
@@ -162,7 +168,15 @@ public class Board {
         rentalPricesHotels8 = new ArrayList<>();
         rentalPricesHouses8.add(Money.withValue(4500.0));
         rentalPricesHotels8.add(Money.withValue(0.0));
-        cells.add(new Neighborhood("Tucuman",Money.withValue(25000.0),Money.withValue(0.0), Money.withValue(0.0), new Rental(Money.withValue(2500.0), rentalPricesHouses8, rentalPricesHotels8), this));
+        cells.add(new Neighborhood("Tucuman", Money.withValue(25000.0), Money.withValue(0.0), Money.withValue(0.0), new Rental(Money.withValue(2500.0), rentalPricesHouses8, rentalPricesHotels8), this));
+    }
+
+    public Service getServiceByName(String name){
+        return (Service) cells.stream().filter(cell -> cell.getName().equals(name)).findFirst().orElse(null);
+    }
+
+    public Railway getRailwayByName(String name){
+        return (Railway) cells.stream().filter(cell -> cell.getName().equals(name)).findFirst().orElse(null);
     }
 
     private void initZones(){
