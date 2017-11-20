@@ -71,26 +71,67 @@ public class Board {
     }
 
     private void initBoardCells(){
+        List<Money> rentalPrices;
+        rentalPrices = new ArrayList<>();
+
         cells.add(new StartPoint("Salida",this));
+
         cells.add(new Quini6("Quini 6",this));
-        cells.add(new Neighborhood("Bs. As. - Zona Sur",Money.withValue(20000.0),Money.withValue(5000.0),Money.withValue(8000.0),this));
+
+        rentalPrices.clear();
+        rentalPrices.addAll(Arrays.asList(Money.withValue(2000.0), Money.withValue(3000.0), Money.withValue(3500.0), Money.withValue(5000.0)));
+        cells.add(new Neighborhood("Bs. As. - Zona Sur",Money.withValue(20000.0), Money.withValue(5000.0), Money.withValue(8000.0), new Rental(rentalPrices), this));
+
         cells.add(new Service("Edesur",this));
-        cells.add(new Neighborhood("Bs. As. - Zona Norte",Money.withValue(25000.0),Money.withValue(5500.0),Money.withValue(9000.0),this));
+
+        rentalPrices.clear();
+        rentalPrices.addAll(Arrays.asList(Money.withValue(2500.0), Money.withValue(3500.0), Money.withValue(4000.0), Money.withValue(6000.0)));
+        cells.add(new Neighborhood("Bs. As. - Zona Norte", Money.withValue(25000.0), Money.withValue(5500.0), Money.withValue(9000.0), new Rental(rentalPrices), this));
+
         cells.add(new Jail("Carcel",this));
-        cells.add(new Neighborhood("Cordoba - Sur",Money.withValue(18000.0),Money.withValue(2000.0),Money.withValue(3000.0),this));
+
+        rentalPrices.clear();
+        rentalPrices.addAll(Arrays.asList(Money.withValue(1000.0), Money.withValue(1500.0), Money.withValue(2500.0), Money.withValue(3000.0)));
+        cells.add(new Neighborhood("Cordoba - Sur",Money.withValue(18000.0),Money.withValue(2000.0), Money.withValue(3000.0), new Rental(rentalPrices), this));
+
         cells.add(new DynamicForward("Avance Dinámico",this));
+
         cells.add(new Railway("Subte",this));
-        cells.add(new Neighborhood("Cordoba - Norte",Money.withValue(20000.0),Money.withValue(2200.0),Money.withValue(3500.0),this));
+
+        rentalPrices.clear();
+        rentalPrices.addAll(Arrays.asList(Money.withValue(1300.0), Money.withValue(1800.0), Money.withValue(2900.0), Money.withValue(3500.0)));
+        cells.add(new Neighborhood("Cordoba - Norte",Money.withValue(20000.0),Money.withValue(2200.0),
+                Money.withValue(3500.0), new Rental(rentalPrices), this));
+
         cells.add(new LuxuryTax("Impuesto De Lujo",this));
-        cells.add(new Neighborhood("Santa Fe",Money.withValue(15000.0),Money.withValue(4000.0),Money.withValue(0.0),this));
+
+        rentalPrices.clear();
+        rentalPrices.addAll(Arrays.asList(Money.withValue(1500.0), Money.withValue(3500.0)));
+        cells.add(new Neighborhood("Santa Fe",Money.withValue(15000.0),Money.withValue(4000.0), Money.withValue(0.0), new Rental(rentalPrices), this));
+
         cells.add(new Service("Aysa",this));
-        cells.add(new Neighborhood("Salta - Norte",Money.withValue(23000.0),Money.withValue(4500.0),Money.withValue(7500.0),this));
-        cells.add(new Neighborhood("Salta - Sur",Money.withValue(23000.0),Money.withValue(4500.0),Money.withValue(7500.0),this));
+
+        rentalPrices.clear();
+        rentalPrices.addAll(Arrays.asList(Money.withValue(2000.0), Money.withValue(3250.0), Money.withValue(3850.0), Money.withValue(5500.0)));
+        cells.add(new Neighborhood("Salta - Norte",Money.withValue(23000.0),Money.withValue(4500.0), Money.withValue(7500.0), new Rental(rentalPrices), this));
+
+        rentalPrices.clear();
+        rentalPrices.addAll(Arrays.asList(Money.withValue(2000.0), Money.withValue(3250.0), Money.withValue(3850.0), Money.withValue(5500.0)));
+        cells.add(new Neighborhood("Salta - Sur",Money.withValue(23000.0),Money.withValue(4500.0), Money.withValue(7500.0), new Rental(rentalPrices), this));
+
         cells.add(new Police("Policia",this));
+
         cells.add(new Railway("Tren",this));
-        cells.add(new Neighborhood("Neuquén",Money.withValue(17000.0),Money.withValue(3800.0),Money.withValue(0.0),this));
+
+        rentalPrices.clear();
+        rentalPrices.addAll(Arrays.asList(Money.withValue(1800.0), Money.withValue(3800.0)));
+        cells.add(new Neighborhood("Neuquén",Money.withValue(17000.0),Money.withValue(3800.0), Money.withValue(0.0), new Rental(rentalPrices), this));
+
         cells.add(new DynamicBackward("Retroceso Dinámico",this));
-        cells.add(new Neighborhood("Tucuman",Money.withValue(25000.0),Money.withValue(0.0),Money.withValue(0.0),this));
+
+        rentalPrices.clear();
+        rentalPrices.addAll(Arrays.asList(Money.withValue(2500.0), Money.withValue(4500.0)));
+        cells.add(new Neighborhood("Tucuman",Money.withValue(25000.0),Money.withValue(0.0), Money.withValue(0.0), new Rental(rentalPrices), this));
     }
 
     private void initZones(){
