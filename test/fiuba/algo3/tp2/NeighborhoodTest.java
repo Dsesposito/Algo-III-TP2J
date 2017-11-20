@@ -17,4 +17,20 @@ public class NeighborhoodTest {
         Assert.assertTrue(bsassur.isOwnedBy(player1));
     }
 
+    @Test
+    public void test03PlayerHasAGroupOfNeighborhoodAndBuyAHouse(){
+        Board board = new Board();
+        Player player1 = new Player("Diego",board.getStartCell());
+
+        Neighborhood bsassur = board.getNeighborhoodByName("Bs. As. - Zona Sur");
+        Neighborhood bsasnorte = board.getNeighborhoodByName("Bs. As. - Zona Norte");
+        bsassur.buy(player1);
+        bsasnorte.buy(player1);
+
+        Double valueToBeChecked = player1.getMoney().getValue() - bsassur.getHousePrice().getValue() ;
+
+        bsassur.buyHouse();
+
+        Assert.assertTrue(valueToBeChecked.equals(player1.getMoney().getValue()));
+    }
 }
