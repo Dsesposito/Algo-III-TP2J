@@ -19,6 +19,11 @@ public abstract class Cell{
     }
 
     protected Boolean cellGroupHasSameOwner(Player player){
+
+        if(group == null){
+            return true;
+        }
+
         return group.isOwnedBySamePlayer(player);
     }
 

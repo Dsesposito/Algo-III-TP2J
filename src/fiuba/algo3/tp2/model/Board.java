@@ -10,13 +10,10 @@ import java.util.List;
 public class Board {
 
     private List<Cell> cells;
-    private List<NeighborhoodZone> zones;
 
     public Board() {
         cells = new ArrayList<>();
-        zones = new ArrayList<>();
         this.initBoardCells();
-        this.initZones();
     }
 
     public Cell getCellXPositionsFurtherForward(Cell cell, Long numberOfCellsToMoveForward){
@@ -76,19 +73,14 @@ public class Board {
         CellGroup.groupCells("Transporte ferroviario",Arrays.asList(train,subway));
 
 
-        cells.add(new StartPoint("Salida", this));
-
-        cells.add(new Quini6("Quini 6", this));
-
         List<Money> rentalPricesHouses;
         rentalPricesHouses = new ArrayList<>();
         List<Money> rentalPricesHotels;
         rentalPricesHotels = new ArrayList<>();
         rentalPricesHouses.addAll(Arrays.asList(Money.withValue(3000.0), Money.withValue(3500.0)));
         rentalPricesHotels.add(Money.withValue(5000.0));
-        cells.add(new Neighborhood("Bs. As. - Zona Sur", Money.withValue(20000.0), Money.withValue(5000.0), Money.withValue(8000.0), new Rental(Money.withValue(2000.0), rentalPricesHouses, rentalPricesHotels), this));
+        Neighborhood bsassur = new Neighborhood("Bs. As. - Zona Sur", Money.withValue(20000.0), Money.withValue(5000.0), Money.withValue(8000.0), new Rental(Money.withValue(2000.0), rentalPricesHouses, rentalPricesHotels), this);
 
-        cells.add(new Service("Edesur",this,Money.withValue(35000.0),500.0));
 
         List<Money> rentalPricesHouses1;
         rentalPricesHouses1 = new ArrayList<>();
@@ -96,9 +88,11 @@ public class Board {
         rentalPricesHotels1 = new ArrayList<>();
         rentalPricesHouses1.addAll(Arrays.asList(Money.withValue(3500.0), Money.withValue(4000.0)));
         rentalPricesHotels1.add(Money.withValue(6000.0));
-        cells.add(new Neighborhood("Bs. As. - Zona Norte", Money.withValue(25000.0), Money.withValue(5500.0), Money.withValue(9000.0), new Rental(Money.withValue(2500.0), rentalPricesHouses1, rentalPricesHotels1), this));
+        Neighborhood bsasnorte = new Neighborhood("Bs. As. - Zona Norte", Money.withValue(25000.0), Money.withValue(5500.0), Money.withValue(9000.0), new Rental(Money.withValue(2500.0), rentalPricesHouses1, rentalPricesHotels1), this);
 
-        cells.add(new Jail("Carcel", this));
+        CellGroup.groupCells("Bs. As.",Arrays.asList(bsassur,bsasnorte));
+
+
 
         List<Money> rentalPricesHouses2;
         rentalPricesHouses2 = new ArrayList<>();
@@ -106,11 +100,7 @@ public class Board {
         rentalPricesHotels2 = new ArrayList<>();
         rentalPricesHouses2.addAll(Arrays.asList(Money.withValue(1500.0), Money.withValue(2500.0)));
         rentalPricesHotels2.add(Money.withValue(3000.0));
-        cells.add(new Neighborhood("Cordoba - Sur", Money.withValue(18000.0), Money.withValue(2000.0), Money.withValue(3000.0), new Rental(Money.withValue(1000.0), rentalPricesHouses2, rentalPricesHotels2), this));
-
-        cells.add(new DynamicForward("Avance Dinámico", this));
-
-        cells.add(subway);
+        Neighborhood cordobaSur = new Neighborhood("Cordoba - Sur", Money.withValue(18000.0), Money.withValue(2000.0), Money.withValue(3000.0), new Rental(Money.withValue(1000.0), rentalPricesHouses2, rentalPricesHotels2), this);
 
         List<Money> rentalPricesHouses3;
         rentalPricesHouses3 = new ArrayList<>();
@@ -118,19 +108,11 @@ public class Board {
         rentalPricesHotels3 = new ArrayList<>();
         rentalPricesHouses3.addAll(Arrays.asList(Money.withValue(1800.0), Money.withValue(2900.0)));
         rentalPricesHotels3.add(Money.withValue(3500.0));
-        cells.add(new Neighborhood("Cordoba - Norte", Money.withValue(20000.0), Money.withValue(2200.0), Money.withValue(3500.0), new Rental(Money.withValue(1300.0), rentalPricesHouses3, rentalPricesHotels3), this));
+        Neighborhood cordobaNorte = new Neighborhood("Cordoba - Norte", Money.withValue(20000.0), Money.withValue(2200.0), Money.withValue(3500.0), new Rental(Money.withValue(1300.0), rentalPricesHouses3, rentalPricesHotels3), this);
 
-        cells.add(new LuxuryTax("Impuesto De Lujo", this));
+        CellGroup.groupCells("Cordoba",Arrays.asList(cordobaSur,cordobaNorte));
 
-        List<Money> rentalPricesHouses4;
-        rentalPricesHouses4 = new ArrayList<>();
-        List<Money> rentalPricesHotels4;
-        rentalPricesHotels4 = new ArrayList<>();
-        rentalPricesHouses4.add(Money.withValue(3500.0));
-        rentalPricesHotels4.add(Money.withValue(0.0));
-        cells.add(new Neighborhood("Santa Fe", Money.withValue(15000.0), Money.withValue(4000.0), Money.withValue(0.0), new Rental(Money.withValue(1500.0), rentalPricesHouses4, rentalPricesHotels4), this));
 
-        cells.add(new Service("Aysa",this, Money.withValue(30000.0),300.0));
 
         List<Money> rentalPricesHouses5;
         rentalPricesHouses5 = new ArrayList<>();
@@ -138,7 +120,7 @@ public class Board {
         rentalPricesHotels5 = new ArrayList<>();
         rentalPricesHouses.addAll(Arrays.asList(Money.withValue(3250.0), Money.withValue(3850.0)));
         rentalPricesHotels.add(Money.withValue(5500.0));
-        cells.add(new Neighborhood("Salta - Norte", Money.withValue(23000.0), Money.withValue(4500.0), Money.withValue(7500.0), new Rental(Money.withValue(2000.0), rentalPricesHouses5, rentalPricesHotels5), this));
+        Neighborhood saltaNorte = new Neighborhood("Salta - Norte", Money.withValue(23000.0), Money.withValue(4500.0), Money.withValue(7500.0), new Rental(Money.withValue(2000.0), rentalPricesHouses5, rentalPricesHotels5), this);
 
         List<Money> rentalPricesHouses6;
         rentalPricesHouses6 = new ArrayList<>();
@@ -146,11 +128,23 @@ public class Board {
         rentalPricesHotels6 = new ArrayList<>();
         rentalPricesHouses6.addAll(Arrays.asList(Money.withValue(3250.0), Money.withValue(3850.0)));
         rentalPricesHotels6.add(Money.withValue(5500.0));
-        cells.add(new Neighborhood("Salta - Sur", Money.withValue(23000.0), Money.withValue(4500.0), Money.withValue(7500.0), new Rental(Money.withValue(2000.0), rentalPricesHouses6, rentalPricesHotels6), this));
+        Neighborhood saltaSur = new Neighborhood("Salta - Sur", Money.withValue(23000.0), Money.withValue(4500.0), Money.withValue(7500.0), new Rental(Money.withValue(2000.0), rentalPricesHouses6, rentalPricesHotels6), this);
 
-        cells.add(new Police("Policia", this));
+        CellGroup.groupCells("Salta",Arrays.asList(saltaNorte,saltaSur));
 
-        cells.add(train);
+
+
+        List<Money> rentalPricesHouses4;
+        rentalPricesHouses4 = new ArrayList<>();
+        List<Money> rentalPricesHotels4;
+        rentalPricesHotels4 = new ArrayList<>();
+        rentalPricesHouses4.add(Money.withValue(3500.0));
+        rentalPricesHotels4.add(Money.withValue(0.0));
+        Neighborhood santaFe = new Neighborhood("Santa Fe", Money.withValue(15000.0), Money.withValue(4000.0), Money.withValue(0.0), new Rental(Money.withValue(1500.0), rentalPricesHouses4, rentalPricesHotels4), this);
+
+        CellGroup.groupCells("Santa Fe",Arrays.asList(santaFe));
+
+
 
         List<Money> rentalPricesHouses7;
         rentalPricesHouses7 = new ArrayList<>();
@@ -158,9 +152,11 @@ public class Board {
         rentalPricesHotels7 = new ArrayList<>();
         rentalPricesHouses7.add(Money.withValue(3800.0));
         rentalPricesHotels7.add(Money.withValue(0.0));
-        cells.add(new Neighborhood("Neuquén", Money.withValue(17000.0), Money.withValue(3800.0), Money.withValue(0.0), new Rental(Money.withValue(1800.0), rentalPricesHouses7, rentalPricesHotels7), this));
+        Neighborhood neuquen = new Neighborhood("Neuquén", Money.withValue(17000.0), Money.withValue(3800.0), Money.withValue(0.0), new Rental(Money.withValue(1800.0), rentalPricesHouses7, rentalPricesHotels7), this);
 
-        cells.add(new DynamicBackward("Retroceso Dinámico", this));
+        CellGroup.groupCells("Neuquen",Arrays.asList(neuquen));
+
+
 
         List<Money> rentalPricesHouses8;
         rentalPricesHouses8 = new ArrayList<>();
@@ -168,7 +164,31 @@ public class Board {
         rentalPricesHotels8 = new ArrayList<>();
         rentalPricesHouses8.add(Money.withValue(4500.0));
         rentalPricesHotels8.add(Money.withValue(0.0));
-        cells.add(new Neighborhood("Tucuman", Money.withValue(25000.0), Money.withValue(0.0), Money.withValue(0.0), new Rental(Money.withValue(2500.0), rentalPricesHouses8, rentalPricesHotels8), this));
+        Neighborhood tucuman = new Neighborhood("Tucuman", Money.withValue(25000.0), Money.withValue(0.0), Money.withValue(0.0), new Rental(Money.withValue(2500.0), rentalPricesHouses8, rentalPricesHotels8), this);
+
+        CellGroup.groupCells("Neuquen",Arrays.asList(tucuman));
+
+
+        cells.add(new StartPoint("Salida", this));
+        cells.add(new Quini6("Quini 6", this));
+        cells.add(bsassur);
+        cells.add(new Service("Edesur",this,Money.withValue(35000.0),500.0));
+        cells.add(bsasnorte);
+        cells.add(new Jail("Carcel", this));
+        cells.add(cordobaSur);
+        cells.add(new DynamicForward("Avance Dinámico", this));
+        cells.add(subway);
+        cells.add(cordobaNorte);
+        cells.add(new LuxuryTax("Impuesto De Lujo", this));
+        cells.add(santaFe);
+        cells.add(new Service("Aysa",this, Money.withValue(30000.0),300.0));
+        cells.add(saltaNorte);
+        cells.add(saltaSur);
+        cells.add(new Police("Policia", this));
+        cells.add(train);
+        cells.add(neuquen);
+        cells.add(new DynamicBackward("Retroceso Dinámico", this));
+        cells.add(tucuman);
     }
 
     public Service getServiceByName(String name){
@@ -177,12 +197,5 @@ public class Board {
 
     public Railway getRailwayByName(String name){
         return (Railway) cells.stream().filter(cell -> cell.getName().equals(name)).findFirst().orElse(null);
-    }
-
-    private void initZones(){
-        zones.add(new NeighborhoodZone("Bs. As.",Arrays.asList(this.getNeighborhoodByName("Bs. As. - Zona Sur"),this.getNeighborhoodByName("Bs. As. - Zona Norte"))));
-        zones.add(new NeighborhoodZone("Salta",Arrays.asList(this.getNeighborhoodByName("Salta - Sur"),this.getNeighborhoodByName("Salta - Norte"))));
-        zones.add(new NeighborhoodZone("Cordoba",Arrays.asList(this.getNeighborhoodByName("Cordoba - Sur"),this.getNeighborhoodByName("Cordoba - Norte"))));
-
     }
 }

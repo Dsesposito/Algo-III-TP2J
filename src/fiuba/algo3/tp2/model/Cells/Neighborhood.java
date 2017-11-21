@@ -4,7 +4,7 @@ import fiuba.algo3.tp2.model.*;
 import fiuba.algo3.tp2.model.Exceptions.NeighborhoodWithOutOwnerException;
 import fiuba.algo3.tp2.model.Exceptions.NeighborhoodZoneWithOutSameOwnerException;
 
-public class Neighborhood extends Cell {
+public class Neighborhood extends Cell implements Purchasable{
 
     private Player owner;
 
@@ -21,8 +21,6 @@ public class Neighborhood extends Cell {
     private Money hotelPrice;
 
     private Rental rent;
-
-    private NeighborhoodZone zone;
 
     public Neighborhood(String name,Money landPrice,Money housePrice,Money hotelPrice, Rental rent, Board board){
         super(name, board);
@@ -44,7 +42,8 @@ public class Neighborhood extends Cell {
         if(owner == null){
             throw new NeighborhoodWithOutOwnerException("The neighborhood must have an owner before a house can be bought");
         }
-        if(!zone.hasSameOwner(owner)){
+        if(!super.cellGroupHasSameOwner(owner)){
+
             throw new NeighborhoodZoneWithOutSameOwnerException("The neighborhood zone must have the same owner before a house can be bought");
         }
         this.numberOfBuiltHouses++;
@@ -80,21 +79,10 @@ public class Neighborhood extends Cell {
         return player.equals(this.owner);
     }
 
-    public void setZone(NeighborhoodZone zone){
-        this.zone = zone;
-    }
-
     public Money getLandPrice() {
         return landPrice;
     }
 
-    public Money getHousePrice() {
-        return housePrice;
-    }
-
-    public Money getHotelPrice() {
-        return hotelPrice;
-    }
     public Money getRentalPrice() {
         return rent.getRentalPrice();
     }
