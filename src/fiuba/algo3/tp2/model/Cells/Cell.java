@@ -22,6 +22,11 @@ public abstract class Cell{
         return group.isOwnedBySamePlayer(player);
     }
 
+    protected Boolean cellGroupHasCompleteHouses(){
+        return group.hasCompleteHouses();
+    }
+
+
     public Cell getCellXPositionsFurtherForward(Long numberOfCellsToMoveForward){
         return board.getCellXPositionsFurtherForward(this,numberOfCellsToMoveForward);
     }

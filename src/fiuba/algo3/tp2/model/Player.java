@@ -65,6 +65,11 @@ public class Player {
         this.neighborhoods.add(neighborhood);
     }
 
+    public void dropNeighborhood(Neighborhood neighborhood){
+        this.neighborhoods.remove(neighborhood);
+    }
+
+
     public Long getNumberOfProperties(){
         Long numHousesAndHotels = this.neighborhoods.stream().mapToLong(neighborhoodItem -> (neighborhoodItem.getNumberOfHotel() + neighborhoodItem.getNumberOfHouses())).sum();
         return (numHousesAndHotels + this.neighborhoods.size());
@@ -95,12 +100,13 @@ public class Player {
     }
 
     public void landsOnLuxuryTax(LuxuryTax luxuryTax) {
+        double tax = 0.15;
         this.currentCell = luxuryTax;
+        money.subtract(money.getValue()*tax);
     }
 
     public void landsOnNeighborhood(Neighborhood neighborhood) {
         this.currentCell = neighborhood;
-        this.decrementMoney(neighborhood.getRentalPrice());
     }
 
     public void landsOnPolice(Police police,Jail jail) {

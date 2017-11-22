@@ -54,6 +54,10 @@ public class Board {
         return (Police) cells.stream().filter(cell -> cell.getName().equals("Policia")).findFirst().orElse(null);
     }
 
+    public LuxuryTax getLuxuryTax(){
+        return (LuxuryTax) cells.stream().filter(cell -> cell.getName().equals("Impuesto Al Lujo")).findFirst().orElse(null);
+    }
+
     public DynamicForward getDynamicForward(){
         return (DynamicForward) cells.stream().filter(cell -> cell.getName().equals("Avance Dinámico")).findFirst().orElse(null);
     }
@@ -72,6 +76,10 @@ public class Board {
         Railway subway = new Railway("Subte",this, Money.withValue(40000.0),600.0,1100.0);
         CellGroup.groupCells("Transporte ferroviario",Arrays.asList(train,subway));
 
+        Service edesur = new Service("Edesur",this,Money.withValue(35000.0),500.0, 1000.0);
+        Service aysa = new Service("Aysa",this, Money.withValue(30000.0),300.0, 500.0);
+        CellGroup.groupCells("Servicio de luz y agua",Arrays.asList(edesur,aysa));
+
 
         List<Money> rentalPricesHouses;
         rentalPricesHouses = new ArrayList<>();
@@ -79,7 +87,7 @@ public class Board {
         rentalPricesHotels = new ArrayList<>();
         rentalPricesHouses.addAll(Arrays.asList(Money.withValue(3000.0), Money.withValue(3500.0)));
         rentalPricesHotels.add(Money.withValue(5000.0));
-        Neighborhood bsassur = new Neighborhood("Bs. As. - Zona Sur", Money.withValue(20000.0), Money.withValue(5000.0), Money.withValue(8000.0), new Rental(Money.withValue(2000.0), rentalPricesHouses, rentalPricesHotels), this);
+        Neighborhood bsassur = new Neighborhood("Bs. As. - Zona Sur", Money.withValue(20000.0), Money.withValue(5000.0), Money.withValue(8000.0), new Rental(Money.withValue(2000.0), rentalPricesHouses, rentalPricesHotels), 2L, this);
 
 
         List<Money> rentalPricesHouses1;
@@ -88,11 +96,9 @@ public class Board {
         rentalPricesHotels1 = new ArrayList<>();
         rentalPricesHouses1.addAll(Arrays.asList(Money.withValue(3500.0), Money.withValue(4000.0)));
         rentalPricesHotels1.add(Money.withValue(6000.0));
-        Neighborhood bsasnorte = new Neighborhood("Bs. As. - Zona Norte", Money.withValue(25000.0), Money.withValue(5500.0), Money.withValue(9000.0), new Rental(Money.withValue(2500.0), rentalPricesHouses1, rentalPricesHotels1), this);
+        Neighborhood bsasnorte = new Neighborhood("Bs. As. - Zona Norte", Money.withValue(25000.0), Money.withValue(5500.0), Money.withValue(9000.0), new Rental(Money.withValue(2500.0), rentalPricesHouses1, rentalPricesHotels1), 2L, this);
 
         CellGroup.groupCells("Bs. As.",Arrays.asList(bsassur,bsasnorte));
-
-
 
         List<Money> rentalPricesHouses2;
         rentalPricesHouses2 = new ArrayList<>();
@@ -100,7 +106,7 @@ public class Board {
         rentalPricesHotels2 = new ArrayList<>();
         rentalPricesHouses2.addAll(Arrays.asList(Money.withValue(1500.0), Money.withValue(2500.0)));
         rentalPricesHotels2.add(Money.withValue(3000.0));
-        Neighborhood cordobaSur = new Neighborhood("Cordoba - Sur", Money.withValue(18000.0), Money.withValue(2000.0), Money.withValue(3000.0), new Rental(Money.withValue(1000.0), rentalPricesHouses2, rentalPricesHotels2), this);
+        Neighborhood cordobaSur = new Neighborhood("Cordoba - Sur", Money.withValue(18000.0), Money.withValue(2000.0), Money.withValue(3000.0), new Rental(Money.withValue(1000.0), rentalPricesHouses2, rentalPricesHotels2), 2L, this);
 
         List<Money> rentalPricesHouses3;
         rentalPricesHouses3 = new ArrayList<>();
@@ -108,19 +114,17 @@ public class Board {
         rentalPricesHotels3 = new ArrayList<>();
         rentalPricesHouses3.addAll(Arrays.asList(Money.withValue(1800.0), Money.withValue(2900.0)));
         rentalPricesHotels3.add(Money.withValue(3500.0));
-        Neighborhood cordobaNorte = new Neighborhood("Cordoba - Norte", Money.withValue(20000.0), Money.withValue(2200.0), Money.withValue(3500.0), new Rental(Money.withValue(1300.0), rentalPricesHouses3, rentalPricesHotels3), this);
+        Neighborhood cordobaNorte = new Neighborhood("Cordoba - Norte", Money.withValue(20000.0), Money.withValue(2200.0), Money.withValue(3500.0), new Rental(Money.withValue(1300.0), rentalPricesHouses3, rentalPricesHotels3), 2L, this);
 
         CellGroup.groupCells("Cordoba",Arrays.asList(cordobaSur,cordobaNorte));
-
-
 
         List<Money> rentalPricesHouses5;
         rentalPricesHouses5 = new ArrayList<>();
         List<Money> rentalPricesHotels5;
         rentalPricesHotels5 = new ArrayList<>();
-        rentalPricesHouses.addAll(Arrays.asList(Money.withValue(3250.0), Money.withValue(3850.0)));
-        rentalPricesHotels.add(Money.withValue(5500.0));
-        Neighborhood saltaNorte = new Neighborhood("Salta - Norte", Money.withValue(23000.0), Money.withValue(4500.0), Money.withValue(7500.0), new Rental(Money.withValue(2000.0), rentalPricesHouses5, rentalPricesHotels5), this);
+        rentalPricesHouses5.addAll(Arrays.asList(Money.withValue(3250.0), Money.withValue(3850.0)));
+        rentalPricesHotels5.add(Money.withValue(5500.0));
+        Neighborhood saltaNorte = new Neighborhood("Salta - Norte", Money.withValue(23000.0), Money.withValue(4500.0), Money.withValue(7500.0), new Rental(Money.withValue(2000.0), rentalPricesHouses5, rentalPricesHotels5), 2L, this);
 
         List<Money> rentalPricesHouses6;
         rentalPricesHouses6 = new ArrayList<>();
@@ -128,7 +132,7 @@ public class Board {
         rentalPricesHotels6 = new ArrayList<>();
         rentalPricesHouses6.addAll(Arrays.asList(Money.withValue(3250.0), Money.withValue(3850.0)));
         rentalPricesHotels6.add(Money.withValue(5500.0));
-        Neighborhood saltaSur = new Neighborhood("Salta - Sur", Money.withValue(23000.0), Money.withValue(4500.0), Money.withValue(7500.0), new Rental(Money.withValue(2000.0), rentalPricesHouses6, rentalPricesHotels6), this);
+        Neighborhood saltaSur = new Neighborhood("Salta - Sur", Money.withValue(23000.0), Money.withValue(4500.0), Money.withValue(7500.0), new Rental(Money.withValue(2000.0), rentalPricesHouses6, rentalPricesHotels6), 2L, this);
 
         CellGroup.groupCells("Salta",Arrays.asList(saltaNorte,saltaSur));
 
@@ -140,7 +144,7 @@ public class Board {
         rentalPricesHotels4 = new ArrayList<>();
         rentalPricesHouses4.add(Money.withValue(3500.0));
         rentalPricesHotels4.add(Money.withValue(0.0));
-        Neighborhood santaFe = new Neighborhood("Santa Fe", Money.withValue(15000.0), Money.withValue(4000.0), Money.withValue(0.0), new Rental(Money.withValue(1500.0), rentalPricesHouses4, rentalPricesHotels4), this);
+        Neighborhood santaFe = new Neighborhood("Santa Fe", Money.withValue(15000.0), Money.withValue(4000.0), Money.withValue(0.0), new Rental(Money.withValue(1500.0), rentalPricesHouses4, rentalPricesHotels4), 1L,this);
 
         CellGroup.groupCells("Santa Fe",Arrays.asList(santaFe));
 
@@ -152,7 +156,7 @@ public class Board {
         rentalPricesHotels7 = new ArrayList<>();
         rentalPricesHouses7.add(Money.withValue(3800.0));
         rentalPricesHotels7.add(Money.withValue(0.0));
-        Neighborhood neuquen = new Neighborhood("Neuquén", Money.withValue(17000.0), Money.withValue(3800.0), Money.withValue(0.0), new Rental(Money.withValue(1800.0), rentalPricesHouses7, rentalPricesHotels7), this);
+        Neighborhood neuquen = new Neighborhood("Neuquén", Money.withValue(17000.0), Money.withValue(4800.0), Money.withValue(0.0), new Rental(Money.withValue(1800.0), rentalPricesHouses7, rentalPricesHotels7), 1L,this);
 
         CellGroup.groupCells("Neuquen",Arrays.asList(neuquen));
 
@@ -164,24 +168,24 @@ public class Board {
         rentalPricesHotels8 = new ArrayList<>();
         rentalPricesHouses8.add(Money.withValue(4500.0));
         rentalPricesHotels8.add(Money.withValue(0.0));
-        Neighborhood tucuman = new Neighborhood("Tucuman", Money.withValue(25000.0), Money.withValue(0.0), Money.withValue(0.0), new Rental(Money.withValue(2500.0), rentalPricesHouses8, rentalPricesHotels8), this);
+        Neighborhood tucuman = new Neighborhood("Tucuman", Money.withValue(25000.0), Money.withValue(7000.0), Money.withValue(0.0), new Rental(Money.withValue(2500.0), rentalPricesHouses8, rentalPricesHotels8), 1L,this);
 
-        CellGroup.groupCells("Neuquen",Arrays.asList(tucuman));
+        CellGroup.groupCells("Tucuman",Arrays.asList(tucuman));
 
 
         cells.add(new StartPoint("Salida", this));
         cells.add(new Quini6("Quini 6", this));
         cells.add(bsassur);
-        cells.add(new Service("Edesur",this,Money.withValue(35000.0),500.0));
+        cells.add(edesur);
         cells.add(bsasnorte);
         cells.add(new Jail("Carcel", this));
         cells.add(cordobaSur);
         cells.add(new DynamicForward("Avance Dinámico", this));
         cells.add(subway);
         cells.add(cordobaNorte);
-        cells.add(new LuxuryTax("Impuesto De Lujo", this));
+        cells.add(new LuxuryTax("Impuesto Al Lujo", this));
         cells.add(santaFe);
-        cells.add(new Service("Aysa",this, Money.withValue(30000.0),300.0));
+        cells.add(aysa);
         cells.add(saltaNorte);
         cells.add(saltaSur);
         cells.add(new Police("Policia", this));

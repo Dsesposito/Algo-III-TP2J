@@ -10,7 +10,7 @@ public class CellGroup {
 
     private String name;
 
-    private CellGroup(String name,List<Cell> cells){
+    private CellGroup(String name, List<Cell> cells){
         this.cells = cells;
         this.name = name;
         for(Cell cell : this.cells){
@@ -21,6 +21,15 @@ public class CellGroup {
     public Boolean isOwnedBySamePlayer(Player player){
         for(Cell cell : cells){
             if(!((Purchasable)cell).isOwnedBy(player)){
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Boolean hasCompleteHouses(){
+        for(Cell cell : cells){
+            if(!((Neighborhood)cell).hasCompleteHouses()){
                 return false;
             }
         }

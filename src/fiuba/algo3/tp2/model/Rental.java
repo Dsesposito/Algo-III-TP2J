@@ -4,6 +4,7 @@ import static java.lang.Math.toIntExact;
 
 public class Rental {
     private Money rentalPrice;
+    private Money rentalPriceWithoutBuildings;
     private  List<Money> rentalPricesDueHouses;
     private  List<Money> rentalPricesDueHotels;
 
@@ -11,6 +12,7 @@ public class Rental {
         this.rentalPricesDueHouses = rentalPricesDueHouses;
         this.rentalPricesDueHotels = rentalPricesDueHotels;
         this.rentalPrice = rentalPrice;
+        this.rentalPriceWithoutBuildings = rentalPrice;
     }
 
     public void updateRentalPriceDueHouses(Long index){
@@ -22,7 +24,11 @@ public class Rental {
     public void updateRentalPriceDueHotels(Long index){
         int index_int;
         index_int = toIntExact(index);
-        this.rentalPrice = this.rentalPricesDueHotels.get(index_int);
+        rentalPrice = rentalPricesDueHotels.get(index_int);
+    }
+
+    public void updateRentalPriceWithotBuildings(){
+        rentalPrice = rentalPriceWithoutBuildings;
     }
 
     public Money getRentalPrice(){
