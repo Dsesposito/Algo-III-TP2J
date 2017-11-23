@@ -1,10 +1,7 @@
 package fiuba.algo3.tp2;
 import fiuba.algo3.tp2.model.Board;
-import fiuba.algo3.tp2.model.Cells.Cell;
 import fiuba.algo3.tp2.model.Cells.Police;
-import fiuba.algo3.tp2.model.Exceptions.PlayerActionInJailException;
 import fiuba.algo3.tp2.model.Player;
-import fiuba.algo3.tp2.model.Cells.Jail;
 import fiuba.algo3.tp2.model.Turn;
 import org.junit.Assert;
 import org.junit.Test;

@@ -1,7 +1,7 @@
 package fiuba.algo3.tp2.model.Cells;
 
 import fiuba.algo3.tp2.model.*;
-import fiuba.algo3.tp2.model.Exceptions.*;
+import fiuba.algo3.tp2.model.Exceptions.NeighborhoodExceptions.*;
 
 public class Neighborhood extends Cell implements Groupable {
 

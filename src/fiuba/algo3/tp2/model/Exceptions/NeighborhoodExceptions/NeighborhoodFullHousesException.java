@@ -1,6 +1,6 @@
-package fiuba.algo3.tp2.model.Exceptions;
+package fiuba.algo3.tp2.model.Exceptions.NeighborhoodExceptions;
 
-public class NeighborhoodFullHousesException extends RuntimeException{
+public class NeighborhoodFullHousesException extends NeighborhoodException{
 
     public NeighborhoodFullHousesException(String message) {
         super (message);

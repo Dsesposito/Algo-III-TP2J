@@ -1,6 +1,6 @@
-package fiuba.algo3.tp2.model.Exceptions;
+package fiuba.algo3.tp2.model.Exceptions.NeighborhoodExceptions;
 
-public class NeighborhoodWithOutOwnerException extends RuntimeException{
+public class NeighborhoodWithOutOwnerException extends NeighborhoodException{
 
     public NeighborhoodWithOutOwnerException(String message) {
         super (message);

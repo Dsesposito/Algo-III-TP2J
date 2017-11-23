@@ -2,7 +2,7 @@ package fiuba.algo3.tp2.model.Cells;
 
 import fiuba.algo3.tp2.Global;
 import fiuba.algo3.tp2.model.*;
-import fiuba.algo3.tp2.model.Exceptions.PlayerNotAbleToPayBailException;
+import fiuba.algo3.tp2.model.Exceptions.PlayerExceptions.PlayerNotAbleToPayBailException;
 
 import java.util.ArrayList;
 import java.util.List;

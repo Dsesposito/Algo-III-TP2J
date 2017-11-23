@@ -1,6 +1,6 @@
-package fiuba.algo3.tp2.model.Exceptions;
+package fiuba.algo3.tp2.model.Exceptions.NeighborhoodExceptions;
 
-public class NeighborhoodWithHotelAlreadyBuiltException extends RuntimeException{
+public class NeighborhoodWithHotelAlreadyBuiltException extends NeighborhoodException{
 
     public NeighborhoodWithHotelAlreadyBuiltException(String message) {
         super (message);
