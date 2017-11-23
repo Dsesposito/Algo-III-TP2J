@@ -71,15 +71,14 @@ public class DynamicBackwardTest {
 
         Player player1 = new Player("Diego",board.getStartCell());
 
-        Neighborhood bsassur = board.getNeighborhoodByName("Bs. As. - Zona Sur");
-        bsassur.buy(player1);
-        bsassur.buyHouse();
-        bsassur.buyHouse();
+        Neighborhood santafe = board.getNeighborhoodByName("Santa Fe");
+        santafe.buy(player1);
+        santafe.buyHouse();
         Neighborhood neuquen = board.getNeighborhoodByName("Neuquén");
         neuquen.buy(player1);
-        neuquen.buyHotel();
+        neuquen.buyHouse();
 
-        Long numberOfPlayer1Properties = 5L;
+        Long numberOfPlayer1Properties = 4L;
 
         Long face1 = 1L;
         Long face2 = 2L;
