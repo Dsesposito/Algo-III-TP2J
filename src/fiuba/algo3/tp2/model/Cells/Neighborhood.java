@@ -45,8 +45,10 @@ public class Neighborhood extends Cell implements Purchasable{
     @Override
     public void playerLandsOnCell(Player player, Turn actualTurn) {
         player.landsOnNeighborhood(this);
-        player.decrementMoney(this.getRentalPrice());
-        owner.incrementMoney(this.getRentalPrice());
+        if(this.hasOwner()){
+            player.decrementMoney(this.getRentalPrice());
+            owner.incrementMoney(this.getRentalPrice());
+        }
     }
 
     public void buyHouse(){
@@ -128,6 +130,10 @@ public class Neighborhood extends Cell implements Purchasable{
         completeHouses = false;
         owner.dropNeighborhood(this);
         owner = null;
+    }
+
+    public Boolean hasOwner(){
+        return !(this.owner == null) ;
     }
 
 }

@@ -77,7 +77,7 @@ public class DynamicForwardTest {
         santafe.buyHouse();
         Neighborhood neuquen = board.getNeighborhoodByName("Neuquén");
         neuquen.buy(player1);
-        neuquen.buyHotel();
+        neuquen.buyHouse();
 
         Long numberOfPlayer1Properties = 4L;
 
