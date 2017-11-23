@@ -71,7 +71,7 @@ public class Player {
 
 
     public Long getNumberOfProperties(){
-        Long numHousesAndHotels = this.neighborhoods.stream().mapToLong(neighborhoodItem -> (neighborhoodItem.getNumberOfHotel() + neighborhoodItem.getNumberOfHouses())).sum();
+        Long numHousesAndHotels = this.neighborhoods.stream().mapToLong(neighborhoodItem -> (neighborhoodItem.getNumberOfHotelAndHouses())).sum();
         return (numHousesAndHotels + this.neighborhoods.size());
     }
 

@@ -1,8 +1,7 @@
 package fiuba.algo3.tp2.model.Cells;
 
 import fiuba.algo3.tp2.model.*;
-import fiuba.algo3.tp2.model.Exceptions.NeighborhoodWithOutOwnerException;
-import fiuba.algo3.tp2.model.Exceptions.NeighborhoodZoneWithOutSameOwnerException;
+import fiuba.algo3.tp2.model.Exceptions.*;
 
 public class Neighborhood extends Cell implements Purchasable{
 
@@ -10,11 +9,7 @@ public class Neighborhood extends Cell implements Purchasable{
 
     private String name;
 
-    private Long numberOfBuiltHouses;
 
-    private Long numberOfBuiltHotels;
-
-    private Boolean hasHotelBuilt;
 
     private Money landPrice;
 
@@ -26,75 +21,74 @@ public class Neighborhood extends Cell implements Purchasable{
 
     private Long maxHouses;
 
-    private boolean completeHouses;
-
     public Neighborhood(String name,Money landPrice,Money housePrice,Money hotelPrice, Rental rent, Long maxHouses, Board board){
         super(name, board);
         this.name = name;
-        this.numberOfBuiltHouses = 0L;
-        this.numberOfBuiltHotels = 0L;
-        this.hasHotelBuilt = false;
         this.landPrice = landPrice;
         this.hotelPrice = hotelPrice;
         this.housePrice = housePrice;
         this.rent = rent;
         this.maxHouses = maxHouses;
-        this.completeHouses = false;
     }
 
     @Override
     public void playerLandsOnCell(Player player, Turn actualTurn) {
         player.landsOnNeighborhood(this);
-        if(this.hasOwner()){
+        if(this.hasOwner() && !this.owner.equals(player)){
             player.decrementMoney(this.getRentalPrice());
-            owner.incrementMoney(this.getRentalPrice());
+            this.owner.incrementMoney(this.getRentalPrice());
         }
     }
 
     public void buyHouse(){
-        if(owner == null){
+        if(this.owner == null){
             throw new NeighborhoodWithOutOwnerException("The neighborhood must have an owner before a house can be bought");
         }
-        if(!super.cellGroupHasSameOwner(owner)){
+        if(!super.cellGroupHasSameOwner(this.owner)){
             throw new NeighborhoodZoneWithOutSameOwnerException("The neighborhood zone must have the same owner before a house can be bought");
         }
 
-        if(!completeHouses){
-            numberOfBuiltHouses++;
-            owner.decrementMoney(housePrice);
-            rent.updateRentalPriceDueHouses(numberOfBuiltHouses - 1);
-            if(numberOfBuiltHouses.equals(maxHouses)){
-                completeHouses = true;
-            }
+        if(this.hasAllHousesBuilt()){
+            throw new NeighborhoodFullHousesException("The neighborhood has all houses already built");
+        }
+
+        if(!this.hasAllHousesBuilt()){
+            this.rent.incrementBuiltHouses();
+            this.owner.decrementMoney(this.housePrice);
         }
 
     }
 
     public void buyHotel(){
-        if(super.cellGroupHasSameOwner(owner) & super.cellGroupHasCompleteHouses() & !hasHotelBuilt){
-            numberOfBuiltHouses = 0L;
-            hasHotelBuilt = true;
-            numberOfBuiltHotels++;
-            owner.decrementMoney(hotelPrice);
-            rent.updateRentalPriceDueHotels(numberOfBuiltHotels-1);
+
+        /*
+        if(!super.cellGroupHasCompleteHouses()) {
+            throw new NeighborhoodWithOutAllHousesBuiltException("The neighborhood must have all houses built before a hotel can be built");
         }
+        */
+
+        if(this.rent.hastHotelBuilt()){
+            throw new NeighborhoodWithHotelAlreadyBuiltException("The neighborhood can't have multiples hotels");
+        }
+
+        if(super.cellGroupHasCompleteHouses()) {
+            this.rent.clearBuiltHouses();
+            this.rent.incrementBuiltHotels();
+            this.owner.decrementMoney(hotelPrice);
+        }
+
     }
 
-    public Long getNumberOfHouses(){
-        return numberOfBuiltHouses;
-    }
-
-    public Long getNumberOfHotel(){
-        if (this.hasHotelBuilt){
-            return 1L;
-        }
-        return 0L;
-    }
 
     public void buy(Player player){
+
+        if(this.owner != null && this.owner != player){
+            throw new NeighborhoodWithOwnerException("The neighborhood already has an owner");
+        }
+
         this.owner = player;
-        player.addNeighborhood(this);
-        player.getMoney().subtract(this.getLandPrice());
+        this.owner.addNeighborhood(this);
+        this.owner.decrementMoney(this.getLandPrice());
     }
 
     public Boolean isOwnedBy(Player player){
@@ -109,31 +103,39 @@ public class Neighborhood extends Cell implements Purchasable{
         return rent.getRentalPrice();
     }
 
-    public Boolean hasCompleteHouses(){
-        return completeHouses;
-    }
-
     public void sellPropertie(){
+        //TODO Mover a archivo de configuracion
         double commission_of_sale = 1-0.15;
 
-        owner.getMoney().add(this.getLandPrice().getValue()*commission_of_sale);
-        if(hasHotelBuilt){
-            owner.getMoney().add(hotelPrice.getValue()*commission_of_sale);
+        this.owner.incrementMoney(this.getLandPrice().multiply(commission_of_sale));
+        if(this.rent.hastHotelBuilt()){
+            this.owner.incrementMoney(hotelPrice.multiply(commission_of_sale));
         }
         else{
-            owner.getMoney().add(housePrice.getValue()*numberOfBuiltHouses*commission_of_sale);
+            this.owner.incrementMoney(housePrice.multiply(this.rent.getNumberOfBuiltHouses()*commission_of_sale));
         }
 
-        numberOfBuiltHouses = 0L;
-        hasHotelBuilt = false;
-        rent.updateRentalPriceWithotBuildings();
-        completeHouses = false;
-        owner.dropNeighborhood(this);
-        owner = null;
+        this.rent.clearBuiltHousesAndHotels();
+        this.owner.dropNeighborhood(this);
+        this.owner = null;
     }
 
     public Boolean hasOwner(){
         return !(this.owner == null) ;
+    }
+
+    public Long getNumberOfHotelAndHouses(){
+        return rent.getNumberOfBuiltHouses() + rent.getNumberOfBuiltHotels();
+    }
+
+    public Boolean hasAllHousesBuilt(){
+        if(this.rent.hastHotelBuilt()){
+            return true;
+        }
+        else{
+            return this.rent.getNumberOfBuiltHouses().equals(this.maxHouses);
+        }
+
     }
 
 }

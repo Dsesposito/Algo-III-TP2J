@@ -29,7 +29,7 @@ public class CellGroup {
 
     public Boolean hasCompleteHouses(){
         for(Cell cell : cells){
-            if(!((Neighborhood)cell).hasCompleteHouses()){
+            if(!((Neighborhood)cell).hasAllHousesBuilt()){
                 return false;
             }
         }

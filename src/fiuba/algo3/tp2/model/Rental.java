@@ -1,37 +1,72 @@
 package fiuba.algo3.tp2.model;
 import java.util.List;
-import static java.lang.Math.toIntExact;
 
 public class Rental {
-    private Money rentalPrice;
     private Money rentalPriceWithoutBuildings;
     private  List<Money> rentalPricesDueHouses;
     private  List<Money> rentalPricesDueHotels;
 
-    public Rental(Money rentalPrice, List<Money> rentalPricesDueHouses, List<Money> rentalPricesDueHotels){
+    private Long numberOfBuiltHouses;
+    private Long numberOfBuiltHotels;
+
+    public Rental(Money rentalPriceWithoutBuildings, List<Money> rentalPricesDueHouses, List<Money> rentalPricesDueHotels){
         this.rentalPricesDueHouses = rentalPricesDueHouses;
         this.rentalPricesDueHotels = rentalPricesDueHotels;
-        this.rentalPrice = rentalPrice;
-        this.rentalPriceWithoutBuildings = rentalPrice;
+        this.rentalPriceWithoutBuildings = rentalPriceWithoutBuildings;
+        this.numberOfBuiltHotels = 0L;
+        this.numberOfBuiltHouses = 0L;
     }
 
-    public void updateRentalPriceDueHouses(Long index){
-        int index_int;
-        index_int = toIntExact(index);
-        this.rentalPrice = this.rentalPricesDueHouses.get(index_int);
+    public void incrementBuiltHouses(){
+        this.numberOfBuiltHouses++;
     }
 
-    public void updateRentalPriceDueHotels(Long index){
-        int index_int;
-        index_int = toIntExact(index);
-        rentalPrice = rentalPricesDueHotels.get(index_int);
+    public void decrementBuiltHouses(){
+        this.numberOfBuiltHouses--;
     }
 
-    public void updateRentalPriceWithotBuildings(){
-        rentalPrice = rentalPriceWithoutBuildings;
+    public void incrementBuiltHotels(){
+        this.numberOfBuiltHotels++;
+    }
+
+    public void decrementBuiltHotels(){
+        this.numberOfBuiltHotels--;
+    }
+
+    public void clearBuiltHouses(){
+        this.numberOfBuiltHouses = 0L;
+    }
+
+    public void clearBuiltHousesAndHotels(){
+        this.numberOfBuiltHouses = 0L;
+        this.numberOfBuiltHotels = 0L;
     }
 
     public Money getRentalPrice(){
-        return this.rentalPrice;
+        if(this.getNumberOfBuiltHotels() == 0 && this.getNumberOfBuiltHouses() == 0){
+            return this.rentalPriceWithoutBuildings;
+        }
+        else{
+            if(this.getNumberOfBuiltHotels() == 0){
+                return this.rentalPricesDueHouses.get(Math.toIntExact(this.getNumberOfBuiltHouses()) - 1);
+            }
+            else{
+                return this.rentalPricesDueHotels.get(Math.toIntExact(this.getNumberOfBuiltHotels()) - 1);
+            }
+        }
+    }
+
+
+    public Long getNumberOfBuiltHouses() {
+        return numberOfBuiltHouses;
+    }
+
+
+    public Long getNumberOfBuiltHotels() {
+        return numberOfBuiltHotels;
+    }
+
+    public Boolean hastHotelBuilt(){
+        return (numberOfBuiltHotels > 0);
     }
 }
