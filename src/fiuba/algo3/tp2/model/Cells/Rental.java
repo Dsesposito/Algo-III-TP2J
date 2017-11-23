@@ -5,11 +5,13 @@ import java.util.List;
 
 public class Rental {
     private Money rentalPriceWithoutBuildings;
+    private Money rentalPrice;
     private  List<Money> rentalPricesDueHouses;
     private  List<Money> rentalPricesDueHotels;
 
     private Long numberOfBuiltHouses;
     private Long numberOfBuiltHotels;
+
 
     public Rental(Money rentalPriceWithoutBuildings, List<Money> rentalPricesDueHouses, List<Money> rentalPricesDueHotels){
         this.rentalPricesDueHouses = rentalPricesDueHouses;
@@ -17,37 +19,44 @@ public class Rental {
         this.rentalPriceWithoutBuildings = rentalPriceWithoutBuildings;
         this.numberOfBuiltHotels = 0L;
         this.numberOfBuiltHouses = 0L;
+        this.rentalPrice = rentalPriceWithoutBuildings;
     }
 
     public void incrementBuiltHouses(){
-        this.numberOfBuiltHouses++;
+        numberOfBuiltHouses++;
+        rentalPrice = rentalPricesDueHouses.get(Math.toIntExact(this.getNumberOfBuiltHouses()) - 1);
     }
 
     public void incrementBuiltHotels(){
-        this.numberOfBuiltHotels++;
+        numberOfBuiltHotels++;
+        rentalPrice = rentalPricesDueHotels.get(Math.toIntExact(this.getNumberOfBuiltHotels()) - 1);
     }
 
     public void clearBuiltHouses(){
-        this.numberOfBuiltHouses = 0L;
+        numberOfBuiltHouses = 0L;
+        rentalPrice = rentalPriceWithoutBuildings;
     }
 
     public void clearBuiltHousesAndHotels(){
-        this.numberOfBuiltHouses = 0L;
-        this.numberOfBuiltHotels = 0L;
+        numberOfBuiltHouses = 0L;
+        numberOfBuiltHotels = 0L;
+        rentalPrice = rentalPriceWithoutBuildings;
     }
 
     public Money getRentalPrice(){
+
+        return rentalPrice;
+        /*
         if(this.getNumberOfBuiltHotels() == 0 && this.getNumberOfBuiltHouses() == 0){
             return this.rentalPriceWithoutBuildings;
         }
-        else{
-            if(this.getNumberOfBuiltHotels() == 0){
-                return this.rentalPricesDueHouses.get(Math.toIntExact(this.getNumberOfBuiltHouses()) - 1);
-            }
-            else{
-                return this.rentalPricesDueHotels.get(Math.toIntExact(this.getNumberOfBuiltHotels()) - 1);
-            }
+        else if(this.getNumberOfBuiltHotels() == 0){
+            return this.rentalPricesDueHouses.get(Math.toIntExact(this.getNumberOfBuiltHouses()) - 1);
         }
+        else{
+            return this.rentalPricesDueHotels.get(Math.toIntExact(this.getNumberOfBuiltHotels()) - 1);
+        }
+        */
     }
 
 
