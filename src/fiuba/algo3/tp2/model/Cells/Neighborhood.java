@@ -3,13 +3,11 @@ package fiuba.algo3.tp2.model.Cells;
 import fiuba.algo3.tp2.model.*;
 import fiuba.algo3.tp2.model.Exceptions.*;
 
-public class Neighborhood extends Cell implements Purchasable{
+public class Neighborhood extends Cell implements Groupable {
 
     private Player owner;
 
     private String name;
-
-
 
     private Money landPrice;
 
@@ -71,7 +69,7 @@ public class Neighborhood extends Cell implements Purchasable{
             throw new NeighborhoodWithHotelAlreadyBuiltException("The neighborhood can't have multiples hotels");
         }
 
-        if(super.cellGroupHasCompleteHouses()) {
+        if( ((NeighborhoodZone) super.getGroup()).hasCompleteHouses() ) {
             this.rent.clearBuiltHouses();
             this.rent.incrementBuiltHotels();
             this.owner.decrementMoney(hotelPrice);

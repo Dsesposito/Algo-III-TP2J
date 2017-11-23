@@ -1,5 +1,4 @@
 package fiuba.algo3.tp2.model;
-import fiuba.algo3.tp2.Global;
 import fiuba.algo3.tp2.model.Cells.*;
 import fiuba.algo3.tp2.model.Exceptions.CellNotFoundException;
 
@@ -74,11 +73,11 @@ public class Board {
     private void initBoardCells() {
         Railway train = new Railway("Tren",this, Money.withValue(38000.0),450.0,800.0);
         Railway subway = new Railway("Subte",this, Money.withValue(40000.0),600.0,1100.0);
-        CellGroup.groupCells("Transporte ferroviario",Arrays.asList(train,subway));
+        CellGroup.group("Transporte ferroviario",Arrays.asList(train,subway));
 
         Service edesur = new Service("Edesur",this,Money.withValue(35000.0),500.0, 1000.0);
         Service aysa = new Service("Aysa",this, Money.withValue(30000.0),300.0, 500.0);
-        CellGroup.groupCells("Servicio de luz y agua",Arrays.asList(edesur,aysa));
+        CellGroup.group("Servicio de luz y agua",Arrays.asList(edesur,aysa));
 
 
         List<Money> rentalPricesHouses;
@@ -98,7 +97,7 @@ public class Board {
         rentalPricesHotels1.add(Money.withValue(6000.0));
         Neighborhood bsasnorte = new Neighborhood("Bs. As. - Zona Norte", Money.withValue(25000.0), Money.withValue(5500.0), Money.withValue(9000.0), new Rental(Money.withValue(2500.0), rentalPricesHouses1, rentalPricesHotels1), 2L, this);
 
-        CellGroup.groupCells("Bs. As.",Arrays.asList(bsassur,bsasnorte));
+        NeighborhoodZone.group("Bs. As.",Arrays.asList(bsassur,bsasnorte));
 
         List<Money> rentalPricesHouses2;
         rentalPricesHouses2 = new ArrayList<>();
@@ -116,7 +115,7 @@ public class Board {
         rentalPricesHotels3.add(Money.withValue(3500.0));
         Neighborhood cordobaNorte = new Neighborhood("Cordoba - Norte", Money.withValue(20000.0), Money.withValue(2200.0), Money.withValue(3500.0), new Rental(Money.withValue(1300.0), rentalPricesHouses3, rentalPricesHotels3), 2L, this);
 
-        CellGroup.groupCells("Cordoba",Arrays.asList(cordobaSur,cordobaNorte));
+        NeighborhoodZone.group("Cordoba",Arrays.asList(cordobaSur,cordobaNorte));
 
         List<Money> rentalPricesHouses5;
         rentalPricesHouses5 = new ArrayList<>();
@@ -134,7 +133,7 @@ public class Board {
         rentalPricesHotels6.add(Money.withValue(5500.0));
         Neighborhood saltaSur = new Neighborhood("Salta - Sur", Money.withValue(23000.0), Money.withValue(4500.0), Money.withValue(7500.0), new Rental(Money.withValue(2000.0), rentalPricesHouses6, rentalPricesHotels6), 2L, this);
 
-        CellGroup.groupCells("Salta",Arrays.asList(saltaNorte,saltaSur));
+        NeighborhoodZone.group("Salta",Arrays.asList(saltaNorte,saltaSur));
 
 
 
@@ -146,7 +145,7 @@ public class Board {
         rentalPricesHotels4.add(Money.withValue(0.0));
         Neighborhood santaFe = new Neighborhood("Santa Fe", Money.withValue(15000.0), Money.withValue(4000.0), Money.withValue(0.0), new Rental(Money.withValue(1500.0), rentalPricesHouses4, rentalPricesHotels4), 1L,this);
 
-        CellGroup.groupCells("Santa Fe",Arrays.asList(santaFe));
+        NeighborhoodZone.group("Santa Fe",Arrays.asList(santaFe));
 
 
 
@@ -158,7 +157,7 @@ public class Board {
         rentalPricesHotels7.add(Money.withValue(0.0));
         Neighborhood neuquen = new Neighborhood("Neuquén", Money.withValue(17000.0), Money.withValue(4800.0), Money.withValue(0.0), new Rental(Money.withValue(1800.0), rentalPricesHouses7, rentalPricesHotels7), 1L,this);
 
-        CellGroup.groupCells("Neuquen",Arrays.asList(neuquen));
+        NeighborhoodZone.group("Neuquen",Arrays.asList(neuquen));
 
 
 
@@ -170,7 +169,7 @@ public class Board {
         rentalPricesHotels8.add(Money.withValue(0.0));
         Neighborhood tucuman = new Neighborhood("Tucuman", Money.withValue(25000.0), Money.withValue(7000.0), Money.withValue(0.0), new Rental(Money.withValue(2500.0), rentalPricesHouses8, rentalPricesHotels8), 1L,this);
 
-        CellGroup.groupCells("Tucuman",Arrays.asList(tucuman));
+        NeighborhoodZone.group("Tucuman",Arrays.asList(tucuman));
 
 
         cells.add(new StartPoint("Salida", this));

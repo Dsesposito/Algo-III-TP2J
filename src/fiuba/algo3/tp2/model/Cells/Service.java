@@ -5,7 +5,7 @@ import fiuba.algo3.tp2.model.Money;
 import fiuba.algo3.tp2.model.Player;
 import fiuba.algo3.tp2.model.Turn;
 
-public class Service extends Cell implements Purchasable {
+public class Service extends Cell implements Groupable {
 
     private Player owner;
     private Money businessPrice;
@@ -25,8 +25,8 @@ public class Service extends Cell implements Purchasable {
         player.decrementMoney(businessPrice);
         this.owner = player;
         if(super.cellGroupHasSameOwner(player)){
-            for(Cell cell : super.getGroupedCells()){
-                Service service = (Service)cell;
+            for(Groupable groupable : super.getGroup().getGroupables()){
+                Service service = (Service)groupable;
                 service.actualDiceMultiplier = service.diceMultiplierInGroup;
             }
         }

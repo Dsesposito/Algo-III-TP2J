@@ -6,41 +6,32 @@ import java.util.List;
 
 public class CellGroup {
 
-    private List<Cell> cells;
+    protected List<Groupable> groupables;
 
     private String name;
 
-    private CellGroup(String name, List<Cell> cells){
-        this.cells = cells;
+    protected CellGroup(String name, List<Groupable> groupables){
+        this.groupables = groupables;
         this.name = name;
-        for(Cell cell : this.cells){
-            cell.groupBy(this);
+        for(Groupable groupable : this.groupables){
+            groupable.groupBy(this);
         }
     }
 
     public Boolean isOwnedBySamePlayer(Player player){
-        for(Cell cell : cells){
-            if(!((Purchasable)cell).isOwnedBy(player)){
+        for(Groupable purchasables : this.groupables){
+            if(!purchasables.isOwnedBy(player)){
                 return false;
             }
         }
         return true;
     }
 
-    public Boolean hasCompleteHouses(){
-        for(Cell cell : cells){
-            if(!((Neighborhood)cell).hasAllHousesBuilt()){
-                return false;
-            }
-        }
-        return true;
+    public static void group(String name, List<Groupable> groupables) {
+        new CellGroup(name,groupables);
     }
 
-    public static void groupCells(String name, List<Cell> cells) {
-        new CellGroup(name,cells);
-    }
-
-    public List<Cell> getCells(){
-        return this.cells;
+    public List<Groupable> getGroupables(){
+        return this.groupables;
     }
 }

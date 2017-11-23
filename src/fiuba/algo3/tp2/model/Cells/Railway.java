@@ -5,7 +5,7 @@ import fiuba.algo3.tp2.model.Money;
 import fiuba.algo3.tp2.model.Player;
 import fiuba.algo3.tp2.model.Turn;
 
-public class Railway extends Cell implements Purchasable {
+public class Railway extends Cell implements Groupable {
 
     private Player owner;
     private Money businessPrice;
@@ -25,8 +25,8 @@ public class Railway extends Cell implements Purchasable {
         player.decrementMoney(businessPrice);
         this.owner = player;
         if(super.cellGroupHasSameOwner(player)){
-            for(Cell cell : super.getGroupedCells()){
-                Railway railway = (Railway)cell;
+            for(Groupable groupable : super.getGroup().getGroupables()){
+                Railway railway = (Railway)groupable;
                 railway.actualDiceMultiplier = railway.diceMultiplierInGroup;
             }
         }
