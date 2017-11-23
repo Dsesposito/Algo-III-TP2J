@@ -1,4 +1,6 @@
-package fiuba.algo3.tp2.model;
+package fiuba.algo3.tp2.model.Cells;
+import fiuba.algo3.tp2.model.Money;
+
 import java.util.List;
 
 public class Rental {
@@ -21,16 +23,8 @@ public class Rental {
         this.numberOfBuiltHouses++;
     }
 
-    public void decrementBuiltHouses(){
-        this.numberOfBuiltHouses--;
-    }
-
     public void incrementBuiltHotels(){
         this.numberOfBuiltHotels++;
-    }
-
-    public void decrementBuiltHotels(){
-        this.numberOfBuiltHotels--;
     }
 
     public void clearBuiltHouses(){
