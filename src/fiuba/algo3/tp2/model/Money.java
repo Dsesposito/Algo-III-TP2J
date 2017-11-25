@@ -26,6 +26,10 @@ public class Money {
         this.value = diff;
     }
 
+    public Money multiply(Double value){
+        return Money.withValue(this.value*value);
+    }
+
     public void subtract(Double value){
         this.subtract(new Money(value));
     }

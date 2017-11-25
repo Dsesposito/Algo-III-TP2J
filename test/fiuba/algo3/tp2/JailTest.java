@@ -4,7 +4,6 @@ package fiuba.algo3.tp2;
 import fiuba.algo3.tp2.model.Board;
 import fiuba.algo3.tp2.model.Cells.Police;
 import fiuba.algo3.tp2.model.Exceptions.InsufficientFundsException;
-import fiuba.algo3.tp2.model.Exceptions.PlayerMovementInJailException;
 import fiuba.algo3.tp2.model.Cells.Jail;
 import fiuba.algo3.tp2.model.Money;
 import fiuba.algo3.tp2.model.Player;

@@ -4,16 +4,24 @@ import fiuba.algo3.tp2.model.Board;
 import fiuba.algo3.tp2.model.Player;
 import fiuba.algo3.tp2.model.Turn;
 
+import java.util.Arrays;
+import java.util.List;
+
 public abstract class Cell{
 
     private String name;
     private Board board;
+    private CellGroup group;
 
     public Cell(String name,Board board){
         this.name = name;
         this.board = board;
-
     }
+
+    protected Boolean cellGroupHasSameOwner(Player player){
+        return group.isOwnedBySamePlayer(player);
+    }
+
 
     public Cell getCellXPositionsFurtherForward(Long numberOfCellsToMoveForward){
         return board.getCellXPositionsFurtherForward(this,numberOfCellsToMoveForward);
@@ -42,5 +50,13 @@ public abstract class Cell{
     @Override
     public int hashCode() {
         return name != null ? name.hashCode() : 0;
+    }
+
+    public void groupBy(CellGroup group){
+        this.group = group;
+    }
+
+    public CellGroup getGroup(){
+        return this.group;
     }
 }

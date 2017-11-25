@@ -1,6 +1,6 @@
-package fiuba.algo3.tp2.model.Exceptions;
+package fiuba.algo3.tp2.model.Exceptions.PlayerExceptions;
 
-public class PlayerNotAbleToPayBailException extends RuntimeException{
+public class PlayerNotAbleToPayBailException extends PlayerException{
 
     public PlayerNotAbleToPayBailException(String message) {
         super (message);
