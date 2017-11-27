@@ -16,12 +16,11 @@ public class Main extends Application {
         stage.setTitle("AlgoPoly");
 
         MainContainer mainContainer = new MainContainer(stage);
-        Scene playScene = new Scene(mainContainer,1280,720);
 
-        InitContainer initContainer = new InitContainer(stage,playScene);
+        InitContainer initContainer = new InitContainer(stage,mainContainer);
         Scene initScene = new Scene(initContainer,960,400);
 
-        stage.setScene(playScene);
+        stage.setScene(initScene);
         stage.show();
     }
 

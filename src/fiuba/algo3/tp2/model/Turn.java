@@ -2,11 +2,19 @@ package fiuba.algo3.tp2.model;
 
 public class Turn {
 
-    Player currentPlayer;
-    Long diceResult;
+    private Player currentPlayer;
+    private Long diceResult;
 
     public Turn(Player player){
         currentPlayer=player;
+    }
+
+    public Player getCurrentPlayer(){
+        return this.currentPlayer;
+    }
+
+    public void setDiceResult(Long diceResult){
+        this.diceResult = diceResult;
     }
 
     public Long getDiceResult() {

@@ -15,15 +15,21 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class InitContainer extends VBox {
 
-    Stage stage;
+    private Stage stage;
+    private List<TextField> playersName;
 
-    public InitContainer(Stage stage,Scene nextScene){
+    public InitContainer(Stage stage,MainContainer nextView){
 
         super();
 
         this.stage = stage;
+        this.playersName = new ArrayList<>();
 
         this.setSpacing(20);
         this.setPadding(new Insets(25));
@@ -32,7 +38,7 @@ public class InitContainer extends VBox {
 
         this.createPlayersOptions();
 
-        this.createButtons(nextScene);
+        this.createButtons(nextView);
     }
 
     private void createLabels(){
@@ -57,32 +63,36 @@ public class InitContainer extends VBox {
         HBox hbP1 = new HBox();
         hbP1.getChildren().addAll(player1, textFieldP1);
         hbP1.setSpacing(10);
+        this.playersName.add(textFieldP1);
 
         Label player2 = new Label("Jugador 2 :");
         TextField textFieldP2 = new TextField ();
         HBox hbP2 = new HBox();
         hbP2.getChildren().addAll(player2, textFieldP2);
         hbP2.setSpacing(10);
+        this.playersName.add(textFieldP2);
 
         Label player3 = new Label("Jugador 3 :");
         TextField textFieldP3 = new TextField ();
         HBox hbP3 = new HBox();
         hbP3.getChildren().addAll(player3, textFieldP3);
         hbP3.setSpacing(10);
+        this.playersName.add(textFieldP3);
 
         VBox vbPlayersName = new VBox();
         vbPlayersName.setSpacing(20);
         vbPlayersName.getChildren().addAll(hbP1,hbP2,hbP3);
 
         this.getChildren().add(vbPlayersName);
+
     }
 
-    private void createButtons(Scene nextScene){
+    private void createButtons(MainContainer nextView){
 
         Button acceptButton = new Button();
         acceptButton.setText("Continuar");
         acceptButton.setPrefWidth(200);
-        AcceptButtonClickHandler acceptHandler = new AcceptButtonClickHandler(stage,nextScene);
+        AcceptButtonClickHandler acceptHandler = new AcceptButtonClickHandler(this,nextView);
         acceptButton.setOnAction(acceptHandler);
 
         Button cancelButton = new Button();
@@ -100,5 +110,10 @@ public class InitContainer extends VBox {
 
 
         this.getChildren().add(buttonsBox);
+    }
+
+    public List<String> getPlayersName(){
+        return this.playersName.stream().filter(textField -> !textField.getText().isEmpty())
+                .map(textField -> textField.getText()).collect(Collectors.toList());
     }
 }

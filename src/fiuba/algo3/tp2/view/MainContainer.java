@@ -1,10 +1,15 @@
 package fiuba.algo3.tp2.view;
 
+import fiuba.algo3.tp2.model.AlgoPoly;
+import fiuba.algo3.tp2.view.events.MainContainerEvents.RollDiceButtonClickHandler;
 import javafx.geometry.Insets;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -20,6 +25,10 @@ import java.nio.file.Paths;
 public class MainContainer extends BorderPane {
 
     Stage stage;
+    TextField actualPlayerTF;
+    TextField diceResultTF;
+    Button throwDiceButton;
+    TextArea consoleTextArea;
 
     public MainContainer(Stage stage){
 
@@ -63,17 +72,17 @@ public class MainContainer extends BorderPane {
     }
 
     private void setConsole(){
-        Label etiqueta = new Label();
-        etiqueta.setText("consola...");
-        etiqueta.setFont(Font.font("courier new", FontWeight.SEMI_BOLD, 14));
-        etiqueta.setTextFill(Color.WHITE);
 
-        VBox contenedorConsola = new VBox(etiqueta);
-        contenedorConsola.setSpacing(10);
-        contenedorConsola.setPadding(new Insets(15));
-        contenedorConsola.setStyle("-fx-background-color: black;");
+        TextArea textArea = new TextArea();
+        textArea.setFont(Font.font("courier new", FontWeight.SEMI_BOLD, 20));
+        this.consoleTextArea = textArea;
 
-        this.setBottom(contenedorConsola);
+        VBox consoleContainer = new VBox(textArea);
+        consoleContainer.setStyle("-fx-background-color: black;");
+        consoleContainer.setPrefHeight(200);
+        consoleContainer.setMaxHeight(200);
+
+        this.setBottom(consoleContainer);
     }
 
     private void setKeyPad(){
@@ -85,14 +94,27 @@ public class MainContainer extends BorderPane {
 
         Button rollDiceButton = new Button();
         rollDiceButton.setText("Arrojar dados");
+        rollDiceButton.setOnAction(new RollDiceButtonClickHandler(this));
+        this.throwDiceButton = rollDiceButton;
 
-        Button forwardButton = new Button();
-        forwardButton.setText("Avanzar");
+        Label actualPlayerLabel = new Label("Jugador actual :");
+        TextField actualPlayerTF = new TextField ();
+        VBox vbActualPlayer = new VBox();
+        vbActualPlayer.getChildren().addAll(actualPlayerLabel, actualPlayerTF);
+        vbActualPlayer.setSpacing(10);
+        this.actualPlayerTF = actualPlayerTF;
+
+        Label diceResultLabel = new Label("Resultado de los dados :");
+        TextField diceResultTF = new TextField ();
+        VBox vbDiceResult = new VBox();
+        vbDiceResult.getChildren().addAll(diceResultLabel, diceResultTF);
+        vbDiceResult.setSpacing(10);
+        this.diceResultTF = diceResultTF;
 
         String cssLayout = "-fx-border-color: #e2e0e0;-fx-border-insets: 5;-fx-border-width: 3;";
         leftContainer.setStyle(cssLayout);
 
-        leftContainer.getChildren().addAll(rollDiceButton,forwardButton);
+        leftContainer.getChildren().addAll(rollDiceButton,vbDiceResult,vbActualPlayer);
 
         this.setLeft(leftContainer);
     }
@@ -108,6 +130,34 @@ public class MainContainer extends BorderPane {
         }
 
         return new Image(inputstream);
+    }
+
+    public void showScene(InitContainer previousView){
+
+        AlgoPoly algoPoly = AlgoPoly.getInstance();
+
+        for(String playerName : previousView.getPlayersName()){
+            algoPoly.addPlayerToGame(playerName);
+        }
+
+        algoPoly.startGame();
+
+        this.actualPlayerTF.setText(algoPoly.getActualPlayer().getName());
+
+        Scene playScene = new Scene(this,1408,792);
+        stage.setScene(playScene);
+    }
+
+    public void setDiceResultTF(String diceResult){
+        this.diceResultTF.setText(diceResult);
+    }
+
+    public void disableThrowDiceButton(){
+        this.throwDiceButton.setDisable(true);
+    }
+
+    public void printLine(String message){
+        this.consoleTextArea.appendText(message);
     }
 
 }
