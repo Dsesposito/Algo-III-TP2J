@@ -3,7 +3,7 @@ package fiuba.algo3.tp2.model.Cells;
 import fiuba.algo3.tp2.model.*;
 import fiuba.algo3.tp2.model.Exceptions.NeighborhoodExceptions.*;
 
-public class Neighborhood extends Cell implements Groupable {
+public class Neighborhood extends Cell implements Groupable , Owneable{
 
     private Player owner;
 
@@ -89,6 +89,11 @@ public class Neighborhood extends Cell implements Groupable {
         this.owner.decrementMoney(this.getLandPrice());
     }
 
+    @Override
+    public Player getOwner() {
+        return this.owner;
+    }
+
     public Boolean isOwnedBy(Player player){
         return player.equals(this.owner);
     }
@@ -134,6 +139,11 @@ public class Neighborhood extends Cell implements Groupable {
             return this.rent.getNumberOfBuiltHouses().equals(this.maxHouses);
         }
 
+    }
+
+    @Override
+    public Boolean isOwneable(){
+        return true;
     }
 
 }

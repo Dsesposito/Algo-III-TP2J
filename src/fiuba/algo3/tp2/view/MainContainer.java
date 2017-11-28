@@ -1,15 +1,13 @@
 package fiuba.algo3.tp2.view;
 
 import fiuba.algo3.tp2.model.AlgoPoly;
-import fiuba.algo3.tp2.view.events.MainContainerEvents.RollDiceButtonClickHandler;
+import fiuba.algo3.tp2.view.events.MainContainerEvents.BuyLandButtonClickHandler;
+import fiuba.algo3.tp2.view.events.MainContainerEvents.ThrowDiceButtonClickHandler;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -24,11 +22,15 @@ import java.nio.file.Paths;
 
 public class MainContainer extends BorderPane {
 
-    Stage stage;
-    TextField actualPlayerTF;
-    TextField diceResultTF;
-    Button throwDiceButton;
-    TextArea consoleTextArea;
+    private Stage stage;
+    private TextField actualPlayerTF;
+    private TextField diceResultTF;
+    private Button throwDiceButton;
+    private Button sellLandButton;
+    private Button buyLandButton;
+    private Button buildPropertyButton;
+    private TextArea consoleTextArea;
+    private TextField actualPlayerMoneyTF;
 
     public MainContainer(Stage stage){
 
@@ -94,7 +96,7 @@ public class MainContainer extends BorderPane {
 
         Button rollDiceButton = new Button();
         rollDiceButton.setText("Arrojar dados");
-        rollDiceButton.setOnAction(new RollDiceButtonClickHandler(this));
+        rollDiceButton.setOnAction(new ThrowDiceButtonClickHandler(this));
         this.throwDiceButton = rollDiceButton;
 
         Label actualPlayerLabel = new Label("Jugador actual :");
@@ -104,6 +106,13 @@ public class MainContainer extends BorderPane {
         vbActualPlayer.setSpacing(10);
         this.actualPlayerTF = actualPlayerTF;
 
+        Label actualPlayerMoneyLabel = new Label("Dinero :");
+        TextField actualPlayerMoneyTF = new TextField ();
+        VBox vbActualPlayerMoney = new VBox();
+        vbActualPlayerMoney.getChildren().addAll(actualPlayerMoneyLabel, actualPlayerMoneyTF);
+        vbActualPlayerMoney.setSpacing(10);
+        this.actualPlayerMoneyTF = actualPlayerMoneyTF;
+
         Label diceResultLabel = new Label("Resultado de los dados :");
         TextField diceResultTF = new TextField ();
         VBox vbDiceResult = new VBox();
@@ -111,10 +120,32 @@ public class MainContainer extends BorderPane {
         vbDiceResult.setSpacing(10);
         this.diceResultTF = diceResultTF;
 
+        Button buyButton = new Button();
+        buyButton.setText("Comprar");
+        buyButton.setDisable(true);
+        buyButton.setOnAction(new BuyLandButtonClickHandler(this));
+        this.buyLandButton = buyButton;
+
+        Button buildButton = new Button();
+        buildButton.setText("Construir");
+        buildButton.setDisable(true);
+        this.buildPropertyButton = buildButton;
+
+        ChoiceBox buildPropertyChoiceBox = new ChoiceBox();
+        buildPropertyChoiceBox.setDisable(true);
+
+        Button sellButton = new Button();
+        sellButton.setText("Vender");
+        sellButton.setDisable(true);
+        this.sellLandButton = sellButton;
+
+        ChoiceBox sellLandChoiceBox = new ChoiceBox();
+        sellLandChoiceBox.setDisable(true);
+
         String cssLayout = "-fx-border-color: #e2e0e0;-fx-border-insets: 5;-fx-border-width: 3;";
         leftContainer.setStyle(cssLayout);
 
-        leftContainer.getChildren().addAll(rollDiceButton,vbDiceResult,vbActualPlayer);
+        leftContainer.getChildren().addAll(rollDiceButton,vbDiceResult,vbActualPlayer,vbActualPlayerMoney,buyButton,buildButton,buildPropertyChoiceBox,sellButton,sellLandChoiceBox);
 
         this.setLeft(leftContainer);
     }
@@ -143,6 +174,7 @@ public class MainContainer extends BorderPane {
         algoPoly.startGame();
 
         this.actualPlayerTF.setText(algoPoly.getActualPlayer().getName());
+        this.actualPlayerMoneyTF.setText(algoPoly.getActualPlayer().getMoney().getValue().toString());
 
         Scene playScene = new Scene(this,1408,792);
         stage.setScene(playScene);
@@ -152,12 +184,35 @@ public class MainContainer extends BorderPane {
         this.diceResultTF.setText(diceResult);
     }
 
-    public void disableThrowDiceButton(){
-        this.throwDiceButton.setDisable(true);
+    public void updatePlayerMoney(String value){
+        this.actualPlayerMoneyTF.setText(value);
+    }
+
+    public void updatePlayerName(String name){
+        this.actualPlayerTF.setText(name);
+    }
+
+    public void toggleStateThrowDiceButton(){
+        this.throwDiceButton.setDisable(!this.throwDiceButton.isDisabled());
+    }
+
+    public void toggleStateBuildPropertyButton(){
+        this.buildPropertyButton.setDisable(!this.buildPropertyButton.isDisabled());
+    }
+
+    public void toggleStateBuyLandButton(){
+        this.buyLandButton.setDisable(!this.buyLandButton.isDisabled());
+    }
+
+    public void toggleStateSellButton(){
+        this.sellLandButton.setDisable(!this.sellLandButton.isDisabled());
     }
 
     public void printLine(String message){
-        this.consoleTextArea.appendText(message);
+        this.consoleTextArea.appendText(message + "\n");
     }
 
+    public void clearDiceResult() {
+        this.diceResultTF.setText("");
+    }
 }

@@ -5,7 +5,7 @@ import fiuba.algo3.tp2.model.Money;
 import fiuba.algo3.tp2.model.Player;
 import fiuba.algo3.tp2.model.Turn;
 
-public class Service extends Cell implements Groupable {
+public class Service extends Cell implements Groupable , Owneable {
 
     private Player owner;
     private Money businessPrice;
@@ -33,6 +33,11 @@ public class Service extends Cell implements Groupable {
     }
 
     @Override
+    public Player getOwner() {
+        return owner;
+    }
+
+    @Override
     public void playerLandsOnCell(Player player, Turn actualTurn) {
         player.landsOnService(this);
         if(!this.isOwnedBy(player)){
@@ -49,4 +54,13 @@ public class Service extends Cell implements Groupable {
         return this.actualDiceMultiplier;
     }
 
+    @Override
+    public Boolean isOwneable(){
+        return true;
+    }
+
+    @Override
+    public Boolean hasOwner() {
+        return this.owner != null;
+    }
 }

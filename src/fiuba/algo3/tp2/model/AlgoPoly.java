@@ -6,6 +6,7 @@ import fiuba.algo3.tp2.model.Exceptions.AlgoPolyNoActualTurnException;
 import fiuba.algo3.tp2.model.Exceptions.AlgoPolyPlayerQuantityException;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class AlgoPoly {
@@ -56,12 +57,19 @@ public class AlgoPoly {
             throw new AlgoPolyPlayerQuantityException("In order to play is needed at least two players");
         }
 
-        int max = players.size()-1;
+        Collections.shuffle(players);
 
-        int randomPlayer = (int)(Math.random() * (max + 1));
+        this.actualTurn = new Turn(players.get(0));
 
-        this.actualTurn = new Turn(players.get(randomPlayer));
+    }
 
+    public void nextTurn(){
+        Player actualPlayer = this.getActualPlayer();
+        int nextPlayerIndex = players.indexOf(actualPlayer) + 1;
+        if(nextPlayerIndex + 1 > players.size()){
+            nextPlayerIndex = ((nextPlayerIndex + 1) % players.size()) - 1;
+        }
+        this.actualTurn = new Turn(players.get(nextPlayerIndex));
     }
 
     public void throwDice(){

@@ -35,6 +35,10 @@ public abstract class Cell{
         return this.name;
     }
 
+    public Boolean isOwneable(){
+        return false;
+    }
+
     public abstract void playerLandsOnCell(Player player,Turn actualTurn);
 
     @Override
