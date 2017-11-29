@@ -5,6 +5,9 @@ import fiuba.algo3.tp2.model.Cells.Cell;
 import fiuba.algo3.tp2.model.Cells.Owneable;
 import fiuba.algo3.tp2.model.Player;
 import fiuba.algo3.tp2.model.Turn;
+import fiuba.algo3.tp2.view.events.Exceptions.BuildChoiceBoxEmptyException;
+import fiuba.algo3.tp2.view.events.MainContainerEvents.BuildButtonClickHandler;
+import fiuba.algo3.tp2.view.events.Exceptions.SellChoiceBoxEmptyException;
 import fiuba.algo3.tp2.view.events.MainContainerEvents.*;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
@@ -23,6 +26,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -146,6 +150,7 @@ public class MainContainer extends BorderPane {
         Button buildButton = new Button();
         buildButton.setText("Construir");
         buildButton.setDisable(true);
+        buildButton.setOnAction(new BuildButtonClickHandler(this));
         this.buildPropertyButton = buildButton;
 
         ChoiceBox buildPropertyChoiceBox = new ChoiceBox();
@@ -198,6 +203,11 @@ public class MainContainer extends BorderPane {
 
         algoPoly.startGame();
 
+        algoPoly.getBoard().getNeighborhoodByName("Cordoba - Sur").buy(algoPoly.getActualPlayer());
+        algoPoly.getBoard().getNeighborhoodByName("Cordoba - Norte").buy(algoPoly.getActualPlayer());
+        algoPoly.getBoard().getNeighborhoodByName("Santa Fe").buy(algoPoly.getActualPlayer());
+        algoPoly.getBoard().getNeighborhoodByName("Salta - Norte").buy(algoPoly.getActualPlayer());
+
         this.setNewTurnState();
 
         Scene playScene = new Scene(this,1408,792);
@@ -221,12 +231,16 @@ public class MainContainer extends BorderPane {
             List<String> ownedCellsName = currentPlayer.getOwneableCells().stream()
                     .map(owneable -> ((Cell)owneable).getName())
                     .collect(Collectors.toList());
-            if(!ownedCellsName.isEmpty()){
-                this.sellButton.setDisable(false);
-                this.sellChoiceBox.setDisable(false);
-                this.sellChoiceBox.setItems(FXCollections.observableArrayList(ownedCellsName));
-                return;
-            }
+
+            this.sellButton.setDisable(false);
+            this.sellChoiceBox.setDisable(false);
+            this.sellChoiceBox.setItems(FXCollections.observableArrayList(ownedCellsName));
+
+        }
+        else{
+            this.sellButton.setDisable(true);
+            this.sellChoiceBox.setDisable(true);
+            this.sellChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
         }
 
 
@@ -235,24 +249,26 @@ public class MainContainer extends BorderPane {
                 .map(ownedCell -> ((Cell)ownedCell).getName())
                 .collect(Collectors.toList());
         if(!cellsNameWhereIsAbleToBuild.isEmpty()){
-            this.buyButton.setDisable(false);
+            this.buildPropertyButton.setDisable(false);
             this.buildChoiceBox.setDisable(false);
             this.buildChoiceBox.setItems(FXCollections.observableArrayList(cellsNameWhereIsAbleToBuild));
         }
-
-
-        this.sellButton.setDisable(true);
-        this.sellChoiceBox.setDisable(true);
-        this.buyButton.setDisable(true);
-        this.buildChoiceBox.setDisable(true);
-
+        else{
+            this.buyButton.setDisable(true);
+            this.buildChoiceBox.setDisable(true);
+            this.buildChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
+        }
     }
 
     public void setNewTurnState(){
 
         this.throwDiceButton.setDisable(false);
         this.sellButton.setDisable(true);
+        this.sellChoiceBox.setDisable(true);
+        this.sellChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
         this.buyButton.setDisable(true);
+        this.buildChoiceBox.setDisable(true);
+        this.buildChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
         this.passButton.setDisable(true);
         this.buildPropertyButton.setDisable(true);
         this.diceResultTF.setText("");
@@ -285,6 +301,21 @@ public class MainContainer extends BorderPane {
     }
 
     public String getSelectedSellOwneableCellName(){
+        if(this.sellChoiceBox.getValue() == null){
+            throw new SellChoiceBoxEmptyException("In order to sell, a property must be selected.");
+        }
         return (String)this.sellChoiceBox.getValue();
+    }
+
+    public String getSelectedBuildNeighborhoodName(){
+        if(this.buildChoiceBox.getValue() == null){
+            throw new BuildChoiceBoxEmptyException("In order to build, a neighborhood must be selected.");
+        }
+        return (String)this.buildChoiceBox.getValue();
+    }
+
+    public void setPlayerInBankruptcyState() {
+        this.setNewTurnState();
+        this.throwDiceButton.setDisable(true);
     }
 }

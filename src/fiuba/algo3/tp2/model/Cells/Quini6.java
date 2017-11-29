@@ -24,8 +24,8 @@ public class Quini6 extends Cell {
 
     @Override
     public void playerLandsOnCell(Player player, Turn actualTurn) {
-        newWinner(player);
         player.landsOnQuini6(this);
+        newWinner(player);
     }
 
     public Integer getVictories(Player player){

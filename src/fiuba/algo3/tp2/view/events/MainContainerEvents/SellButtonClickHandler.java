@@ -3,6 +3,7 @@ package fiuba.algo3.tp2.view.events.MainContainerEvents;
 import fiuba.algo3.tp2.model.AlgoPoly;
 import fiuba.algo3.tp2.model.Cells.Owneable;
 import fiuba.algo3.tp2.view.MainContainer;
+import fiuba.algo3.tp2.view.events.Exceptions.SellChoiceBoxEmptyException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
@@ -17,8 +18,14 @@ public class SellButtonClickHandler implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
 
         AlgoPoly algoPoly = AlgoPoly.getInstance();
-        Owneable owneableToSell = (Owneable) algoPoly.getBoard().getCellByName(mainView.getSelectedSellOwneableCellName());
-        owneableToSell.sell();
-        mainView.updatePlayerInfo();
+        try{
+            Owneable owneableToSell = (Owneable) algoPoly.getBoard().getCellByName(mainView.getSelectedSellOwneableCellName());
+            owneableToSell.sell();
+            mainView.updatePlayerInfo();
+        }
+        catch (SellChoiceBoxEmptyException e){
+            algoPoly.logEvent("Para poder vender primero debe seleccionar una propiedad.");
+        }
+
     }
 }

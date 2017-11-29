@@ -66,7 +66,6 @@ public class AlgoPoly {
         this.logEvent("El primer jugador en mover será " + firstPlayer.getName());
 
         this.actualTurn = new Turn(firstPlayer);
-
     }
 
     public void resetGame(){
@@ -118,5 +117,10 @@ public class AlgoPoly {
 
     public void logEvent(String message){
         this.console.addMessage(message);
+    }
+
+    public void playerHasBeenDefeated() {
+        players.remove(this.getActualPlayer());
+        this.nextTurn();
     }
 }

@@ -34,8 +34,15 @@ public class Neighborhood extends Cell implements Groupable , Owneable{
         player.landsOnNeighborhood(this);
         if(this.hasOwner() && !this.owner.equals(player)){
             AlgoPoly.getInstance().logEvent("La propiedad le pertenece a " + this.owner.getName());
-            player.decrementMoney(this.getRentalPrice());
-            this.owner.incrementMoney(this.getRentalPrice());
+
+            if(!player.hasEnoughMoney(this.getRentalPrice())){
+                AlgoPoly.getInstance().logEvent("El jugador " + player.getName() + " no posee dinero suficiente para pagar el precio de alquiler. Para poder avanzar primero debe saldar su deuda de " + this.getRentalPrice().toString());
+                player.createDeb(new Debt(player,this.owner,this.getRentalPrice()));
+            }
+            else {
+                player.decrementMoney(this.getRentalPrice());
+                this.owner.incrementMoney(this.getRentalPrice());
+            }
         }
     }
 
@@ -155,6 +162,13 @@ public class Neighborhood extends Cell implements Groupable , Owneable{
             return this.rent.getNumberOfBuiltHouses().equals(this.maxHouses);
         }
 
+    }
+
+    public Boolean hasHotelBuilt(){
+        if(this.rent.hastHotelBuilt()){
+            return true;
+        }
+        return false;
     }
 
     @Override

@@ -2,6 +2,7 @@ package fiuba.algo3.tp2.model;
 
 import fiuba.algo3.tp2.Global;
 import fiuba.algo3.tp2.model.Cells.*;
+import fiuba.algo3.tp2.model.Exceptions.InsufficientFundsException;
 import fiuba.algo3.tp2.model.MotionAlgorithm.*;
 
 import java.util.ArrayList;
@@ -20,10 +21,10 @@ public class Player {
 
     public Player(String name,Cell startCell){
         this.name = name;
-        money = new Money(initMoney);
-        currentCell = startCell;
-        motionAlgorithm = new NormalForward();
-        ownedCells = new ArrayList<>();
+        this.money = new Money(initMoney);
+        this.currentCell = startCell;
+        this.motionAlgorithm = new NormalForward();
+        this.ownedCells = new ArrayList<>();
     }
 
     public String getName(){
@@ -35,16 +36,16 @@ public class Player {
     }
 
     public void payToBank(Money money){
-        this.money.subtract(money);
+        this.money = this.money.subtract(money);
     }
 
     public void incrementMoney(Money money){
-        this.money.add(money);
+        this.money = this.money.add(money);
         AlgoPoly.getInstance().logEvent("El dinero del jugador " + this.name + " se incremento en " + money.getValue());
     }
 
     public void decrementMoney(Money money){
-        this.money.subtract(money);
+        this.money = this.money.subtract(money);
         AlgoPoly.getInstance().logEvent("El dinero del jugador " + this.name + " se redujo en " + money.getValue());
     }
 
@@ -56,8 +57,8 @@ public class Player {
         return cell.equals(this.currentCell);
     }
 
-    public void move(Turn turn){
-        this.motionAlgorithm.move(this,turn);
+    public void move(Turn turn) {
+        this.motionAlgorithm.move(this, turn);
     }
 
     public void releasedFromJail(){
@@ -119,7 +120,8 @@ public class Player {
     }
 
     public void landsOnPolice(Police police,Jail jail) {
-        this.motionAlgorithm = new Stopped(jail);
+        this.setCurrentCellAndLog(police);
+        this.motionAlgorithm = new StoppedInJail(jail);
         this.setCurrentCellAndLog(jail);
     }
 
@@ -163,4 +165,23 @@ public class Player {
         return this.ownedCells;
     }
 
+    public void solveDebt() {
+        this.motionAlgorithm = new NormalForward();
+    }
+
+    public boolean hasEnoughMoney(Money money) {
+        return !this.money.isNegative(money);
+    }
+
+    public void createDeb(Debt debt) {
+        this.motionAlgorithm = new StoppedInBankruptcy(debt);
+    }
+
+    public Boolean isStoppedByBankruptcy() {
+        return this.motionAlgorithm.getClass().isInstance(StoppedInBankruptcy.class);
+    }
+
+    public Boolean hasPropertiesToSell() {
+        return this.getNumberOfProperties() > 0;
+    }
 }
