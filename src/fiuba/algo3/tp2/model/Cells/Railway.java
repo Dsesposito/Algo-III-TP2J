@@ -1,11 +1,8 @@
 package fiuba.algo3.tp2.model.Cells;
 
-import fiuba.algo3.tp2.model.Board;
-import fiuba.algo3.tp2.model.Money;
-import fiuba.algo3.tp2.model.Player;
-import fiuba.algo3.tp2.model.Turn;
+import fiuba.algo3.tp2.model.*;
 
-public class Railway extends Cell implements Groupable {
+public class Railway extends Cell implements Groupable, Owneable {
 
     private Player owner;
     private Money businessPrice;
@@ -24,6 +21,10 @@ public class Railway extends Cell implements Groupable {
     public void buy(Player player){
         player.decrementMoney(businessPrice);
         this.owner = player;
+        this.owner.addOwneable(this);
+
+        AlgoPoly.getInstance().logEvent("El jugador " + player.getName() + " compró " + super.getName());
+
         if(super.cellGroupHasSameOwner(player)){
             for(Groupable groupable : super.getGroup().getGroupables()){
                 Railway railway = (Railway)groupable;
@@ -33,9 +34,32 @@ public class Railway extends Cell implements Groupable {
     }
 
     @Override
+    public void sell(){
+        //TODO Mover a archivo de configuracion
+        double commission_of_sale = 1-0.15;
+
+        this.owner.incrementMoney(this.businessPrice.multiply(commission_of_sale));
+
+        AlgoPoly.getInstance().logEvent("El jugador " + owner.getName() + " vendió " + super.getName());
+
+        this.owner.dropOwneable(this);
+        this.owner = null;
+    }
+
+    @Override
+    public Player getOwner() {
+        return owner;
+    }
+
+    @Override
+    public Boolean isNeighborhood() {
+        return false;
+    }
+
+    @Override
     public void playerLandsOnCell(Player player, Turn actualTurn) {
         player.landsOnRailWay(this);
-        if(!this.isOwnedBy(player)){
+        if(this.hasOwner() && !this.isOwnedBy(player)){
             Money moneyToDecrement = Money.withValue(actualTurn.getDiceResult() * actualDiceMultiplier);
             player.decrementMoney(moneyToDecrement);
         }
@@ -48,4 +72,16 @@ public class Railway extends Cell implements Groupable {
     public Double getDiceMultiplier() {
         return this.actualDiceMultiplier;
     }
+
+    @Override
+    public Boolean isOwneable(){
+        return true;
+    }
+
+    @Override
+    public Boolean hasOwner() {
+        return this.owner != null;
+    }
+
+
 }

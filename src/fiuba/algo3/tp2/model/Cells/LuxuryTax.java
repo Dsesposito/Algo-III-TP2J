@@ -11,6 +11,8 @@ public class LuxuryTax extends Cell {
 
     @Override
     public void playerLandsOnCell(Player player, Turn actualTurn) {
+        double tax = 0.15;
         player.landsOnLuxuryTax(this);
+        player.decrementMoney(player.getMoney().multiply(tax));
     }
 }

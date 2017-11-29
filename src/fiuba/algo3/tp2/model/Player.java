@@ -6,6 +6,7 @@ import fiuba.algo3.tp2.model.MotionAlgorithm.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Player {
 
@@ -13,7 +14,7 @@ public class Player {
     private Cell currentCell;
     private Money money;
     private MotionAlgorithm motionAlgorithm;
-    private List<Neighborhood> neighborhoods;
+    private List<Owneable> ownedCells;
 
     private static Double initMoney = Global.config.getDouble("initPlayerMoney");
 
@@ -22,7 +23,7 @@ public class Player {
         this.money = new Money(initMoney);
         this.currentCell = startCell;
         this.motionAlgorithm = new NormalForward();
-        this.neighborhoods = new ArrayList<>();
+        this.ownedCells = new ArrayList<>();
     }
 
     public String getName(){
@@ -39,10 +40,12 @@ public class Player {
 
     public void incrementMoney(Money money){
         this.money.add(money);
+        AlgoPoly.getInstance().logEvent("El dinero del jugador " + this.name + " se incremento en " + money.getValue());
     }
 
     public void decrementMoney(Money money){
         this.money.subtract(money);
+        AlgoPoly.getInstance().logEvent("El dinero del jugador " + this.name + " se redujo en " + money.getValue());
     }
 
     public Cell getCurrentCell(){
@@ -61,24 +64,32 @@ public class Player {
         this.motionAlgorithm = new NormalForward();
     }
 
-    public void addNeighborhood(Neighborhood neighborhood){
-        this.neighborhoods.add(neighborhood);
+    public void addOwneable(Owneable owneable){
+        this.ownedCells.add(owneable);
     }
 
-    public void dropNeighborhood(Neighborhood neighborhood){
-        this.neighborhoods.remove(neighborhood);
+    public void dropOwneable(Owneable owneable){
+        this.ownedCells.remove(owneable);
     }
 
 
     public Long getNumberOfProperties(){
-        Long numHousesAndHotels = this.neighborhoods.stream().mapToLong(neighborhoodItem -> (neighborhoodItem.getNumberOfHotelAndHouses())).sum();
-        return (numHousesAndHotels + this.neighborhoods.size());
+        List<Owneable> neighborhoods = this.ownedCells.stream()
+                .filter(owneable -> owneable.isNeighborhood()).collect(Collectors.toList());
+        Long numHousesAndHotels = neighborhoods.stream()
+                .mapToLong(neighborhoodItem -> ((Neighborhood)neighborhoodItem).getNumberOfHotelAndHouses())
+                .sum();
+        return (numHousesAndHotels + neighborhoods.size());
+    }
+
+    public Boolean hasOwneableCells(){
+        return !this.ownedCells.isEmpty();
     }
 
     public void landsOnDynamicBackward(DynamicBackward dynamicBackward,Turn turn) {
         //Configuro el nuevo algoritmo de avance
         this.motionAlgorithm = DynamicBackwardAlgorithmFactory.getAlgorithm(turn.getDiceResult());
-        this.currentCell = dynamicBackward;
+        this.setCurrentCellAndLog(dynamicBackward);
         //Vuelvo a mover
         this.move(turn);
         //Restablezco algoritmo de avance
@@ -88,7 +99,7 @@ public class Player {
     public void landsOnDynamicForward(DynamicForward dynamicForward, Turn turn){
         //Configuro el nuevo algoritmo de avance
         this.motionAlgorithm = DynamicForwardAlgorithmFactory.getAlgorithm(turn.getDiceResult());
-        this.currentCell = dynamicForward;
+        this.setCurrentCellAndLog(dynamicForward);
         //Vuelvo a mover
         this.move(turn);
         //Restablezco algoritmo de avance
@@ -96,38 +107,41 @@ public class Player {
     }
 
     public void landsOnJail(Jail jail) {
-        this.currentCell = jail;
+        this.setCurrentCellAndLog(jail);
     }
 
     public void landsOnLuxuryTax(LuxuryTax luxuryTax) {
-        double tax = 0.15;
-        this.currentCell = luxuryTax;
-        money.subtract(money.getValue()*tax);
+        this.setCurrentCellAndLog(luxuryTax);
     }
 
     public void landsOnNeighborhood(Neighborhood neighborhood) {
-        this.currentCell = neighborhood;
+        this.setCurrentCellAndLog(neighborhood);
     }
 
     public void landsOnPolice(Police police,Jail jail) {
         this.motionAlgorithm = new Stopped(jail);
-        this.currentCell = jail;
+        this.setCurrentCellAndLog(jail);
     }
 
     public void landsOnQuini6(Quini6 quini6) {
-        this.currentCell = quini6;
+        this.setCurrentCellAndLog(quini6);
     }
 
     public void landsOnRailWay(Railway railway) {
-        this.currentCell = railway;
+        this.setCurrentCellAndLog(railway);
     }
 
     public void landsOnService(Service service) {
-        this.currentCell = service;
+        this.setCurrentCellAndLog(service);
     }
 
     public void landsOnStartPoint(StartPoint startPoint) {
-        this.currentCell = startPoint;
+        this.setCurrentCellAndLog(startPoint);
+    }
+
+    private void setCurrentCellAndLog(Cell currentCell){
+        this.currentCell = currentCell;
+        AlgoPoly.getInstance().logEvent("El jugador " + this.name + " cayó en " + currentCell.getName());
     }
 
     @Override
@@ -143,5 +157,9 @@ public class Player {
     @Override
     public int hashCode() {
         return name != null ? name.hashCode() : 0;
+    }
+
+    public List<Owneable> getOwneableCells() {
+        return this.ownedCells;
     }
 }

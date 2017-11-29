@@ -15,16 +15,20 @@ public class Board {
     }
 
     public Cell getCellXPositionsFurtherForward(Cell cell, Long numberOfCellsToMoveForward){
-        //TODO: Refactor implementar desborde
         if(!cells.contains(cell)){
             throw new CellNotFoundException("The cell " + cell.getName() + " is invalid.");
         }
 
-        return cells.get((int) (cells.indexOf(cell) + numberOfCellsToMoveForward));
+        int index = cells.indexOf(cell) + Math.toIntExact(numberOfCellsToMoveForward);
+        int lastPos = cells.size()-1;
+        if(index > lastPos){
+            index = (index % lastPos) - 1;
+        }
+
+        return cells.get(index);
     }
 
     public Cell getCellXPositionsFurtherBackward(Cell cell, Long numberOfCellsToMoveBackward){
-        //TODO: Refactor implementar desborde
         if(!cells.contains(cell)){
             throw new CellNotFoundException("The cell " + cell.getName() + " is invalid.");
         }
@@ -186,10 +190,22 @@ public class Board {
     }
 
     public Service getServiceByName(String name){
-        return (Service) cells.stream().filter(cell -> cell.getName().equals(name)).findFirst().orElse(null);
+        return (Service) cells.stream()
+                .filter(cell -> cell.getName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 
     public Railway getRailwayByName(String name){
-        return (Railway) cells.stream().filter(cell -> cell.getName().equals(name)).findFirst().orElse(null);
+        return (Railway) cells.stream()
+                .filter(cell -> cell.getName().equals(name))
+                .findFirst()
+                .orElse(null);
+    }
+
+    public Cell getCellByName(String name){
+        return cells.stream().filter(cell -> cell.getName().equals(name))
+                .findFirst()
+                .orElse(null);
     }
 }

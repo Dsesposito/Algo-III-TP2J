@@ -3,7 +3,7 @@ package fiuba.algo3.tp2.model.Cells;
 import fiuba.algo3.tp2.model.*;
 import fiuba.algo3.tp2.model.Exceptions.NeighborhoodExceptions.*;
 
-public class Neighborhood extends Cell implements Groupable {
+public class Neighborhood extends Cell implements Groupable , Owneable{
 
     private Player owner;
 
@@ -33,6 +33,7 @@ public class Neighborhood extends Cell implements Groupable {
     public void playerLandsOnCell(Player player, Turn actualTurn) {
         player.landsOnNeighborhood(this);
         if(this.hasOwner() && !this.owner.equals(player)){
+            AlgoPoly.getInstance().logEvent("La propiedad le pertenece a " + this.owner.getName());
             player.decrementMoney(this.getRentalPrice());
             this.owner.incrementMoney(this.getRentalPrice());
         }
@@ -53,6 +54,8 @@ public class Neighborhood extends Cell implements Groupable {
         if(!this.hasAllHousesBuilt()){
             this.rent.incrementBuiltHouses();
             this.owner.decrementMoney(this.housePrice);
+
+            AlgoPoly.getInstance().logEvent("El jugador " + this.owner.getName() + " compró una casa en el barrio " + this.name);
         }
 
     }
@@ -73,6 +76,9 @@ public class Neighborhood extends Cell implements Groupable {
             this.rent.clearBuiltHouses();
             this.rent.incrementBuiltHotels();
             this.owner.decrementMoney(hotelPrice);
+
+            AlgoPoly.getInstance().logEvent("El jugador " + this.owner.getName() + " compró un hotel en el barrio " + this.name);
+
         }
 
     }
@@ -84,9 +90,21 @@ public class Neighborhood extends Cell implements Groupable {
             throw new NeighborhoodWithOwnerException("The neighborhood already has an owner");
         }
 
+        AlgoPoly.getInstance().logEvent("El jugador " + player.getName() + " compró el barrio " + this.name);
+
         this.owner = player;
-        this.owner.addNeighborhood(this);
+        this.owner.addOwneable(this);
         this.owner.decrementMoney(this.getLandPrice());
+    }
+
+    @Override
+    public Player getOwner() {
+        return this.owner;
+    }
+
+    @Override
+    public Boolean isNeighborhood() {
+        return true;
     }
 
     public Boolean isOwnedBy(Player player){
@@ -101,7 +119,8 @@ public class Neighborhood extends Cell implements Groupable {
         return rent.getRentalPrice();
     }
 
-    public void sellPropertie(){
+    @Override
+    public void sell(){
         //TODO Mover a archivo de configuracion
         double commission_of_sale = 1-0.15;
 
@@ -109,12 +128,14 @@ public class Neighborhood extends Cell implements Groupable {
         if(this.rent.hastHotelBuilt()){
             this.owner.incrementMoney(hotelPrice.multiply(commission_of_sale));
         }
-        else{
+        else if(this.rent.getNumberOfBuiltHouses() > 0){
             this.owner.incrementMoney(housePrice.multiply(this.rent.getNumberOfBuiltHouses()*commission_of_sale));
         }
 
+        AlgoPoly.getInstance().logEvent("El jugador " + owner.getName() + " vendió el barrio " + this.name);
+
         this.rent.clearBuiltHousesAndHotels();
-        this.owner.dropNeighborhood(this);
+        this.owner.dropOwneable(this);
         this.owner = null;
     }
 
@@ -134,6 +155,11 @@ public class Neighborhood extends Cell implements Groupable {
             return this.rent.getNumberOfBuiltHouses().equals(this.maxHouses);
         }
 
+    }
+
+    @Override
+    public Boolean isOwneable(){
+        return true;
     }
 
 }
