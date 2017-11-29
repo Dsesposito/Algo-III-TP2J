@@ -4,6 +4,7 @@ import fiuba.algo3.tp2.model.AlgoPoly;
 import fiuba.algo3.tp2.model.Cells.Cell;
 import fiuba.algo3.tp2.model.Cells.Groupable;
 import fiuba.algo3.tp2.model.Cells.Owneable;
+import fiuba.algo3.tp2.model.Exceptions.InsufficientFundsException;
 import fiuba.algo3.tp2.model.Player;
 import fiuba.algo3.tp2.model.Turn;
 import fiuba.algo3.tp2.view.MainContainer;
@@ -23,13 +24,26 @@ public class ThrowDiceButtonClickHandler implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
 
         AlgoPoly algoPoly = AlgoPoly.getInstance();
+
+        Player currentPlayer = algoPoly.getActualPlayer();
+
         algoPoly.throwDice();
 
         algoPoly.movePlayer();
 
+        if(currentPlayer.isStoppedByBankruptcy()){
+            if(currentPlayer.hasPropertiesToSell()){
+                mainView.setPlayerInBankruptcyState();
+            }
+            else{
+                algoPoly.playerHasBeenDefeated();
+                mainView.setNewTurnState();
+            }
+
+        }
+
         mainView.setPlayerPlayingState();
 
-        Player currentPlayer = algoPoly.getActualPlayer();
         Cell landedCell = currentPlayer.getCurrentCell();
 
         Boolean isOwneable = landedCell.isOwneable();
