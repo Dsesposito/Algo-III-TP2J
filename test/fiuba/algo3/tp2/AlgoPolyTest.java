@@ -19,6 +19,9 @@ public class AlgoPolyTest {
     public void test01AddThreePlayersToGame(){
         AlgoPoly game = AlgoPoly.getInstance();
 
+        game.resetGame();
+
+
         game.addPlayerToGame("Lucas");
         game.addPlayerToGame("Diego");
         game.addPlayerToGame("Guido");
@@ -30,11 +33,15 @@ public class AlgoPolyTest {
     public void test02AddFourPlayersToGame(){
         AlgoPoly game = AlgoPoly.getInstance();
 
+        game.resetGame();
+
         game.addPlayerToGame("Lucas");
         game.addPlayerToGame("Diego");
         game.addPlayerToGame("Guido");
         thrown.expect(AlgoPolyPlayerQuantityException.class);
         game.addPlayerToGame("Gonazalo");
+
+        game.resetGame();
     }
 
 }

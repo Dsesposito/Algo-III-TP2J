@@ -69,6 +69,11 @@ public class AlgoPoly {
 
     }
 
+    public void resetGame(){
+        this.players = new ArrayList<>();
+        this.actualTurn = null;
+    }
+
     public void nextTurn(){
         Player actualPlayer = this.getActualPlayer();
         int nextPlayerIndex = players.indexOf(actualPlayer) + 1;
