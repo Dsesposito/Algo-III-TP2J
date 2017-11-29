@@ -36,8 +36,15 @@ public class Neighborhood extends Cell implements Groupable , Owneable{
             AlgoPoly.getInstance().logEvent("La propiedad le pertenece a " + this.owner.getName());
 
             if(!player.hasEnoughMoney(this.getRentalPrice())){
-                AlgoPoly.getInstance().logEvent("El jugador " + player.getName() + " no posee dinero suficiente para pagar el precio de alquiler. Para poder avanzar primero debe saldar su deuda de " + this.getRentalPrice().toString());
-                player.createDeb(new Debt(player,this.owner,this.getRentalPrice()));
+
+                if(player.sellingPropertiesHasEnoughMoney(this.getRentalPrice())){
+                    AlgoPoly.getInstance().logEvent("El jugador " + player.getName() + " no posee dinero suficiente para pagar el precio de alquiler. Para poder avanzar primero debe saldar su deuda de " + this.getRentalPrice().toString());
+                    player.createDeb(new Debt(player,this.owner,this.getRentalPrice()));
+                }
+                else{
+                    AlgoPoly.getInstance().logEvent("El jugador " + player.getName() + " no posee suficiente propiedades para saldar su deuda de " + this.getRentalPrice().toString() + ". El jugador ha si derrotado. ");
+                    player.setDefeated();
+                }
             }
             else {
                 player.decrementMoney(this.getRentalPrice());
@@ -112,6 +119,21 @@ public class Neighborhood extends Cell implements Groupable , Owneable{
     @Override
     public Boolean isNeighborhood() {
         return true;
+    }
+
+    @Override
+    public Money getSaleValue() {
+        //TODO Mover a archivo de configuracion
+        double commission_of_sale = 1-0.15;
+
+        Money saleValue = this.getLandPrice().multiply(commission_of_sale);
+        if(this.rent.hastHotelBuilt()){
+            saleValue = saleValue.add(hotelPrice.multiply(commission_of_sale));
+        }
+        else if(this.rent.getNumberOfBuiltHouses() > 0){
+            saleValue = saleValue.add(housePrice.multiply(this.rent.getNumberOfBuiltHouses()*commission_of_sale));
+        }
+        return saleValue;
     }
 
     public Boolean isOwnedBy(Player player){

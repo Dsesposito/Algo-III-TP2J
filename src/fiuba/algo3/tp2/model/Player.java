@@ -181,7 +181,27 @@ public class Player {
         return this.motionAlgorithm.getClass().isInstance(StoppedInBankruptcy.class);
     }
 
+    public Boolean isDefeted(){
+        return this.motionAlgorithm.getClass().isInstance(Defeted.class);
+    }
+
     public Boolean hasPropertiesToSell() {
         return this.getNumberOfProperties() > 0;
+    }
+
+
+    public void setDefeated() {
+        this.motionAlgorithm = new Defeted();
+    }
+
+    public Boolean sellingPropertiesHasEnoughMoney(Money rentalPrice) {
+
+        Money saleValue = Money.withValue(0.0);
+
+        for(Owneable owneable : this.ownedCells){
+            saleValue = saleValue.add(owneable.getSaleValue());
+        }
+
+        return !saleValue.isNegative(rentalPrice);
     }
 }

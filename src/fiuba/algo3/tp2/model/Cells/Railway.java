@@ -57,11 +57,35 @@ public class Railway extends Cell implements Groupable, Owneable {
     }
 
     @Override
+    public Money getSaleValue() {
+        //TODO Mover a archivo de configuracion
+        double commission_of_sale = 1-0.15;
+
+        return this.businessPrice.multiply(commission_of_sale);
+    }
+
+    @Override
     public void playerLandsOnCell(Player player, Turn actualTurn) {
         player.landsOnRailWay(this);
         if(this.hasOwner() && !this.isOwnedBy(player)){
-            Money moneyToDecrement = Money.withValue(actualTurn.getDiceResult() * actualDiceMultiplier);
-            player.decrementMoney(moneyToDecrement);
+            Money rentalPrice = Money.withValue(actualTurn.getDiceResult() * actualDiceMultiplier);
+
+            if(!player.hasEnoughMoney(rentalPrice)){
+
+                if(player.sellingPropertiesHasEnoughMoney(rentalPrice)){
+                    AlgoPoly.getInstance().logEvent("El jugador " + player.getName() + " no posee dinero suficiente para pagar el precio de alquiler. Para poder avanzar primero debe saldar su deuda de " + rentalPrice.toString());
+                    player.createDeb(new Debt(player,this.owner,rentalPrice));
+                }
+                else{
+                    AlgoPoly.getInstance().logEvent("El jugador " + player.getName() + " no posee suficiente propiedades para saldar su deuda de " + rentalPrice.toString() + ". El jugador ha si derrotado. ");
+                    player.setDefeated();
+                }
+
+            }
+            else {
+                player.decrementMoney(rentalPrice);
+                this.owner.incrementMoney(rentalPrice);
+            }
         }
     }
 
