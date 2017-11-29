@@ -21,7 +21,6 @@ public class AlgoPolyTest {
 
         game.resetGame();
 
-
         game.addPlayerToGame("Lucas");
         game.addPlayerToGame("Diego");
         game.addPlayerToGame("Guido");
@@ -32,7 +31,6 @@ public class AlgoPolyTest {
     @Test
     public void test02AddFourPlayersToGame(){
         AlgoPoly game = AlgoPoly.getInstance();
-
         game.resetGame();
 
         game.addPlayerToGame("Lucas");

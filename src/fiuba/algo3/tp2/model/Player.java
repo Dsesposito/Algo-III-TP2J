@@ -20,10 +20,10 @@ public class Player {
 
     public Player(String name,Cell startCell){
         this.name = name;
-        this.money = new Money(initMoney);
-        this.currentCell = startCell;
-        this.motionAlgorithm = new NormalForward();
-        this.ownedCells = new ArrayList<>();
+        money = new Money(initMoney);
+        currentCell = startCell;
+        motionAlgorithm = new NormalForward();
+        ownedCells = new ArrayList<>();
     }
 
     public String getName(){
@@ -162,4 +162,5 @@ public class Player {
     public List<Owneable> getOwneableCells() {
         return this.ownedCells;
     }
+
 }

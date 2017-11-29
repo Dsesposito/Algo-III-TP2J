@@ -81,13 +81,11 @@ public class AlgoPoly {
             nextPlayerIndex = ((nextPlayerIndex + 1) % players.size()) - 1;
         }
         this.actualTurn = new Turn(players.get(nextPlayerIndex));
-
         this.logEvent("Turno del jugador " + this.getActualPlayer().getName());
     }
 
     public void throwDice(){
-        Integer diceResult = die1.throwDie() + die2.throwDie();
-        actualTurn.setDiceResult(Long.valueOf(diceResult));
+        actualTurn.setDiceResult(Long.valueOf(die1.throwDie()), Long.valueOf(die2.throwDie()));
     }
 
     public Board getBoard(){
@@ -99,11 +97,9 @@ public class AlgoPoly {
     }
 
     public Player getActualPlayer(){
-
         if(this.actualTurn == null){
             throw new AlgoPolyNoActualTurnException("There is not a turn running");
         }
-
         return this.actualTurn.getCurrentPlayer();
     }
 
@@ -111,9 +107,13 @@ public class AlgoPoly {
         return this.actualTurn;
     }
 
+    public void mockThrowDice(Long face1, Long face2){
+        actualTurn.setDiceResult(face1, face2);
+    }
+
     public void movePlayer() {
-        Player player = this.actualTurn.getCurrentPlayer();
-        player.move(this.actualTurn);
+        Player player = actualTurn.getCurrentPlayer();
+        player.move(actualTurn);
     }
 
     public void logEvent(String message){

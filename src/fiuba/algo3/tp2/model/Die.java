@@ -5,7 +5,7 @@ public class Die {
     private static Integer minimum = 1;
     private static Integer maximum = 6;
 
-    public Die(){};
+    public Die(){}
 
     public Integer throwDie(){
         lastFace = minimum + (int)(Math.random() * (maximum - minimum));
