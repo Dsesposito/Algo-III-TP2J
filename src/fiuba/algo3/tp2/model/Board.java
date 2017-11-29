@@ -1,10 +1,9 @@
 package fiuba.algo3.tp2.model;
+import fiuba.algo3.tp2.Global;
 import fiuba.algo3.tp2.model.Cells.*;
 import fiuba.algo3.tp2.model.Exceptions.CellNotFoundException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 public class Board {
 
@@ -71,31 +70,30 @@ public class Board {
 
 
     private void initBoardCells() {
-        Railway train = new Railway("Tren",this, Money.withValue(38000.0),450.0,800.0);
-        Railway subway = new Railway("Subte",this, Money.withValue(40000.0),600.0,1100.0);
+
+        Railway train = new Railway("Tren",this, Money.withValue(Global.config.getDouble("trainSalePrice")), Global.config.getDouble("trainDiceMultiplierSingle"), Global.config.getDouble("trainDiceMultiplierGroup"));
+        Railway subway = new Railway("Subte",this, Money.withValue(Global.config.getDouble("subwaySalePrice")), Global.config.getDouble("subwayDiceMultiplierSingle"), Global.config.getDouble("subwayDiceMultiplierGroup"));
         CellGroup.group("Transporte ferroviario",Arrays.asList(train,subway));
 
-        Service edesur = new Service("Edesur",this,Money.withValue(35000.0),500.0, 1000.0);
-        Service aysa = new Service("Aysa",this, Money.withValue(30000.0),300.0, 500.0);
+        Service edesur = new Service("Edesur",this, Money.withValue(Global.config.getDouble("edesurSalePrice")), Global.config.getDouble("edesurDiceMultiplierSingle"), Global.config.getDouble("edesurDiceMultiplierGroup"));
+        Service aysa = new Service("Aysa",this, Money.withValue(Global.config.getDouble("aysaSalePrice")), Global.config.getDouble("aysaDiceMultiplierSingle"), Global.config.getDouble("aysaDiceMultiplierGroup"));
         CellGroup.group("Servicio de luz y agua",Arrays.asList(edesur,aysa));
-
 
         List<Money> rentalPricesHouses;
         rentalPricesHouses = new ArrayList<>();
         List<Money> rentalPricesHotels;
         rentalPricesHotels = new ArrayList<>();
-        rentalPricesHouses.addAll(Arrays.asList(Money.withValue(3000.0), Money.withValue(3500.0)));
-        rentalPricesHotels.add(Money.withValue(5000.0));
-        Neighborhood bsassur = new Neighborhood("Bs. As. - Zona Sur", Money.withValue(20000.0), Money.withValue(5000.0), Money.withValue(8000.0), new Rental(Money.withValue(2000.0), rentalPricesHouses, rentalPricesHotels), 2L, this);
-
+        rentalPricesHouses.addAll(Arrays.asList(Money.withValue(Global.config.getDouble("bsassurOneHouseRentalPrice")), Money.withValue(Global.config.getDouble("bsassurTwoHousesRentalPrice"))));
+        rentalPricesHotels.add(Money.withValue(Global.config.getDouble("bsassurOneHotelRentalPrice")));
+        Neighborhood bsassur = new Neighborhood("Bs. As. - Zona Sur", Money.withValue(Global.config.getDouble("bsassurSalePrice")), Money.withValue(Global.config.getDouble("bsassurHousePrice")), Money.withValue(Global.config.getDouble("bsassurHotelPrice")), new Rental(Money.withValue(Global.config.getDouble("bsassurRentalPrice")), rentalPricesHouses, rentalPricesHotels), 2L, this);
 
         List<Money> rentalPricesHouses1;
         rentalPricesHouses1 = new ArrayList<>();
         List<Money> rentalPricesHotels1;
         rentalPricesHotels1 = new ArrayList<>();
-        rentalPricesHouses1.addAll(Arrays.asList(Money.withValue(3500.0), Money.withValue(4000.0)));
-        rentalPricesHotels1.add(Money.withValue(6000.0));
-        Neighborhood bsasnorte = new Neighborhood("Bs. As. - Zona Norte", Money.withValue(25000.0), Money.withValue(5500.0), Money.withValue(9000.0), new Rental(Money.withValue(2500.0), rentalPricesHouses1, rentalPricesHotels1), 2L, this);
+        rentalPricesHouses1.addAll(Arrays.asList(Money.withValue(Global.config.getDouble("bsasnorteOneHouseRentalPrice")), Money.withValue(Global.config.getDouble("bsasnorteTwoHousesRentalPrice"))));
+        rentalPricesHotels1.add(Money.withValue(Global.config.getDouble("bsasnorteOneHotelRentalPrice")));
+        Neighborhood bsasnorte = new Neighborhood("Bs. As. - Zona Norte", Money.withValue(Global.config.getDouble("bsasnorteSalePrice")), Money.withValue(Global.config.getDouble("bsasnorteHousePrice")), Money.withValue(Global.config.getDouble("bsasnorteHotelPrice")), new Rental(Money.withValue(Global.config.getDouble("bsasnorteRentalPrice")), rentalPricesHouses1, rentalPricesHotels1), 2L, this);
 
         NeighborhoodZone.group("Bs. As.",Arrays.asList(bsassur,bsasnorte));
 
@@ -103,17 +101,17 @@ public class Board {
         rentalPricesHouses2 = new ArrayList<>();
         List<Money> rentalPricesHotels2;
         rentalPricesHotels2 = new ArrayList<>();
-        rentalPricesHouses2.addAll(Arrays.asList(Money.withValue(1500.0), Money.withValue(2500.0)));
-        rentalPricesHotels2.add(Money.withValue(3000.0));
-        Neighborhood cordobaSur = new Neighborhood("Cordoba - Sur", Money.withValue(18000.0), Money.withValue(2000.0), Money.withValue(3000.0), new Rental(Money.withValue(1000.0), rentalPricesHouses2, rentalPricesHotels2), 2L, this);
+        rentalPricesHouses2.addAll(Arrays.asList(Money.withValue(Global.config.getDouble("cordobasurOneHouseRentalPrice")), Money.withValue(Global.config.getDouble("cordobasurTwoHousesRentalPrice"))));
+        rentalPricesHotels2.add(Money.withValue(Global.config.getDouble("cordobasurOneHotelRentalPrice")));
+        Neighborhood cordobaSur = new Neighborhood("Cordoba - Sur", Money.withValue(Global.config.getDouble("cordobasurSalePrice")), Money.withValue(Global.config.getDouble("cordobasurHousePrice")), Money.withValue(Global.config.getDouble("cordobasurHotelPrice")), new Rental(Money.withValue(Global.config.getDouble("cordobasurRentalPrice")), rentalPricesHouses2, rentalPricesHotels2), 2L, this);
 
         List<Money> rentalPricesHouses3;
         rentalPricesHouses3 = new ArrayList<>();
         List<Money> rentalPricesHotels3;
         rentalPricesHotels3 = new ArrayList<>();
-        rentalPricesHouses3.addAll(Arrays.asList(Money.withValue(1800.0), Money.withValue(2900.0)));
-        rentalPricesHotels3.add(Money.withValue(3500.0));
-        Neighborhood cordobaNorte = new Neighborhood("Cordoba - Norte", Money.withValue(20000.0), Money.withValue(2200.0), Money.withValue(3500.0), new Rental(Money.withValue(1300.0), rentalPricesHouses3, rentalPricesHotels3), 2L, this);
+        rentalPricesHouses3.addAll(Arrays.asList(Money.withValue(Global.config.getDouble("cordobanorteOneHouseRentalPrice")), Money.withValue(Global.config.getDouble("cordobanorteTwoHousesRentalPrice"))));
+        rentalPricesHotels3.add(Money.withValue(Global.config.getDouble("cordobanorteOneHotelRentalPrice")));
+        Neighborhood cordobaNorte = new Neighborhood("Cordoba - Norte", Money.withValue(Global.config.getDouble("cordobanorteSalePrice")), Money.withValue(Global.config.getDouble("cordobanorteHousePrice")), Money.withValue(Global.config.getDouble("cordobanorteHotelPrice")), new Rental(Money.withValue(Global.config.getDouble("cordobanorteRentalPrice")), rentalPricesHouses3, rentalPricesHotels3), 2L, this);
 
         NeighborhoodZone.group("Cordoba",Arrays.asList(cordobaSur,cordobaNorte));
 
@@ -121,56 +119,49 @@ public class Board {
         rentalPricesHouses5 = new ArrayList<>();
         List<Money> rentalPricesHotels5;
         rentalPricesHotels5 = new ArrayList<>();
-        rentalPricesHouses5.addAll(Arrays.asList(Money.withValue(3250.0), Money.withValue(3850.0)));
-        rentalPricesHotels5.add(Money.withValue(5500.0));
-        Neighborhood saltaNorte = new Neighborhood("Salta - Norte", Money.withValue(23000.0), Money.withValue(4500.0), Money.withValue(7500.0), new Rental(Money.withValue(2000.0), rentalPricesHouses5, rentalPricesHotels5), 2L, this);
+        rentalPricesHouses5.addAll(Arrays.asList(Money.withValue(Global.config.getDouble("saltanorteOneHouseRentalPrice")), Money.withValue(Global.config.getDouble("saltanorteTwoHousesRentalPrice"))));
+        rentalPricesHotels5.add(Money.withValue(Global.config.getDouble("saltanorteOneHotelRentalPrice")));
+        Neighborhood saltaNorte = new Neighborhood("Salta - Norte", Money.withValue(Global.config.getDouble("saltanorteSalePrice")), Money.withValue(Global.config.getDouble("saltanorteHousePrice")), Money.withValue(Global.config.getDouble("saltanorteHotelPrice")), new Rental(Money.withValue(Global.config.getDouble("saltanorteRentalPrice")), rentalPricesHouses5, rentalPricesHotels5), 2L, this);
 
         List<Money> rentalPricesHouses6;
         rentalPricesHouses6 = new ArrayList<>();
         List<Money> rentalPricesHotels6;
         rentalPricesHotels6 = new ArrayList<>();
-        rentalPricesHouses6.addAll(Arrays.asList(Money.withValue(3250.0), Money.withValue(3850.0)));
-        rentalPricesHotels6.add(Money.withValue(5500.0));
-        Neighborhood saltaSur = new Neighborhood("Salta - Sur", Money.withValue(23000.0), Money.withValue(4500.0), Money.withValue(7500.0), new Rental(Money.withValue(2000.0), rentalPricesHouses6, rentalPricesHotels6), 2L, this);
+        rentalPricesHouses6.addAll(Arrays.asList(Money.withValue(Global.config.getDouble("saltanorteOneHouseRentalPrice")), Money.withValue(Global.config.getDouble("saltanorteTwoHousesRentalPrice"))));
+        rentalPricesHotels6.add(Money.withValue(Global.config.getDouble("saltanorteOneHotelRentalPrice")));
+        Neighborhood saltaSur = new Neighborhood("Salta - Sur", Money.withValue(Global.config.getDouble("saltanorteSalePrice")), Money.withValue(Global.config.getDouble("saltanorteHousePrice")), Money.withValue(Global.config.getDouble("saltanorteHotelPrice")), new Rental(Money.withValue(Global.config.getDouble("saltanorteRentalPrice")), rentalPricesHouses6, rentalPricesHotels6), 2L, this);
 
         NeighborhoodZone.group("Salta",Arrays.asList(saltaNorte,saltaSur));
-
-
 
         List<Money> rentalPricesHouses4;
         rentalPricesHouses4 = new ArrayList<>();
         List<Money> rentalPricesHotels4;
         rentalPricesHotels4 = new ArrayList<>();
-        rentalPricesHouses4.add(Money.withValue(3500.0));
-        rentalPricesHotels4.add(Money.withValue(0.0));
-        Neighborhood santaFe = new Neighborhood("Santa Fe", Money.withValue(15000.0), Money.withValue(4000.0), Money.withValue(0.0), new Rental(Money.withValue(1500.0), rentalPricesHouses4, rentalPricesHotels4), 1L,this);
+        rentalPricesHouses4.addAll(Arrays.asList(Money.withValue(Global.config.getDouble("santafeOneHouseRentalPrice")), Money.withValue(Global.config.getDouble("santafeTwoHousesRentalPrice"))));
+        rentalPricesHotels4.add(Money.withValue(Global.config.getDouble("santafeOneHotelRentalPrice")));
+        Neighborhood santaFe = new Neighborhood("Santa Fe", Money.withValue(Global.config.getDouble("santafeSalePrice")), Money.withValue(Global.config.getDouble("santafeHousePrice")), Money.withValue(Global.config.getDouble("santafeHotelPrice")), new Rental(Money.withValue(Global.config.getDouble("santafeRentalPrice")), rentalPricesHouses4, rentalPricesHotels4), 1L,this);
 
         NeighborhoodZone.group("Santa Fe",Arrays.asList(santaFe));
-
-
 
         List<Money> rentalPricesHouses7;
         rentalPricesHouses7 = new ArrayList<>();
         List<Money> rentalPricesHotels7;
         rentalPricesHotels7 = new ArrayList<>();
-        rentalPricesHouses7.add(Money.withValue(3800.0));
-        rentalPricesHotels7.add(Money.withValue(0.0));
-        Neighborhood neuquen = new Neighborhood("Neuquén", Money.withValue(17000.0), Money.withValue(4800.0), Money.withValue(0.0), new Rental(Money.withValue(1800.0), rentalPricesHouses7, rentalPricesHotels7), 1L,this);
+        rentalPricesHouses7.addAll(Arrays.asList(Money.withValue(Global.config.getDouble("neuquenOneHouseRentalPrice")), Money.withValue(Global.config.getDouble("neuquenTwoHousesRentalPrice"))));
+        rentalPricesHotels7.add(Money.withValue(Global.config.getDouble("neuquenOneHotelRentalPrice")));
+        Neighborhood neuquen = new Neighborhood("Neuquén", Money.withValue(Global.config.getDouble("neuquenSalePrice")), Money.withValue(Global.config.getDouble("neuquenHousePrice")), Money.withValue(Global.config.getDouble("neuquenHotelPrice")), new Rental(Money.withValue(Global.config.getDouble("neuquenRentalPrice")), rentalPricesHouses7, rentalPricesHotels7), 1L,this);
 
         NeighborhoodZone.group("Neuquen",Arrays.asList(neuquen));
-
-
 
         List<Money> rentalPricesHouses8;
         rentalPricesHouses8 = new ArrayList<>();
         List<Money> rentalPricesHotels8;
         rentalPricesHotels8 = new ArrayList<>();
-        rentalPricesHouses8.add(Money.withValue(4500.0));
-        rentalPricesHotels8.add(Money.withValue(0.0));
-        Neighborhood tucuman = new Neighborhood("Tucuman", Money.withValue(25000.0), Money.withValue(7000.0), Money.withValue(0.0), new Rental(Money.withValue(2500.0), rentalPricesHouses8, rentalPricesHotels8), 1L,this);
+        rentalPricesHouses8.addAll(Arrays.asList(Money.withValue(Global.config.getDouble("tucumanOneHouseRentalPrice")), Money.withValue(Global.config.getDouble("tucumanTwoHousesRentalPrice"))));
+        rentalPricesHotels8.add(Money.withValue(Global.config.getDouble("tucumanOneHotelRentalPrice")));
+        Neighborhood tucuman = new Neighborhood("Tucuman", Money.withValue(Global.config.getDouble("tucumanSalePrice")), Money.withValue(Global.config.getDouble("tucumanHousePrice")), Money.withValue(Global.config.getDouble("tucumanHotelPrice")), new Rental(Money.withValue(Global.config.getDouble("tucumanRentalPrice")), rentalPricesHouses8, rentalPricesHotels8), 1L,this);
 
         NeighborhoodZone.group("Tucuman",Arrays.asList(tucuman));
-
 
         cells.add(new StartPoint("Salida", this));
         cells.add(new Quini6("Quini 6", this));
