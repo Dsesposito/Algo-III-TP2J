@@ -32,7 +32,7 @@ public class ThrowDiceButtonClickHandler implements EventHandler<ActionEvent> {
         algoPoly.movePlayer();
 
         if(currentPlayer.isStoppedByBankruptcy()){
-            if(currentPlayer.hasPropertiesToSell()){
+            if(currentPlayer.hasPropertiesToSell() && !currentPlayer.isDefeted()){
                 mainView.setPlayerInBankruptcyState();
             }
             else{
