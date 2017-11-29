@@ -28,22 +28,13 @@ public class BuyLandButtonClickHandler implements EventHandler<ActionEvent> {
 
         try{
             owneableCell.buy(currentPlayer);
-            this.mainView.toggleStateBuyLandButton();
-            mainView.updatePlayerMoney(currentPlayer.getMoney().getValue().toString());
-            mainView.printLine("El jugador " + currentPlayer.getName() + " compró " + currentPlayer.getCurrentCell().getName());
+            this.mainView.updatePlayerInfo();
         }
         catch (InsufficientFundsException e){
-            mainView.printLine("El jugador " + currentPlayer.getName() + " no posee los fondos suficientes para comprar.");
+            algoPoly.logEvent("El jugador " + currentPlayer.getName() + " no posee los fondos suficientes para comprar.");
         }
 
-        mainView.clearDiceResult();
-
         algoPoly.nextTurn();
-
-        mainView.printLine("Turno del jugador " + algoPoly.getActualPlayer().getName());
-
-        this.mainView.updatePlayerName(algoPoly.getActualPlayer().getName());
-        this.mainView.updatePlayerMoney(algoPoly.getActualPlayer().getMoney().getValue().toString());
-        this.mainView.toggleStateThrowDiceButton();
+        this.mainView.setNewTurnState();
     }
 }

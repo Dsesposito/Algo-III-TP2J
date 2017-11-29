@@ -23,7 +23,7 @@ public class PropertiesTest {
         bsassur.buyHouse();
         bsassur.buyHouse();
 
-        bsassur.sellPropertie();
+        bsassur.sell();
         double money_player1_start = player1.getMoney().getValue();
         bsassur.buy(player2);
         Assert.assertTrue(bsassur.isOwnedBy(player2));
@@ -51,7 +51,7 @@ public class PropertiesTest {
         bsasnorte.buy(player1);
         bsassur.buyHouse();
         // Only one house
-        bsassur.sellPropertie();
+        bsassur.sell();
         bsassur.buy(player2);
 
         double money_player2_start = player2.getMoney().getValue();
@@ -61,12 +61,12 @@ public class PropertiesTest {
 
         Assert.assertEquals(money_player2_finish, money_player2_start + 2000, DELTA);
 
-        bsassur.sellPropertie();
+        bsassur.sell();
         bsassur.buy(player1);
         bsassur.buyHouse();
         bsassur.buyHouse();
         // Two houses
-        bsassur.sellPropertie();
+        bsassur.sell();
         bsassur.buy(player2);
 
         money_player2_start = player2.getMoney().getValue();
@@ -75,7 +75,7 @@ public class PropertiesTest {
 
         Assert.assertEquals(money_player2_finish, money_player2_start + 2000, DELTA);
 
-        bsassur.sellPropertie();
+        bsassur.sell();
         bsassur.buy(player1);
         bsassur.buyHouse();
         bsassur.buyHouse();
@@ -83,7 +83,7 @@ public class PropertiesTest {
         bsasnorte.buyHouse();
         bsassur.buyHotel();
         //With Hotel
-        bsassur.sellPropertie();
+        bsassur.sell();
         bsassur.buy(player2);
 
         money_player2_start = player2.getMoney().getValue();

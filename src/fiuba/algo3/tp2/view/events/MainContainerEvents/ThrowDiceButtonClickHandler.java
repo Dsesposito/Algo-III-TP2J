@@ -25,27 +25,25 @@ public class ThrowDiceButtonClickHandler implements EventHandler<ActionEvent> {
         AlgoPoly algoPoly = AlgoPoly.getInstance();
         algoPoly.throwDice();
 
-        Turn actualTurn = algoPoly.getActualTurn();
-
-        this.mainView.setDiceResultTF(actualTurn.getDiceResult().toString());
-        this.mainView.toggleStateThrowDiceButton();
-
         algoPoly.movePlayer();
+
+        mainView.setPlayerPlayingState();
 
         Player currentPlayer = algoPoly.getActualPlayer();
         Cell landedCell = currentPlayer.getCurrentCell();
 
-        mainView.printLine("El jugador " + currentPlayer.getName() + " cayó en " + landedCell.getName());
-
         Boolean isOwneable = landedCell.isOwneable();
-        if(isOwneable){
+        if(!isOwneable){
+            algoPoly.nextTurn();
+            this.mainView.setNewTurnState();
+        }
+        else{
             Owneable owneableCell = (Owneable)landedCell;
-            if(!owneableCell.hasOwner()) {
-                this.mainView.toggleStateBuyLandButton();
-            }
-            else{
-                mainView.printLine("La propiedad le pertenece a " + owneableCell.getOwner().getName());
+            if(owneableCell.hasOwner()) {
+                algoPoly.nextTurn();
+                this.mainView.setNewTurnState();
             }
         }
+
     }
 }

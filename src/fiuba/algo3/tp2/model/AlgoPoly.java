@@ -18,6 +18,7 @@ public class AlgoPoly {
     Turn actualTurn;
     Die die1;
     Die die2;
+    Console console;
 
     private static Long maxNumberOfPlayers = Global.config.getLong("maxNumberOfPlayers");
 
@@ -26,6 +27,7 @@ public class AlgoPoly {
         board = new Board();
         die1 = new Die();
         die2 = new Die();
+        console = new Console();
     }
 
     public static AlgoPoly getInstance() {
@@ -59,7 +61,11 @@ public class AlgoPoly {
 
         Collections.shuffle(players);
 
-        this.actualTurn = new Turn(players.get(0));
+        Player firstPlayer = players.get(0);
+
+        this.logEvent("El primer jugador en mover será " + firstPlayer.getName());
+
+        this.actualTurn = new Turn(firstPlayer);
 
     }
 
@@ -70,6 +76,8 @@ public class AlgoPoly {
             nextPlayerIndex = ((nextPlayerIndex + 1) % players.size()) - 1;
         }
         this.actualTurn = new Turn(players.get(nextPlayerIndex));
+
+        this.logEvent("Turno del jugador " + this.getActualPlayer().getName());
     }
 
     public void throwDice(){
@@ -79,6 +87,10 @@ public class AlgoPoly {
 
     public Board getBoard(){
         return this.board;
+    }
+
+    public Console getConsole(){
+        return this.console;
     }
 
     public Player getActualPlayer(){
@@ -97,5 +109,9 @@ public class AlgoPoly {
     public void movePlayer() {
         Player player = this.actualTurn.getCurrentPlayer();
         player.move(this.actualTurn);
+    }
+
+    public void logEvent(String message){
+        this.console.addMessage(message);
     }
 }

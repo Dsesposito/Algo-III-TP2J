@@ -19,8 +19,8 @@ public class CellGroup {
     }
 
     public Boolean isOwnedBySamePlayer(Player player){
-        for(Groupable purchasables : this.groupables){
-            if(!purchasables.isOwnedBy(player)){
+        for(Groupable groupables : this.groupables){
+            if(!groupables.isOwnedBy(player)){
                 return false;
             }
         }
