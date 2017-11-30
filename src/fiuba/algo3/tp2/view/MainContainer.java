@@ -203,11 +203,6 @@ public class MainContainer extends BorderPane {
 
         algoPoly.startGame();
 
-        algoPoly.getBoard().getNeighborhoodByName("Cordoba - Sur").buy(algoPoly.getActualPlayer());
-        algoPoly.getBoard().getNeighborhoodByName("Cordoba - Norte").buy(algoPoly.getActualPlayer());
-        algoPoly.getBoard().getNeighborhoodByName("Santa Fe").buy(algoPoly.getActualPlayer());
-        algoPoly.getBoard().getNeighborhoodByName("Salta - Norte").buy(algoPoly.getActualPlayer());
-
         this.setNewTurnState();
 
         Scene playScene = new Scene(this,1408,792);
@@ -226,6 +221,16 @@ public class MainContainer extends BorderPane {
         this.actualPlayerTF.setText(currentPlayer.getName());
         this.actualPlayerMoneyTF.setText(currentPlayer.getMoney().getValue().toString());
 
+        this.updateSaleProperties();
+        this.updateBuildProperties();
+
+    }
+
+    private void updateSaleProperties(){
+
+        AlgoPoly algoPoly = AlgoPoly.getInstance();
+        Player currentPlayer = algoPoly.getActualPlayer();
+
         if(currentPlayer.hasOwneableCells()){
 
             List<String> ownedCellsName = currentPlayer.getOwneableCells().stream()
@@ -242,7 +247,12 @@ public class MainContainer extends BorderPane {
             this.sellChoiceBox.setDisable(true);
             this.sellChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
         }
+    }
 
+    private void updateBuildProperties(){
+
+        AlgoPoly algoPoly = AlgoPoly.getInstance();
+        Player currentPlayer = algoPoly.getActualPlayer();
 
         List<String> cellsNameWhereIsAbleToBuild = currentPlayer.getOwneableCells().stream()
                 .filter(ownedCell -> ((Cell)ownedCell).getGroup().isOwnedBySamePlayer(currentPlayer))
@@ -315,7 +325,6 @@ public class MainContainer extends BorderPane {
     }
 
     public void setPlayerInBankruptcyState() {
-        this.setNewTurnState();
-        this.throwDiceButton.setDisable(true);
+        this.updateSaleProperties();
     }
 }

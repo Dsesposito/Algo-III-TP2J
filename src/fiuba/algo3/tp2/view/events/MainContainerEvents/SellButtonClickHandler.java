@@ -18,10 +18,19 @@ public class SellButtonClickHandler implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
 
         AlgoPoly algoPoly = AlgoPoly.getInstance();
+        Boolean wasStoppedByBankruptcy = algoPoly.getActualPlayer().isStoppedByBankruptcy();
         try{
             Owneable owneableToSell = (Owneable) algoPoly.getBoard().getCellByName(mainView.getSelectedSellOwneableCellName());
             owneableToSell.sell();
-            mainView.updatePlayerInfo();
+
+            if(wasStoppedByBankruptcy && algoPoly.getActualPlayer().hasEnoughMoneyToSolveDebt()){
+                algoPoly.getActualPlayer().solveDebt();
+                algoPoly.nextTurn();
+                mainView.setNewTurnState();
+            }
+            else{
+                mainView.updatePlayerInfo();
+            }
         }
         catch (SellChoiceBoxEmptyException e){
             algoPoly.logEvent("Para poder vender primero debe seleccionar una propiedad.");

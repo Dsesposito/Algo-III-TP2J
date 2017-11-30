@@ -5,6 +5,7 @@ import fiuba.algo3.tp2.model.Cells.Cell;
 import fiuba.algo3.tp2.model.Cells.Groupable;
 import fiuba.algo3.tp2.model.Cells.Owneable;
 import fiuba.algo3.tp2.model.Exceptions.InsufficientFundsException;
+import fiuba.algo3.tp2.model.Money;
 import fiuba.algo3.tp2.model.Player;
 import fiuba.algo3.tp2.model.Turn;
 import fiuba.algo3.tp2.view.MainContainer;
@@ -31,18 +32,20 @@ public class ThrowDiceButtonClickHandler implements EventHandler<ActionEvent> {
 
         algoPoly.movePlayer();
 
+        mainView.setPlayerPlayingState();
+
         if(currentPlayer.isStoppedByBankruptcy()){
             if(currentPlayer.hasPropertiesToSell() && !currentPlayer.isDefeted()){
                 mainView.setPlayerInBankruptcyState();
+                return;
             }
             else{
                 algoPoly.playerHasBeenDefeated();
                 mainView.setNewTurnState();
+                return;
             }
 
         }
-
-        mainView.setPlayerPlayingState();
 
         Cell landedCell = currentPlayer.getCurrentCell();
 
