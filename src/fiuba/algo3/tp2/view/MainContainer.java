@@ -49,15 +49,9 @@ public class MainContainer extends BorderPane {
 
         this.stage = stage;
 
-        this.setMenu();
         this.setBoard();
         this.setConsole();
         this.setKeyPad();
-    }
-
-    private void setMenu(){
-        MenuBar menuBar = new MenuBar(stage);
-        this.setTop(menuBar);
     }
 
     private void setBoard(){
