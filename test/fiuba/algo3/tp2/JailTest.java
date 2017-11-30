@@ -107,7 +107,6 @@ public class JailTest {
 
         Jail jail = board.getJail();
         Police police = board.getPolice();
-
         Long face1 = 6L;
         Long face2 = 6L;
 
@@ -115,7 +114,6 @@ public class JailTest {
         turn.mockDice(face1,face2);
 
         police.playerLandsOnCell(player1,turn);
-
         player1.move(turn);
         player1.move(turn);
         player1.move(turn);
