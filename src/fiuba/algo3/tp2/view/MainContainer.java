@@ -199,7 +199,7 @@ public class MainContainer extends BorderPane {
 
         this.setNewTurnState();
 
-        Scene playScene = new Scene(this,1408,792);
+        Scene playScene = new Scene(this,1408,765);
         stage.setScene(playScene);
     }
 
