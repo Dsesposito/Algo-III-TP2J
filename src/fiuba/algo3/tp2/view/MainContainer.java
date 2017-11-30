@@ -327,4 +327,17 @@ public class MainContainer extends BorderPane {
     public void setPlayerInBankruptcyState() {
         this.updateSaleProperties();
     }
+
+    public void setAllDisabledState() {
+        this.throwDiceButton.setDisable(false);
+        this.sellButton.setDisable(true);
+        this.sellChoiceBox.setDisable(true);
+        this.sellChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
+        this.buyButton.setDisable(true);
+        this.buildChoiceBox.setDisable(true);
+        this.buildChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
+        this.passButton.setDisable(true);
+        this.buildPropertyButton.setDisable(true);
+        this.diceResultTF.setText("");
+    }
 }

@@ -46,7 +46,7 @@ public class BuildButtonClickHandler implements EventHandler<ActionEvent> {
             }
         }
         catch(InsufficientFundsException e){
-            algoPoly.logEvent("El jugador " + algoPoly.getActualPlayer().getName() + " no posee los fondos suficientes para construir en");
+            algoPoly.logEvent("El jugador " + algoPoly.getActualPlayer().getName() + " no posee los fondos suficientes para construir en " + neighborhood.getName());
         }
     }
 }

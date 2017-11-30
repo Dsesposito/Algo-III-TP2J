@@ -19,22 +19,28 @@ public class SellButtonClickHandler implements EventHandler<ActionEvent> {
 
         AlgoPoly algoPoly = AlgoPoly.getInstance();
         Boolean wasStoppedByBankruptcy = algoPoly.getActualPlayer().isStoppedByBankruptcy();
+        Owneable owneableToSell;
         try{
-            Owneable owneableToSell = (Owneable) algoPoly.getBoard().getCellByName(mainView.getSelectedSellOwneableCellName());
-            owneableToSell.sell();
-
-            if(wasStoppedByBankruptcy && algoPoly.getActualPlayer().hasEnoughMoneyToSolveDebt()){
-                algoPoly.getActualPlayer().solveDebt();
-                algoPoly.nextTurn();
-                mainView.setNewTurnState();
-            }
-            else{
-                mainView.updatePlayerInfo();
-            }
+            owneableToSell = (Owneable) algoPoly.getBoard().getCellByName(mainView.getSelectedSellOwneableCellName());
         }
         catch (SellChoiceBoxEmptyException e){
             algoPoly.logEvent("Para poder vender primero debe seleccionar una propiedad.");
+            return;
         }
+
+        owneableToSell.sell();
+        // Si el jugador estaba en bancarrota y ya posee dinero para saldar la deuda, entonces
+        // la salda y se pasa de turno.
+        if(wasStoppedByBankruptcy && algoPoly.getActualPlayer().hasEnoughMoneyToSolveDebt()){
+            algoPoly.getActualPlayer().solveDebt();
+            algoPoly.nextTurn();
+            mainView.setNewTurnState();
+        }
+        // De lo contrario debe seguir vendiendo.
+        else{
+            mainView.updatePlayerInfo();
+        }
+
 
     }
 }

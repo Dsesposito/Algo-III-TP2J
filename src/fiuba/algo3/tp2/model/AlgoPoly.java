@@ -123,4 +123,8 @@ public class AlgoPoly {
         players.remove(this.getActualPlayer());
         this.nextTurn();
     }
+
+    public Boolean allOponentsHasBeenDefeated() {
+        return players.size() == 1;
+    }
 }
