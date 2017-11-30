@@ -49,15 +49,9 @@ public class MainContainer extends BorderPane {
 
         this.stage = stage;
 
-        this.setMenu();
         this.setBoard();
         this.setConsole();
         this.setKeyPad();
-    }
-
-    private void setMenu(){
-        MenuBar menuBar = new MenuBar(stage);
-        this.setTop(menuBar);
     }
 
     private void setBoard(){
@@ -205,7 +199,7 @@ public class MainContainer extends BorderPane {
 
         this.setNewTurnState();
 
-        Scene playScene = new Scene(this,1408,792);
+        Scene playScene = new Scene(this,1408,765);
         stage.setScene(playScene);
     }
 
@@ -326,5 +320,18 @@ public class MainContainer extends BorderPane {
 
     public void setPlayerInBankruptcyState() {
         this.updateSaleProperties();
+    }
+
+    public void setAllDisabledState() {
+        this.throwDiceButton.setDisable(false);
+        this.sellButton.setDisable(true);
+        this.sellChoiceBox.setDisable(true);
+        this.sellChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
+        this.buyButton.setDisable(true);
+        this.buildChoiceBox.setDisable(true);
+        this.buildChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
+        this.passButton.setDisable(true);
+        this.buildPropertyButton.setDisable(true);
+        this.diceResultTF.setText("");
     }
 }

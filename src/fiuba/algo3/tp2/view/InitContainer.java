@@ -60,7 +60,6 @@ public class InitContainer extends VBox {
 
         Label player1 = new Label("Jugador 1 :");
         TextField textFieldP1 = new TextField ();
-        textFieldP1.setText("Diego"); //TODO: Sacar
         HBox hbP1 = new HBox();
         hbP1.getChildren().addAll(player1, textFieldP1);
         hbP1.setSpacing(10);
@@ -68,7 +67,6 @@ public class InitContainer extends VBox {
 
         Label player2 = new Label("Jugador 2 :");
         TextField textFieldP2 = new TextField ();
-        textFieldP2.setText("Lucas"); //TODO: Sacar
         HBox hbP2 = new HBox();
         hbP2.getChildren().addAll(player2, textFieldP2);
         hbP2.setSpacing(10);
@@ -76,7 +74,6 @@ public class InitContainer extends VBox {
 
         Label player3 = new Label("Jugador 3 :");
         TextField textFieldP3 = new TextField ();
-        textFieldP3.setText("Guido"); //TODO: Sacar
         HBox hbP3 = new HBox();
         hbP3.getChildren().addAll(player3, textFieldP3);
         hbP3.setSpacing(10);

@@ -2,6 +2,7 @@ package fiuba.algo3.tp2;
 
 import fiuba.algo3.tp2.model.Board;
 import fiuba.algo3.tp2.model.Cells.Neighborhood;
+import fiuba.algo3.tp2.model.Exceptions.NeighborhoodExceptions.NeighborhoodWithOutAllHousesBuiltException;
 import fiuba.algo3.tp2.model.Player;
 import fiuba.algo3.tp2.model.Turn;
 import org.junit.Assert;
@@ -147,10 +148,15 @@ public class NeighborhoodTest {
         bsasnorte.buyHouse();
 
         double start_money = player1.getMoney().getValue();
-        bsassur.buyHotel();
-        bsasnorte.buyHotel();
-        double finish_money = player1.getMoney().getValue();
-        Assert.assertEquals(finish_money, start_money, DELTA);
+        try{
+            bsassur.buyHotel();
+            bsasnorte.buyHotel();
+            Assert.assertFalse(true);
+        }
+        catch (NeighborhoodWithOutAllHousesBuiltException e){
+            double finish_money = player1.getMoney().getValue();
+            Assert.assertEquals(finish_money, start_money, DELTA);
+        }
     }
 
     @Test
@@ -347,10 +353,15 @@ public class NeighborhoodTest {
         cordobanorte.buyHouse();
 
         double start_money = player1.getMoney().getValue();
-        cordobasur.buyHotel();
-        cordobanorte.buyHotel();
-        double finish_money = player1.getMoney().getValue();
-        Assert.assertEquals(finish_money, start_money, DELTA);
+        try{
+            cordobasur.buyHotel();
+            cordobanorte.buyHotel();
+            Assert.assertFalse(true);
+        }
+        catch (NeighborhoodWithOutAllHousesBuiltException e){
+            double finish_money = player1.getMoney().getValue();
+            Assert.assertEquals(finish_money, start_money, DELTA);
+        }
     }
 
     @Test
@@ -547,10 +558,15 @@ public class NeighborhoodTest {
         saltanorte.buyHouse();
 
         double start_money = player1.getMoney().getValue();
-        saltasur.buyHotel();
-        saltanorte.buyHotel();
-        double finish_money = player1.getMoney().getValue();
-        Assert.assertEquals(finish_money, start_money, DELTA);
+        try{
+            saltasur.buyHotel();
+            saltanorte.buyHotel();
+            Assert.assertFalse(true);
+        }
+        catch (NeighborhoodWithOutAllHousesBuiltException e){
+            double finish_money = player1.getMoney().getValue();
+            Assert.assertEquals(finish_money, start_money, DELTA);
+        }
     }
 
     @Test

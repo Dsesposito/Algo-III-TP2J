@@ -172,20 +172,20 @@ public class Board {
         cells.add(bsassur);
         cells.add(edesur);
         cells.add(bsasnorte);
-        cells.add(new Jail("Carcel", this));
+        cells.add(CellsFactory.getInstanceOfJail(this));
         cells.add(cordobaSur);
-        cells.add(new DynamicForward("Avance Dinámico", this));
+        cells.add(CellsFactory.getInstanceOfDynamicForward(this));
         cells.add(subway);
         cells.add(cordobaNorte);
-        cells.add(new LuxuryTax("Impuesto Al Lujo", this));
+        cells.add(CellsFactory.getInstanceOfLuxuryTax(this));
         cells.add(santaFe);
         cells.add(aysa);
         cells.add(saltaNorte);
         cells.add(saltaSur);
-        cells.add(new Police("Policia", this));
+        cells.add(CellsFactory.getInstanceOfPolicia(this));
         cells.add(train);
         cells.add(neuquen);
-        cells.add(new DynamicBackward("Retroceso Dinámico", this));
+        cells.add(CellsFactory.getInstanceOfDynamicBackward(this));
         cells.add(tucuman);
     }
 
