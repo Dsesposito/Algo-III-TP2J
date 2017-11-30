@@ -24,7 +24,7 @@ public abstract class Cell{
 
 
     public Cell getCellXPositionsFurtherForward(Long numberOfCellsToMoveForward){
-        return board.getCellXPositionsFurtherForward(this,numberOfCellsToMoveForward);
+        return board.getCellXPositionsFurtherForward(this, numberOfCellsToMoveForward);
     }
 
     public Cell getCellXPositionsFurtherBackward(Long numberOfCellsToGoesBack){

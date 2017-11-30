@@ -69,7 +69,6 @@ public class Railway extends Cell implements Groupable, Owneable {
         player.landsOnRailWay(this);
         if(this.hasOwner() && !this.isOwnedBy(player)){
             Money rentalPrice = Money.withValue(actualTurn.getDiceResult() * actualDiceMultiplier);
-
             if(!player.hasEnoughMoney(rentalPrice)){
 
                 if(player.sellingPropertiesHasEnoughMoney(rentalPrice)){
