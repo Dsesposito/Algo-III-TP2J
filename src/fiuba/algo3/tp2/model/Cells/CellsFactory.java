@@ -81,9 +81,9 @@ public class CellsFactory {
         rentalPricesHouses6 = new ArrayList<>();
         List<Money> rentalPricesHotels6;
         rentalPricesHotels6 = new ArrayList<>();
-        rentalPricesHouses6.addAll(Arrays.asList(Money.withValue(Global.config.getDouble("saltanorteOneHouseRentalPrice")), Money.withValue(Global.config.getDouble("saltanorteTwoHousesRentalPrice"))));
-        rentalPricesHotels6.add(Money.withValue(Global.config.getDouble("saltanorteOneHotelRentalPrice")));
-        return new Neighborhood("Salta - Sur", Money.withValue(Global.config.getDouble("saltanorteSalePrice")), Money.withValue(Global.config.getDouble("saltanorteHousePrice")), Money.withValue(Global.config.getDouble("saltanorteHotelPrice")), new Rental(Money.withValue(Global.config.getDouble("saltanorteRentalPrice")), rentalPricesHouses6, rentalPricesHotels6), 2L, board);
+        rentalPricesHouses6.addAll(Arrays.asList(Money.withValue(Global.config.getDouble("saltasurOneHouseRentalPrice")), Money.withValue(Global.config.getDouble("saltasurTwoHousesRentalPrice"))));
+        rentalPricesHotels6.add(Money.withValue(Global.config.getDouble("saltasurOneHotelRentalPrice")));
+        return new Neighborhood("Salta - Sur", Money.withValue(Global.config.getDouble("saltasurSalePrice")), Money.withValue(Global.config.getDouble("saltasurHousePrice")), Money.withValue(Global.config.getDouble("saltasurHotelPrice")), new Rental(Money.withValue(Global.config.getDouble("saltasurRentalPrice")), rentalPricesHouses6, rentalPricesHotels6), 2L, board);
     }
 
     public static Neighborhood getInstanceOfSantaFe(Board board) {
