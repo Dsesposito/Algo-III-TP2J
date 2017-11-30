@@ -1,5 +1,6 @@
 package fiuba.algo3.tp2.model.Cells;
 
+import fiuba.algo3.tp2.Global;
 import fiuba.algo3.tp2.model.*;
 
 public class Service extends Cell implements Groupable , Owneable {
@@ -9,6 +10,8 @@ public class Service extends Cell implements Groupable , Owneable {
     private Double diceMultiplierSingle;
     private Double diceMultiplierInGroup;
     private Double actualDiceMultiplier;
+
+    private static Double commissionOfSale = Global.config.getDouble("commissionOfSale");
 
     public Service(String name, Board board, Money businessPrice, Double diceMultiplierSingle, Double diceMultiplierInGroup) {
         super(name, board);
@@ -35,10 +38,8 @@ public class Service extends Cell implements Groupable , Owneable {
 
     @Override
     public void sell(){
-        //TODO Mover a archivo de configuracion
-        double commission_of_sale = 1-0.15;
 
-        this.owner.incrementMoney(this.businessPrice.multiply(commission_of_sale));
+        this.owner.incrementMoney(this.businessPrice.multiply(commissionOfSale));
 
         AlgoPoly.getInstance().logEvent("El jugador " + owner.getName() + " vendió " + super.getName());
 
@@ -101,9 +102,6 @@ public class Service extends Cell implements Groupable , Owneable {
 
     @Override
     public Money getSaleValue() {
-        //TODO Mover a archivo de configuracion
-        double commission_of_sale = 1-0.15;
-
-        return this.businessPrice.multiply(commission_of_sale);
+        return this.businessPrice.multiply(commissionOfSale);
     }
 }

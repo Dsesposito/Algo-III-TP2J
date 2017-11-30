@@ -1,5 +1,6 @@
 package fiuba.algo3.tp2.model.Cells;
 
+import fiuba.algo3.tp2.Global;
 import fiuba.algo3.tp2.model.*;
 import fiuba.algo3.tp2.model.Exceptions.NeighborhoodExceptions.*;
 
@@ -18,6 +19,8 @@ public class Neighborhood extends Cell implements Groupable , Owneable{
     private Rental rent;
 
     private Long maxHouses;
+
+    private static Double commissionOfSale = Global.config.getDouble("commissionOfSale");
 
     public Neighborhood(String name,Money landPrice,Money housePrice,Money hotelPrice, Rental rent, Long maxHouses, Board board){
         super(name, board);
@@ -65,36 +68,28 @@ public class Neighborhood extends Cell implements Groupable , Owneable{
             throw new NeighborhoodFullHousesException("The neighborhood has all houses already built");
         }
 
-        if(!this.hasAllHousesBuilt()){
-            this.rent.incrementBuiltHouses();
-            this.owner.decrementMoney(this.housePrice);
 
-            AlgoPoly.getInstance().logEvent("El jugador " + this.owner.getName() + " compró una casa en el barrio " + this.name);
-        }
+        this.rent.incrementBuiltHouses();
+        this.owner.decrementMoney(this.housePrice);
 
+        AlgoPoly.getInstance().logEvent("El jugador " + this.owner.getName() + " compró una casa en el barrio " + this.name);
     }
 
     public void buyHotel(){
 
-        /*
-        if(!super.cellGroupHasCompleteHouses()) {
+        if(!((NeighborhoodZone) super.getGroup()).hasCompleteHouses()) {
             throw new NeighborhoodWithOutAllHousesBuiltException("The neighborhood must have all houses built before a hotel can be built");
         }
-        */
 
         if(this.rent.hastHotelBuilt()){
             throw new NeighborhoodWithHotelAlreadyBuiltException("The neighborhood can't have multiples hotels");
         }
 
-        if( ((NeighborhoodZone) super.getGroup()).hasCompleteHouses() ) {
-            this.rent.clearBuiltHouses();
-            this.rent.incrementBuiltHotels();
-            this.owner.decrementMoney(hotelPrice);
+        this.rent.clearBuiltHouses();
+        this.rent.incrementBuiltHotels();
+        this.owner.decrementMoney(hotelPrice);
 
-            AlgoPoly.getInstance().logEvent("El jugador " + this.owner.getName() + " compró un hotel en el barrio " + this.name);
-
-        }
-
+        AlgoPoly.getInstance().logEvent("El jugador " + this.owner.getName() + " compró un hotel en el barrio " + this.name);
     }
 
 
@@ -123,15 +118,12 @@ public class Neighborhood extends Cell implements Groupable , Owneable{
 
     @Override
     public Money getSaleValue() {
-        //TODO Mover a archivo de configuracion
-        double commission_of_sale = 1-0.15;
-
-        Money saleValue = this.getLandPrice().multiply(commission_of_sale);
+        Money saleValue = this.getLandPrice().multiply(commissionOfSale);
         if(this.rent.hastHotelBuilt()){
-            saleValue = saleValue.add(hotelPrice.multiply(commission_of_sale));
+            saleValue = saleValue.add(hotelPrice.multiply(commissionOfSale));
         }
         else if(this.rent.getNumberOfBuiltHouses() > 0){
-            saleValue = saleValue.add(housePrice.multiply(this.rent.getNumberOfBuiltHouses()*commission_of_sale));
+            saleValue = saleValue.add(housePrice.multiply(this.rent.getNumberOfBuiltHouses()*commissionOfSale));
         }
         return saleValue;
     }
@@ -150,15 +142,13 @@ public class Neighborhood extends Cell implements Groupable , Owneable{
 
     @Override
     public void sell(){
-        //TODO Mover a archivo de configuracion
-        double commission_of_sale = 1-0.15;
 
-        this.owner.incrementMoney(this.getLandPrice().multiply(commission_of_sale));
+        this.owner.incrementMoney(this.getLandPrice().multiply(commissionOfSale));
         if(this.rent.hastHotelBuilt()){
-            this.owner.incrementMoney(hotelPrice.multiply(commission_of_sale));
+            this.owner.incrementMoney(hotelPrice.multiply(commissionOfSale));
         }
         else if(this.rent.getNumberOfBuiltHouses() > 0){
-            this.owner.incrementMoney(housePrice.multiply(this.rent.getNumberOfBuiltHouses()*commission_of_sale));
+            this.owner.incrementMoney(housePrice.multiply(this.rent.getNumberOfBuiltHouses()*commissionOfSale));
         }
 
         AlgoPoly.getInstance().logEvent("El jugador " + owner.getName() + " vendió el barrio " + this.name);
