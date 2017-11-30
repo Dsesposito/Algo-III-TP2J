@@ -2,6 +2,7 @@ package fiuba.algo3.tp2.view;
 
 import fiuba.algo3.tp2.model.AlgoPoly;
 import fiuba.algo3.tp2.model.Cells.Cell;
+import fiuba.algo3.tp2.model.Cells.Jail;
 import fiuba.algo3.tp2.model.Cells.Owneable;
 import fiuba.algo3.tp2.model.Player;
 import fiuba.algo3.tp2.model.Turn;
@@ -9,6 +10,7 @@ import fiuba.algo3.tp2.view.events.Exceptions.BuildChoiceBoxEmptyException;
 import fiuba.algo3.tp2.view.events.MainContainerEvents.BuildButtonClickHandler;
 import fiuba.algo3.tp2.view.events.Exceptions.SellChoiceBoxEmptyException;
 import fiuba.algo3.tp2.view.events.MainContainerEvents.*;
+import fiuba.algo3.tp2.view.events.MainContainerEvents.PayBailButtonClickHanlder;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -44,6 +46,7 @@ public class MainContainer extends BorderPane {
     private TextField actualPlayerMoneyTF;
     private ChoiceBox sellChoiceBox;
     private ChoiceBox buildChoiceBox;
+    private Button payBailButton;
 
     public MainContainer(Stage stage){
 
@@ -161,10 +164,16 @@ public class MainContainer extends BorderPane {
         sellLandChoiceBox.setDisable(true);
         this.sellChoiceBox = sellLandChoiceBox;
 
+        Button payBailButton = new Button();
+        payBailButton.setText("Pagar fianza");
+        payBailButton.setDisable(true);
+        payBailButton.setOnAction(new PayBailButtonClickHanlder(this));
+        this.payBailButton = payBailButton;
+
         String cssLayout = "-fx-border-color: #e2e0e0;-fx-border-insets: 5;-fx-border-width: 3;";
         leftContainer.setStyle(cssLayout);
 
-        leftContainer.getChildren().addAll(rollDiceButton,vbDiceResult,vbActualPlayer,vbActualPlayerMoney,passButton,buyButton,buildButton,buildPropertyChoiceBox,sellButton,sellLandChoiceBox);
+        leftContainer.getChildren().addAll(rollDiceButton,vbDiceResult,vbActualPlayer,vbActualPlayerMoney,passButton,buyButton,buildButton,buildPropertyChoiceBox,sellButton,sellLandChoiceBox,payBailButton);
 
         this.setLeft(leftContainer);
     }
@@ -192,7 +201,7 @@ public class MainContainer extends BorderPane {
 
         for(String playerName : previousView.getPlayersName()){
             algoPoly.addPlayerToGame(playerName);
-            algoPoly.logEvent("EL juegador " + playerName + " se ha unido a la partida");
+            algoPoly.logEvent("El jugador " + playerName + " se ha unido a la partida");
         }
 
         algoPoly.startGame();
@@ -275,7 +284,17 @@ public class MainContainer extends BorderPane {
         this.buildChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
         this.passButton.setDisable(true);
         this.buildPropertyButton.setDisable(true);
+        this.payBailButton.setDisable(true);
         this.diceResultTF.setText("");
+
+        AlgoPoly algoPoly = AlgoPoly.getInstance();
+        Player currentPlayer = algoPoly.getActualPlayer();
+        Jail jail = algoPoly.getBoard().getJail();
+        if(jail.isPrisoner(currentPlayer) && !jail.isFreeToGo(currentPlayer) && jail.isAbleToPayBail(currentPlayer)){
+            this.payBailButton.setDisable(false);
+            this.passButton.setDisable(false);
+        }
+
         this.updatePlayerInfo();
     }
 
@@ -299,9 +318,9 @@ public class MainContainer extends BorderPane {
         this.diceResultTF.setText(actualTurn.getDiceResult().toString());
         this.passButton.setDisable(false);
         this.throwDiceButton.setDisable(true);
+        this.payBailButton.setDisable(true);
         this.sellButton.setDisable(true);
         this.sellChoiceBox.setDisable(true);
-
     }
 
     public String getSelectedSellOwneableCellName(){
@@ -333,5 +352,6 @@ public class MainContainer extends BorderPane {
         this.passButton.setDisable(true);
         this.buildPropertyButton.setDisable(true);
         this.diceResultTF.setText("");
+        this.payBailButton.setDisable(true);
     }
 }

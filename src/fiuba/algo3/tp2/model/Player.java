@@ -38,10 +38,6 @@ public class Player {
         return this.money;
     }
 
-    public void payToBank(Money money){
-        this.money = this.money.subtract(money);
-    }
-
     public void incrementMoney(Money money){
         this.money = this.money.add(money);
         AlgoPoly.getInstance().logEvent("El dinero del jugador " + this.name + " se incremento en " + money.getValue());

@@ -127,4 +127,8 @@ public class AlgoPoly {
     public Boolean allOponentsHasBeenDefeated() {
         return players.size() == 1;
     }
+
+    public void playerPayBail() {
+        this.board.getJail().playerPayBail(this.getActualPlayer());
+    }
 }

@@ -7,7 +7,13 @@ import fiuba.algo3.tp2.model.Turn;
 public class DynamicForwardProperties implements MotionAlgorithm {
     @Override
     public void move(Player player, Turn turn) {
-        Cell futureCell = player.getCurrentCell().getCellXPositionsFurtherForward(player.getNumberOfProperties());
+
+        Long positionsToMove = player.getNumberOfProperties();
+        if(positionsToMove == 0){
+            positionsToMove++;
+        }
+
+        Cell futureCell = player.getCurrentCell().getCellXPositionsFurtherForward(positionsToMove);
         futureCell.playerLandsOnCell(player,turn);
     }
 }

@@ -15,7 +15,7 @@ public class Police extends Cell {
 
     @Override
     public void playerLandsOnCell(Player player, Turn actualTurn) {
-        jail.addPrisioner(player);
+        jail.addPrisoner(player);
         player.landsOnPolice(this,jail);
     }
 }

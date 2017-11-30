@@ -7,7 +7,11 @@ import fiuba.algo3.tp2.model.Turn;
 public class DynamicBackwardPlus2 implements MotionAlgorithm {
     @Override
     public void move(Player player, Turn turn) {
-        Cell futureCell = player.getCurrentCell().getCellXPositionsFurtherBackward(turn.getDiceResult()-2);
+        Long positionsToMove = turn.getDiceResult()-2;
+        if(positionsToMove == 0){
+            positionsToMove++;
+        }
+        Cell futureCell = player.getCurrentCell().getCellXPositionsFurtherBackward(positionsToMove);
         futureCell.playerLandsOnCell(player,turn);
     }
 }

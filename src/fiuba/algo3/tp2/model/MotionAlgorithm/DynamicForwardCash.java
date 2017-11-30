@@ -9,6 +9,9 @@ public class DynamicForwardCash implements MotionAlgorithm {
     public void move(Player player, Turn turn) {
 
         Long numberOfMoves = (long) Math.floor(player.getMoney().modulus(turn.getDiceResult()));
+        if(numberOfMoves == 0){
+            numberOfMoves = 1L;
+        }
         Cell futureCell = player.getCurrentCell().getCellXPositionsFurtherForward(numberOfMoves);
         futureCell.playerLandsOnCell(player,turn);
     }

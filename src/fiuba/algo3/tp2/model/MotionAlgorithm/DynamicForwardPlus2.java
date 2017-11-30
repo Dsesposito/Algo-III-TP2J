@@ -8,7 +8,11 @@ public class DynamicForwardPlus2 implements MotionAlgorithm{
 
     @Override
     public void move(Player player, Turn turn) {
-        Cell futureCell = player.getCurrentCell().getCellXPositionsFurtherForward(turn.getDiceResult()-2);
+        Long positionsToMove = turn.getDiceResult()-2;
+        if(positionsToMove == 0){
+            positionsToMove++;
+        }
+        Cell futureCell = player.getCurrentCell().getCellXPositionsFurtherForward(positionsToMove);
         futureCell.playerLandsOnCell(player,turn);
     }
 }

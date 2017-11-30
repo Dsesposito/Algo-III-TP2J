@@ -16,6 +16,8 @@ public class StoppedInJail implements MotionAlgorithm {
     public void move(Player player, Turn turn) {
         if(jail.isFreeToGo(player)){
             new NormalForward().move(player,turn);
+            jail.incrementTurn(player);
+            jail.releasePrisoner(player);
         }
         else{
             jail.incrementTurn(player);

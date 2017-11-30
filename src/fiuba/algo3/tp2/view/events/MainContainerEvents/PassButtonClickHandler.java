@@ -17,6 +17,9 @@ public class PassButtonClickHandler implements EventHandler<ActionEvent> {
     public void handle(ActionEvent event) {
 
         AlgoPoly algoPoly = AlgoPoly.getInstance();
+
+        algoPoly.logEvent("El jugador " + algoPoly.getActualPlayer().getName() + " paso su turno.");
+
         algoPoly.nextTurn();
 
         mainView.setNewTurnState();

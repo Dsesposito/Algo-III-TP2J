@@ -18,11 +18,11 @@ public class Prisoner {
     }
 
     public Boolean isFreeToGo(){
-        return numberOfTurns.equals(maxNumberOfTurnsInJail);
+        return numberOfTurns >= maxNumberOfTurnsInJail;
     }
 
     public Boolean isAbleToPayBail(){
-        return (numberOfTurns > minNumberOfTurnsInJail);
+        return (numberOfTurns >= minNumberOfTurnsInJail);
     }
 
     public Boolean isPlayer(Player player){

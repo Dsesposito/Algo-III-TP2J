@@ -36,6 +36,10 @@ public class ThrowDiceButtonClickHandler implements EventHandler<ActionEvent> {
         //Configuracion de botones correspondientes a acciones hacibles cuando un jugador esta jugando
         mainView.setPlayerPlayingState();
 
+        if(algoPoly.getBoard().getJail().isPrisoner(currentPlayer)){
+            algoPoly.logEvent("El jugador " + currentPlayer.getName() + " no puede moverse ya que se encuentra en la carcel");
+        }
+
         //Comprueba que el jugador no este en quiebra.
         if(currentPlayer.isStoppedByBankruptcy()){
             // Si lo esta y puede vender se habilita la posibilidad de vender

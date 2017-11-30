@@ -76,7 +76,7 @@ public class JailTest {
         Player player1 = new Player("Diego",board.getStartCell());
 
         Money money = new Money(60000.0);
-        player1.payToBank(money);
+        player1.decrementMoney(money);
 
         Jail jail = board.getJail();
         Police police = board.getPolice();
@@ -103,7 +103,7 @@ public class JailTest {
         Player player1 = new Player("Diego",board.getStartCell());
 
         Money money = new Money(60000.0);
-        player1.payToBank(money);
+        player1.decrementMoney(money);
 
         Jail jail = board.getJail();
         Police police = board.getPolice();
