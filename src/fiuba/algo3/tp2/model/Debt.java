@@ -19,4 +19,9 @@ public class Debt {
     public Player getCreditor() {
         return creditor;
     }
+
+    public void solve() {
+        this.debtor.decrementMoney(debt);
+        this.creditor.incrementMoney(debt);
+    }
 }

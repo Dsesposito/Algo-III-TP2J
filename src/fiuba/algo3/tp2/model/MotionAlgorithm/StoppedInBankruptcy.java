@@ -16,13 +16,8 @@ public class StoppedInBankruptcy implements MotionAlgorithm {
     @Override
     public void move(Player player, Turn turn) {
 
-        if(player.hasEnoughMoney(debt.getDebtMoney())){
-            player.decrementMoney(debt.getDebtMoney());
-            debt.getCreditor().incrementMoney(debt.getDebtMoney());
-            player.solveDebt();
-        }
-        else{throw new PlayerInBankruptcyException("Player can't move. First he must solves his debt.");
-
+        if(!player.hasEnoughMoney(debt.getDebtMoney())){
+            throw new PlayerInBankruptcyException("Player can't move. First he must solves his debt.");
         }
     }
 }

@@ -18,6 +18,7 @@ public class Player {
     private List<Owneable> ownedCells;
 
     private static Double initMoney = Global.config.getDouble("initPlayerMoney");
+    private Debt debt;
 
     public Player(String name,Cell startCell){
         this.name = name;
@@ -167,6 +168,8 @@ public class Player {
 
     public void solveDebt() {
         this.motionAlgorithm = new NormalForward();
+        this.debt.solve();
+        this.debt = null;
     }
 
     public boolean hasEnoughMoney(Money money) {
@@ -175,14 +178,15 @@ public class Player {
 
     public void createDeb(Debt debt) {
         this.motionAlgorithm = new StoppedInBankruptcy(debt);
+        this.debt = debt;
     }
 
     public Boolean isStoppedByBankruptcy() {
-        return this.motionAlgorithm.getClass().isInstance(StoppedInBankruptcy.class);
+        return (this.motionAlgorithm instanceof StoppedInBankruptcy);
     }
 
     public Boolean isDefeted(){
-        return this.motionAlgorithm.getClass().isInstance(Defeted.class);
+        return (this.motionAlgorithm instanceof Defeted);
     }
 
     public Boolean hasPropertiesToSell() {
@@ -203,5 +207,9 @@ public class Player {
         }
 
         return !saleValue.isNegative(rentalPrice);
+    }
+
+    public Boolean hasEnoughMoneyToSolveDebt() {
+        return this.hasEnoughMoney(this.debt.getDebtMoney());
     }
 }
