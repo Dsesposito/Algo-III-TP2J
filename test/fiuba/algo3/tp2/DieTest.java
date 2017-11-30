@@ -60,4 +60,24 @@ public class DieTest {
         Assert.assertTrue(!game.getActualTurn().playAgain());
     }
 
+    @Test
+    public void test04ThrownDiceAndMoveToTheCorrectPosition() {
+
+        AlgoPoly game = AlgoPoly.getInstance();
+        game.resetGame();
+        game.addPlayerToGame("Lucas");
+        game.addPlayerToGame("Diego");
+        game.addPlayerToGame("Guido");
+        game.startGame();
+
+        game.nextTurn();
+        Long face1 = 6L;
+        Long face2 = 4L;
+        // Deberia quedar en Impuesto Al Lujo
+        game.mockThrowDice(face1,face2);
+        game.movePlayer();
+        Assert.assertEquals("Impuesto Al Lujo", game.getActualPlayer().getCurrentCell().getName());
+    }
+
+
 }

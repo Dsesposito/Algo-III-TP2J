@@ -17,9 +17,8 @@ public class HaveNoMoneyTest {
         game.addPlayerToGame("Diego");
         game.addPlayerToGame("Guido");
         game.startGame();
-        Board board = new Board();
-        Railway subte = board.getRailwayByName("Subte");
-        Railway tren = board.getRailwayByName("Tren");
+        Railway subte = game.getBoard().getRailwayByName("Subte");
+        Railway tren = game.getBoard().getRailwayByName("Tren");
         game.nextTurn();
         tren.buy(game.getActualPlayer());
         game.getActualPlayer().decrementMoney(game.getActualPlayer().getMoney());
@@ -36,9 +35,6 @@ public class HaveNoMoneyTest {
         Long face2 = 3L;
         game.mockThrowDice(face1, face2);
         game.movePlayer(); // cae en subte
-        System.out.print(subte.hasOwner());  // Tiene dueño
-        Railway subte2 = (Railway)game.getActualPlayer().getCurrentCell();
-        System.out.print(subte2.hasOwner()); // No tiene dueño!!!
         Assert.assertTrue(true);
     }
 }
