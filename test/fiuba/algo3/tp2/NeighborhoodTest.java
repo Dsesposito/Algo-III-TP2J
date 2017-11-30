@@ -980,6 +980,17 @@ public class NeighborhoodTest {
         Assert.assertEquals(finish_money, start_money-rentprice, DELTA);
 
     }
+    @Test
+    public void test51BuySimpleLandsAndCanNotBuildHotels(){
+        Board board = new Board();
+        Player player1 = new Player("Diego", board.getStartCell());
+        Neighborhood tucuman = board.getNeighborhoodByName("Tucuman");
+        tucuman.buy(player1);
+        tucuman.buyHouse();
+        Long aux = tucuman.getNumberOfHotelAndHouses();
+        tucuman.buyHotel();
+        Assert.assertEquals(aux, tucuman.getNumberOfHotelAndHouses());
+    }
 
 }
 

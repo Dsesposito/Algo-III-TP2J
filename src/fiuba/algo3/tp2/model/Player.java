@@ -16,6 +16,7 @@ public class Player {
     private Money money;
     private MotionAlgorithm motionAlgorithm;
     private List<Owneable> ownedCells;
+    private boolean isDefeated;
 
     private static Double initMoney = Global.config.getDouble("initPlayerMoney");
     private Debt debt;
@@ -26,6 +27,7 @@ public class Player {
         this.currentCell = startCell;
         this.motionAlgorithm = new NormalForward();
         this.ownedCells = new ArrayList<>();
+        isDefeated = false;
     }
 
     public String getName(){
@@ -196,6 +198,11 @@ public class Player {
 
     public void setDefeated() {
         this.motionAlgorithm = new Defeted();
+        isDefeated = true;
+    }
+
+    public boolean isDefeated(){
+        return isDefeated;
     }
 
     public Boolean sellingPropertiesHasEnoughMoney(Money rentalPrice) {
