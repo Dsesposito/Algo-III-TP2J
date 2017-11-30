@@ -258,7 +258,7 @@ public class MainContainer extends BorderPane {
         Player currentPlayer = algoPoly.getActualPlayer();
 
         List<String> cellsNameWhereIsAbleToBuild = currentPlayer.getOwneableCells().stream()
-                .filter(ownedCell -> ((Cell)ownedCell).getGroup().isOwnedBySamePlayer(currentPlayer))
+                .filter(ownedCell -> ( (Cell)ownedCell).getGroup().isOwnedBySamePlayer(currentPlayer) && ownedCell.isNeighborhood() )
                 .map(ownedCell -> ((Cell)ownedCell).getName())
                 .collect(Collectors.toList());
         if(!cellsNameWhereIsAbleToBuild.isEmpty()){
