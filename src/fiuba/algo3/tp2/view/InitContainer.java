@@ -1,10 +1,9 @@
 package fiuba.algo3.tp2.view;
 
-import fiuba.algo3.tp2.view.events.InitContainerEvents.AcceptButtonClickHandler;
-import fiuba.algo3.tp2.view.events.InitContainerEvents.CancelButtonClickHandler;
+import fiuba.algo3.tp2.Controllers.events.InitContainerEvents.AcceptButtonClickHandler;
+import fiuba.algo3.tp2.Controllers.events.InitContainerEvents.CancelButtonClickHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -24,7 +23,7 @@ public class InitContainer extends VBox {
     private Stage stage;
     private List<TextField> playersName;
 
-    public InitContainer(Stage stage,MainContainer nextView){
+    public InitContainer(Stage stage){
 
         super();
 
@@ -38,7 +37,7 @@ public class InitContainer extends VBox {
 
         this.createPlayersOptions();
 
-        this.createButtons(nextView);
+        this.createButtons();
     }
 
     private void createLabels(){
@@ -87,12 +86,12 @@ public class InitContainer extends VBox {
 
     }
 
-    private void createButtons(MainContainer nextView){
+    private void createButtons(){
 
         Button acceptButton = new Button();
         acceptButton.setText("Continuar");
         acceptButton.setPrefWidth(200);
-        AcceptButtonClickHandler acceptHandler = new AcceptButtonClickHandler(this,nextView);
+        AcceptButtonClickHandler acceptHandler = new AcceptButtonClickHandler(this.stage,this);
         acceptButton.setOnAction(acceptHandler);
 
         Button cancelButton = new Button();

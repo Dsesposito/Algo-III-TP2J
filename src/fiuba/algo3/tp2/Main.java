@@ -21,9 +21,7 @@ public class Main extends Application {
 
         stage.setTitle("AlgoPoly");
 
-        MainContainer mainContainer = new MainContainer(stage);
-
-        InitContainer initContainer = new InitContainer(stage,mainContainer);
+        InitContainer initContainer = new InitContainer(stage);
         Scene initScene = new Scene(initContainer,960,400);
 
         stage.setScene(initScene);

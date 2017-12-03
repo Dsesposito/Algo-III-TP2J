@@ -1,4 +1,4 @@
-package fiuba.algo3.tp2.view.events.Exceptions;
+package fiuba.algo3.tp2.Controllers.events.Exceptions;
 
 public class BuildChoiceBoxEmptyException extends RuntimeException{
 

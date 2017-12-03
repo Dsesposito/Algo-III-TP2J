@@ -1,4 +1,4 @@
-package fiuba.algo3.tp2.view.events.MainContainerEvents;
+package fiuba.algo3.tp2.Controllers.events.MainContainerEvents;
 
 import fiuba.algo3.tp2.model.AlgoPoly;
 import fiuba.algo3.tp2.view.MainContainer;

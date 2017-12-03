@@ -2,9 +2,10 @@ package fiuba.algo3.tp2.model.Cells;
 
 import fiuba.algo3.tp2.model.Board;
 import fiuba.algo3.tp2.model.Player;
+import fiuba.algo3.tp2.model.Position;
 import fiuba.algo3.tp2.model.Turn;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Cell{
@@ -12,10 +13,14 @@ public abstract class Cell{
     private String name;
     private Board board;
     private CellGroup group;
+    private Position position;
+    private List<Player> playersOnCell;
 
-    public Cell(String name,Board board){
+    public Cell(String name, Board board, Position position){
         this.name = name;
         this.board = board;
+        this.position = position;
+        this.playersOnCell = new ArrayList<>();
     }
 
     protected Boolean cellGroupHasSameOwner(Player player){
@@ -62,5 +67,27 @@ public abstract class Cell{
 
     public CellGroup getGroup(){
         return this.group;
+    }
+
+    public Position getPosition() {
+        return position;
+    }
+
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
+    public void addPlayerToCell(Player player){
+        this.playersOnCell.add(player);
+    }
+
+    public void removePlayerFromCell(Player player) {
+        if(this.playersOnCell.contains(player)){
+            this.playersOnCell.remove(player);
+        }
+    }
+
+    public List<Player> getPlayersOnCell() {
+        return this.playersOnCell;
     }
 }

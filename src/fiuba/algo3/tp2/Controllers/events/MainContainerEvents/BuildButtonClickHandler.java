@@ -1,11 +1,10 @@
-package fiuba.algo3.tp2.view.events.MainContainerEvents;
+package fiuba.algo3.tp2.Controllers.events.MainContainerEvents;
 
 import fiuba.algo3.tp2.model.AlgoPoly;
 import fiuba.algo3.tp2.model.Cells.Neighborhood;
-import fiuba.algo3.tp2.model.Cells.Owneable;
 import fiuba.algo3.tp2.model.Exceptions.InsufficientFundsException;
 import fiuba.algo3.tp2.view.MainContainer;
-import fiuba.algo3.tp2.view.events.Exceptions.BuildChoiceBoxEmptyException;
+import fiuba.algo3.tp2.Controllers.events.Exceptions.BuildChoiceBoxEmptyException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 

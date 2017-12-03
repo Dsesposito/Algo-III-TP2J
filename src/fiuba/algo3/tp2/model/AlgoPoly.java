@@ -5,13 +5,19 @@ import fiuba.algo3.tp2.model.Cells.*;
 import fiuba.algo3.tp2.model.Exceptions.AlgoPolyNoActualTurnException;
 import fiuba.algo3.tp2.model.Exceptions.AlgoPolyPlayerQuantityException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.beans.PropertyChangeListener;
+import java.util.*;
 
 public class AlgoPoly {
 
     private static AlgoPoly instance = null;
+
+    public enum ListenerTurnProperty {
+        PLAYER_NAME,
+        DICE
+    }
+
+    private Map<ListenerTurnProperty,List<PropertyChangeListener>> turnListeners;
 
     List<Player> players;
     Board board;
@@ -46,11 +52,19 @@ public class AlgoPoly {
         return players.size();
     }
 
+    public void addPlayerToGame(String name, Token token){
+        if(!isAbleToAddPlayer()){
+            throw new AlgoPolyPlayerQuantityException("The maximium of three players have already been reached");
+        }
+        players.add(new Player(name,board.getStartCell(),token));
+
+    }
+
     public void addPlayerToGame(String name){
         if(!isAbleToAddPlayer()){
             throw new AlgoPolyPlayerQuantityException("The maximium of three players have already been reached");
         }
-        players.add(new Player(name,board.getStartCell()));
+        players.add(new Player(name,board.getStartCell(),new Token(this.board.getStartCell().getPosition())));
 
     }
 
@@ -130,5 +144,18 @@ public class AlgoPoly {
 
     public void playerPayBail() {
         this.board.getJail().playerPayBail(this.getActualPlayer());
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void addPropertyChangeListener(ListenerTurnProperty type , PropertyChangeListener listener) {
+        if(this.turnListeners.containsKey(type)){
+            this.turnListeners.get(type).add(listener);
+        }
+        else{
+            this.turnListeners.put(type,new ArrayList<>(Arrays.asList(listener)));
+        }
     }
 }

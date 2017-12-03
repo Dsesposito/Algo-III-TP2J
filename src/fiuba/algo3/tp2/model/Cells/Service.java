@@ -13,8 +13,8 @@ public class Service extends Cell implements Groupable , Owneable {
 
     private static Double commissionOfSale = Global.config.getDouble("commissionOfSale");
 
-    public Service(String name, Board board, Money businessPrice, Double diceMultiplierSingle, Double diceMultiplierInGroup) {
-        super(name, board);
+    public Service(String name, Board board, Money businessPrice, Double diceMultiplierSingle, Double diceMultiplierInGroup, Position boardPosition) {
+        super(name, board, boardPosition);
         this.businessPrice = businessPrice;
         this.diceMultiplierSingle = diceMultiplierSingle;
         this.diceMultiplierInGroup = diceMultiplierInGroup;
@@ -59,6 +59,8 @@ public class Service extends Cell implements Groupable , Owneable {
 
     @Override
     public void playerLandsOnCell(Player player, Turn actualTurn) {
+        player.getCurrentCell().removePlayerFromCell(player);
+        super.addPlayerToCell(player);
         player.landsOnService(this);
         if(this.hasOwner() && !this.isOwnedBy(player)){
             Money rentalPrice = Money.withValue(actualTurn.getDiceResult() * actualDiceMultiplier);
@@ -67,7 +69,7 @@ public class Service extends Cell implements Groupable , Owneable {
 
                 if(player.sellingPropertiesHasEnoughMoney(rentalPrice)){
                     AlgoPoly.getInstance().logEvent("El jugador " + player.getName() + " no posee dinero suficiente para pagar el precio de alquiler. Para poder avanzar primero debe saldar su deuda de " + rentalPrice.toString());
-                    player.createDeb(new Debt(player,this.owner,rentalPrice));
+                    player.createDebt(new Debt(player,this.owner,rentalPrice));
                 }
                 else{
                     AlgoPoly.getInstance().logEvent("El jugador " + player.getName() + " no posee suficiente propiedades para saldar su deuda de " + rentalPrice.toString() + ". El jugador ha si derrotado. ");

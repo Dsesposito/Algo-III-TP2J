@@ -1,9 +1,9 @@
-package fiuba.algo3.tp2.view.events.MainContainerEvents;
+package fiuba.algo3.tp2.Controllers.events.MainContainerEvents;
 
 import fiuba.algo3.tp2.model.AlgoPoly;
 import fiuba.algo3.tp2.model.Cells.Owneable;
 import fiuba.algo3.tp2.view.MainContainer;
-import fiuba.algo3.tp2.view.events.Exceptions.SellChoiceBoxEmptyException;
+import fiuba.algo3.tp2.Controllers.events.Exceptions.SellChoiceBoxEmptyException;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 

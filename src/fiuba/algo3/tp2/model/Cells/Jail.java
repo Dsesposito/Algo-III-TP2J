@@ -15,13 +15,15 @@ public class Jail extends Cell {
 
     private static Double bailCost = Global.config.getDouble("bailCost");
 
-    public Jail(String name, Board board){
-        super(name,board);
+    public Jail(String name, Board board, Position position){
+        super(name, board, position );
         prisioners = new ArrayList<>();
     }
 
     @Override
     public void playerLandsOnCell(Player player, Turn actualTurn) {
+        player.getCurrentCell().removePlayerFromCell(player);
+        super.addPlayerToCell(player);
         player.landsOnJail(this);
     }
 

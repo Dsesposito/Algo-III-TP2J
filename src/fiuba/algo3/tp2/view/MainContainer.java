@@ -1,16 +1,14 @@
 package fiuba.algo3.tp2.view;
 
-import fiuba.algo3.tp2.model.AlgoPoly;
+import fiuba.algo3.tp2.model.*;
 import fiuba.algo3.tp2.model.Cells.Cell;
 import fiuba.algo3.tp2.model.Cells.Jail;
 import fiuba.algo3.tp2.model.Cells.Owneable;
-import fiuba.algo3.tp2.model.Player;
-import fiuba.algo3.tp2.model.Turn;
-import fiuba.algo3.tp2.view.events.Exceptions.BuildChoiceBoxEmptyException;
-import fiuba.algo3.tp2.view.events.MainContainerEvents.BuildButtonClickHandler;
-import fiuba.algo3.tp2.view.events.Exceptions.SellChoiceBoxEmptyException;
-import fiuba.algo3.tp2.view.events.MainContainerEvents.*;
-import fiuba.algo3.tp2.view.events.MainContainerEvents.PayBailButtonClickHanlder;
+import fiuba.algo3.tp2.Controllers.events.Exceptions.BuildChoiceBoxEmptyException;
+import fiuba.algo3.tp2.Controllers.events.MainContainerEvents.BuildButtonClickHandler;
+import fiuba.algo3.tp2.Controllers.events.Exceptions.SellChoiceBoxEmptyException;
+import fiuba.algo3.tp2.Controllers.events.MainContainerEvents.*;
+import fiuba.algo3.tp2.Controllers.events.MainContainerEvents.PayBailButtonClickHanlder;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -19,7 +17,6 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -30,6 +27,7 @@ import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MainContainer extends BorderPane {
@@ -47,6 +45,7 @@ public class MainContainer extends BorderPane {
     private ChoiceBox sellChoiceBox;
     private ChoiceBox buildChoiceBox;
     private Button payBailButton;
+    private Canvas canvas;
 
     public MainContainer(Stage stage){
 
@@ -61,24 +60,12 @@ public class MainContainer extends BorderPane {
 
         Image image = this.readBackGroundImage();
 
-        Canvas canvas = new Canvas(image.getWidth(),image.getHeight());
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        gc.setFill(Color.DARKGREEN);
-        gc.fillOval(990,530, 25, 25);
-
-        gc.setFill(Color.BLUE);
-        gc.fillOval(990,580, 25, 25);
-
-        gc.setFill(Color.RED);
-        gc.fillOval(1040,555, 25, 25);
+        this.canvas = new Canvas(image.getWidth(),image.getHeight());
 
         VBox centralContainer = new VBox(canvas);
 
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         centralContainer.setBackground(new Background(backgroundImage));
-
-
 
         super.setCenter(centralContainer);
     }
@@ -191,26 +178,7 @@ public class MainContainer extends BorderPane {
         return new Image(inputstream);
     }
 
-    public void showScene(InitContainer previousView){
 
-        AlgoPoly algoPoly = AlgoPoly.getInstance();
-
-        algoPoly.getConsole().addMessageObserver(new NewConsoleMessageHandler(this));
-
-        algoPoly.logEvent("Bienvenido a AlgoPoly");
-
-        for(String playerName : previousView.getPlayersName()){
-            algoPoly.addPlayerToGame(playerName);
-            algoPoly.logEvent("El jugador " + playerName + " se ha unido a la partida");
-        }
-
-        algoPoly.startGame();
-
-        this.setNewTurnState();
-
-        Scene playScene = new Scene(this,1408,765);
-        stage.setScene(playScene);
-    }
 
     public void printLine(String message){
         this.consoleTextArea.appendText(message + "\n");
@@ -354,4 +322,26 @@ public class MainContainer extends BorderPane {
         this.diceResultTF.setText("");
         this.payBailButton.setDisable(true);
     }
+
+    public void reDrawToken(Token token) {
+
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        //Limpio la posicion anterior
+        gc.clearRect(token.getPreviousPosition().getXpos() - 15,token.getPreviousPosition().getYpos() - 15, 30, 30);
+
+        //Limpio la celda actual
+        gc.clearRect(token.getPlayer().getCurrentCell().getPosition().getXpos() - 75,token.getPlayer().getCurrentCell().getPosition().getYpos() - 75, 100, 100);
+
+        //Dibujo nuevamente en la celda actual
+        Map<Player,Position> newPlayersPosition = token.distributePlayersInCell();
+        for(Map.Entry<Player,Position> entry : newPlayersPosition.entrySet()){
+            gc.setFill(entry.getKey().getToken().getColor());
+            gc.fillOval(entry.getValue().getXpos()-15,entry.getValue().getYpos()-15, 30, 30);
+        }
+
+    }
+
+
+
 }
