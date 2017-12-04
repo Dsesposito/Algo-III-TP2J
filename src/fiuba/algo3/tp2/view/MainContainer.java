@@ -1,25 +1,27 @@
 package fiuba.algo3.tp2.view;
 
-import fiuba.algo3.tp2.model.AlgoPoly;
+import fiuba.algo3.tp2.Controllers.MainViewController;
+import fiuba.algo3.tp2.model.*;
 import fiuba.algo3.tp2.model.Cells.Cell;
 import fiuba.algo3.tp2.model.Cells.Jail;
+import fiuba.algo3.tp2.model.Cells.Neighborhood;
 import fiuba.algo3.tp2.model.Cells.Owneable;
-import fiuba.algo3.tp2.model.Player;
-import fiuba.algo3.tp2.model.Turn;
-import fiuba.algo3.tp2.view.events.Exceptions.BuildChoiceBoxEmptyException;
-import fiuba.algo3.tp2.view.events.MainContainerEvents.BuildButtonClickHandler;
-import fiuba.algo3.tp2.view.events.Exceptions.SellChoiceBoxEmptyException;
-import fiuba.algo3.tp2.view.events.MainContainerEvents.*;
-import fiuba.algo3.tp2.view.events.MainContainerEvents.PayBailButtonClickHanlder;
+import fiuba.algo3.tp2.Controllers.events.Exceptions.BuildChoiceBoxEmptyException;
+import fiuba.algo3.tp2.Controllers.events.MainContainerEvents.BuildButtonClickHandler;
+import fiuba.algo3.tp2.Controllers.events.Exceptions.SellChoiceBoxEmptyException;
+import fiuba.algo3.tp2.Controllers.events.MainContainerEvents.*;
+import fiuba.algo3.tp2.Controllers.events.MainContainerEvents.PayBailButtonClickHanlder;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.stage.Stage;
@@ -30,11 +32,13 @@ import java.io.FileNotFoundException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MainContainer extends BorderPane {
 
     private Stage stage;
+    private MainViewController controller;
     private TextField actualPlayerTF;
     private TextField diceResultTF;
     private Button throwDiceButton;
@@ -47,38 +51,38 @@ public class MainContainer extends BorderPane {
     private ChoiceBox sellChoiceBox;
     private ChoiceBox buildChoiceBox;
     private Button payBailButton;
+    private Canvas canvas;
+    private ChoiceBox propertiesChoiceBox;
+    private TextField numHousesTF;
+    private TextField numHotelsTF;
+    private ObservableList<OwneableHelper> playerProperties;
+    private ObservableList<Neighborhood> playerBuildableNeighborhoods;
+    private ObservableList<Owneable> playerSalableCells;
 
-    public MainContainer(Stage stage){
+    public MainContainer(Stage stage,MainViewController controller){
 
         this.stage = stage;
+        this.controller = controller;
+        this.playerProperties = FXCollections.observableArrayList();
+        this.playerSalableCells = FXCollections.observableArrayList();
+        this.playerBuildableNeighborhoods = FXCollections.observableArrayList();
 
         this.setBoard();
         this.setConsole();
         this.setKeyPad();
+        this.setDescriptionBox();
     }
 
     private void setBoard(){
 
         Image image = this.readBackGroundImage();
 
-        Canvas canvas = new Canvas(image.getWidth(),image.getHeight());
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-
-        gc.setFill(Color.DARKGREEN);
-        gc.fillOval(990,530, 25, 25);
-
-        gc.setFill(Color.BLUE);
-        gc.fillOval(990,580, 25, 25);
-
-        gc.setFill(Color.RED);
-        gc.fillOval(1040,555, 25, 25);
+        this.canvas = new Canvas(image.getWidth(),image.getHeight());
 
         VBox centralContainer = new VBox(canvas);
 
         BackgroundImage backgroundImage = new BackgroundImage(image, BackgroundRepeat.NO_REPEAT, BackgroundRepeat.NO_REPEAT, BackgroundPosition.DEFAULT, BackgroundSize.DEFAULT);
         centralContainer.setBackground(new Background(backgroundImage));
-
-
 
         super.setCenter(centralContainer);
     }
@@ -86,16 +90,69 @@ public class MainContainer extends BorderPane {
     private void setConsole(){
 
         TextArea textArea = new TextArea();
-        textArea.setPrefHeight(140);
+        textArea.setPrefHeight(210);
         textArea.setFont(Font.font("courier new", FontWeight.SEMI_BOLD, 16));
         this.consoleTextArea = textArea;
 
         VBox consoleContainer = new VBox(textArea);
         consoleContainer.setStyle("-fx-background-color: black;");
-        consoleContainer.setPrefHeight(200);
-        consoleContainer.setMaxHeight(200);
+        consoleContainer.setPrefHeight(250);
+        consoleContainer.setMaxHeight(250);
 
         this.setBottom(consoleContainer);
+    }
+
+    private void setDescriptionBox(){
+        VBox rightContainer = new VBox();
+
+        rightContainer.setSpacing(10);
+        rightContainer.setPadding(new Insets(15));
+        rightContainer.setMaxWidth(165);
+
+        String cssLayout = "-fx-border-color: #e2e0e0;-fx-border-insets: 5;-fx-border-width: 3;";
+        rightContainer.setStyle(cssLayout);
+
+        Label actualPlayerLabel = new Label("Jugador actual :");
+        TextField actualPlayerTF = new TextField ();
+        actualPlayerTF.setEditable(false);
+        VBox vbActualPlayer = new VBox();
+        vbActualPlayer.getChildren().addAll(actualPlayerLabel, actualPlayerTF);
+        vbActualPlayer.setSpacing(10);
+        this.actualPlayerTF = actualPlayerTF;
+
+        Label actualPlayerMoneyLabel = new Label("Dinero :");
+        TextField actualPlayerMoneyTF = new TextField ();
+        actualPlayerMoneyTF.setEditable(false);
+        VBox vbActualPlayerMoney = new VBox();
+        vbActualPlayerMoney.getChildren().addAll(actualPlayerMoneyLabel, actualPlayerMoneyTF);
+        vbActualPlayerMoney.setSpacing(10);
+        this.actualPlayerMoneyTF = actualPlayerMoneyTF;
+
+        ChoiceBox propertiesChoiceBox = new ChoiceBox();
+        propertiesChoiceBox.setMaxWidth(Double.MAX_VALUE);
+        propertiesChoiceBox.setItems(this.playerProperties);
+        propertiesChoiceBox.getSelectionModel().selectedItemProperty().addListener(new PropertySelectedHandler(this.controller));
+        this.propertiesChoiceBox = propertiesChoiceBox;
+
+        Label propertyHousesLabel = new Label("Casas :");
+        TextField numHousesTF = new TextField ();
+        numHousesTF.setEditable(false);
+        VBox vbPropertyHouses = new VBox();
+        vbPropertyHouses.getChildren().addAll(propertyHousesLabel, numHousesTF);
+        vbPropertyHouses.setSpacing(10);
+        this.numHousesTF = numHousesTF;
+
+        Label propertyHotelsLabel = new Label("Hoteles :");
+        TextField numHotelsTF = new TextField ();
+        numHotelsTF.setEditable(false);
+        VBox vbPropertyHotels = new VBox();
+        vbPropertyHotels.getChildren().addAll(propertyHotelsLabel, numHotelsTF);
+        vbPropertyHotels.setSpacing(10);
+        this.numHotelsTF = numHotelsTF;
+
+        rightContainer.getChildren().addAll(vbActualPlayer,vbActualPlayerMoney,propertiesChoiceBox,vbPropertyHouses,vbPropertyHotels);
+
+        this.setRight(rightContainer);
     }
 
     private void setKeyPad(){
@@ -104,76 +161,74 @@ public class MainContainer extends BorderPane {
 
         leftContainer.setSpacing(10);
         leftContainer.setPadding(new Insets(15));
+        leftContainer.setMaxWidth(165);
+
+        String cssLayout = "-fx-border-color: #e2e0e0;-fx-border-insets: 5;-fx-border-width: 3;";
+        leftContainer.setStyle(cssLayout);
 
         Button rollDiceButton = new Button();
+        rollDiceButton.setMaxWidth(Double.MAX_VALUE);
         rollDiceButton.setText("Arrojar dados");
         rollDiceButton.setOnAction(new ThrowDiceButtonClickHandler(this));
         rollDiceButton.setDisable(true);
         this.throwDiceButton = rollDiceButton;
 
-        Label actualPlayerLabel = new Label("Jugador actual :");
-        TextField actualPlayerTF = new TextField ();
-        VBox vbActualPlayer = new VBox();
-        vbActualPlayer.getChildren().addAll(actualPlayerLabel, actualPlayerTF);
-        vbActualPlayer.setSpacing(10);
-        this.actualPlayerTF = actualPlayerTF;
-
-        Label actualPlayerMoneyLabel = new Label("Dinero :");
-        TextField actualPlayerMoneyTF = new TextField ();
-        VBox vbActualPlayerMoney = new VBox();
-        vbActualPlayerMoney.getChildren().addAll(actualPlayerMoneyLabel, actualPlayerMoneyTF);
-        vbActualPlayerMoney.setSpacing(10);
-        this.actualPlayerMoneyTF = actualPlayerMoneyTF;
-
-        Label diceResultLabel = new Label("Resultado de los dados :");
+        Label diceResultLabel = new Label("Dados :");
         TextField diceResultTF = new TextField ();
+        diceResultTF.setEditable(false);
         VBox vbDiceResult = new VBox();
         vbDiceResult.getChildren().addAll(diceResultLabel, diceResultTF);
         vbDiceResult.setSpacing(10);
         this.diceResultTF = diceResultTF;
 
         Button passButton = new Button();
+        passButton.setMaxWidth(Double.MAX_VALUE);
         passButton.setText("Pasar turno");
         passButton.setDisable(true);
         passButton.setOnAction(new PassButtonClickHandler(this));
         this.passButton = passButton;
 
         Button buyButton = new Button();
+        buyButton.setMaxWidth(Double.MAX_VALUE);
         buyButton.setText("Comprar");
         buyButton.setDisable(true);
         buyButton.setOnAction(new BuyLandButtonClickHandler(this));
         this.buyButton = buyButton;
 
-        Button buildButton = new Button();
-        buildButton.setText("Construir");
-        buildButton.setDisable(true);
-        buildButton.setOnAction(new BuildButtonClickHandler(this));
-        this.buildPropertyButton = buildButton;
-
         ChoiceBox buildPropertyChoiceBox = new ChoiceBox();
         buildPropertyChoiceBox.setDisable(true);
+        buildPropertyChoiceBox.setMaxWidth(Double.MAX_VALUE);
+        buildPropertyChoiceBox.setItems(this.playerBuildableNeighborhoods);
         this.buildChoiceBox = buildPropertyChoiceBox;
 
+        Button buildButton = new Button();
+        buildButton.setMaxWidth(Double.MAX_VALUE);
+        buildButton.setText("Construir");
+        buildButton.setDisable(true);
+        buildButton.setOnAction(new BuildButtonClickHandler(this.controller));
+        this.buildPropertyButton = buildButton;
+
+        ChoiceBox sellChoiceBox = new ChoiceBox();
+        sellChoiceBox.setMaxWidth(Double.MAX_VALUE);
+        sellChoiceBox.setDisable(true);
+        sellChoiceBox.setItems(this.playerSalableCells);
+        this.sellChoiceBox = sellChoiceBox;
+
         Button sellButton = new Button();
+        sellButton.setMaxWidth(Double.MAX_VALUE);
         sellButton.setText("Vender");
         sellButton.setDisable(true);
-        sellButton.setOnAction(new SellButtonClickHandler(this));
+        sellButton.setOnAction(new SellButtonClickHandler(this.controller));
         this.sellButton = sellButton;
 
-        ChoiceBox sellLandChoiceBox = new ChoiceBox();
-        sellLandChoiceBox.setDisable(true);
-        this.sellChoiceBox = sellLandChoiceBox;
-
         Button payBailButton = new Button();
+        payBailButton.setMaxWidth(Double.MAX_VALUE);
         payBailButton.setText("Pagar fianza");
         payBailButton.setDisable(true);
         payBailButton.setOnAction(new PayBailButtonClickHanlder(this));
         this.payBailButton = payBailButton;
 
-        String cssLayout = "-fx-border-color: #e2e0e0;-fx-border-insets: 5;-fx-border-width: 3;";
-        leftContainer.setStyle(cssLayout);
-
-        leftContainer.getChildren().addAll(rollDiceButton,vbDiceResult,vbActualPlayer,vbActualPlayerMoney,passButton,buyButton,buildButton,buildPropertyChoiceBox,sellButton,sellLandChoiceBox,payBailButton);
+        leftContainer.getChildren().addAll(rollDiceButton,vbDiceResult,passButton,buyButton,buildButton,buildPropertyChoiceBox,sellButton,sellChoiceBox,payBailButton);
 
         this.setLeft(leftContainer);
     }
@@ -191,38 +246,13 @@ public class MainContainer extends BorderPane {
         return new Image(inputstream);
     }
 
-    public void showScene(InitContainer previousView){
 
-        AlgoPoly algoPoly = AlgoPoly.getInstance();
-
-        algoPoly.getConsole().addMessageObserver(new NewConsoleMessageHandler(this));
-
-        algoPoly.logEvent("Bienvenido a AlgoPoly");
-
-        for(String playerName : previousView.getPlayersName()){
-            algoPoly.addPlayerToGame(playerName);
-            algoPoly.logEvent("El jugador " + playerName + " se ha unido a la partida");
-        }
-
-        algoPoly.startGame();
-
-        this.setNewTurnState();
-
-        Scene playScene = new Scene(this,1408,765);
-        stage.setScene(playScene);
-    }
 
     public void printLine(String message){
         this.consoleTextArea.appendText(message + "\n");
     }
 
     public void updatePlayerInfo(){
-
-        AlgoPoly algoPoly = AlgoPoly.getInstance();
-        Player currentPlayer = algoPoly.getActualPlayer();
-
-        this.actualPlayerTF.setText(currentPlayer.getName());
-        this.actualPlayerMoneyTF.setText(currentPlayer.getMoney().getValue().toString());
 
         this.updateSaleProperties();
         this.updateBuildProperties();
@@ -235,20 +265,12 @@ public class MainContainer extends BorderPane {
         Player currentPlayer = algoPoly.getActualPlayer();
 
         if(currentPlayer.hasOwneableCells()){
-
-            List<String> ownedCellsName = currentPlayer.getOwneableCells().stream()
-                    .map(owneable -> ((Cell)owneable).getName())
-                    .collect(Collectors.toList());
-
             this.sellButton.setDisable(false);
             this.sellChoiceBox.setDisable(false);
-            this.sellChoiceBox.setItems(FXCollections.observableArrayList(ownedCellsName));
-
         }
         else{
             this.sellButton.setDisable(true);
             this.sellChoiceBox.setDisable(true);
-            this.sellChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
         }
     }
 
@@ -264,12 +286,10 @@ public class MainContainer extends BorderPane {
         if(!cellsNameWhereIsAbleToBuild.isEmpty()){
             this.buildPropertyButton.setDisable(false);
             this.buildChoiceBox.setDisable(false);
-            this.buildChoiceBox.setItems(FXCollections.observableArrayList(cellsNameWhereIsAbleToBuild));
         }
         else{
             this.buyButton.setDisable(true);
             this.buildChoiceBox.setDisable(true);
-            this.buildChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
         }
     }
 
@@ -278,14 +298,11 @@ public class MainContainer extends BorderPane {
         this.throwDiceButton.setDisable(false);
         this.sellButton.setDisable(true);
         this.sellChoiceBox.setDisable(true);
-        this.sellChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
         this.buyButton.setDisable(true);
         this.buildChoiceBox.setDisable(true);
-        this.buildChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
         this.passButton.setDisable(true);
         this.buildPropertyButton.setDisable(true);
         this.payBailButton.setDisable(true);
-        this.diceResultTF.setText("");
 
         AlgoPoly algoPoly = AlgoPoly.getInstance();
         Player currentPlayer = algoPoly.getActualPlayer();
@@ -313,28 +330,13 @@ public class MainContainer extends BorderPane {
             }
         }
 
-        Turn actualTurn = algoPoly.getActualTurn();
-
-        this.diceResultTF.setText(actualTurn.getDiceResult().toString());
         this.passButton.setDisable(false);
         this.throwDiceButton.setDisable(true);
         this.payBailButton.setDisable(true);
         this.sellButton.setDisable(true);
         this.sellChoiceBox.setDisable(true);
-    }
-
-    public String getSelectedSellOwneableCellName(){
-        if(this.sellChoiceBox.getValue() == null){
-            throw new SellChoiceBoxEmptyException("In order to sell, a property must be selected.");
-        }
-        return (String)this.sellChoiceBox.getValue();
-    }
-
-    public String getSelectedBuildNeighborhoodName(){
-        if(this.buildChoiceBox.getValue() == null){
-            throw new BuildChoiceBoxEmptyException("In order to build, a neighborhood must be selected.");
-        }
-        return (String)this.buildChoiceBox.getValue();
+        this.buildPropertyButton.setDisable(true);
+        this.buildChoiceBox.setDisable(true);
     }
 
     public void setPlayerInBankruptcyState() {
@@ -345,13 +347,77 @@ public class MainContainer extends BorderPane {
         this.throwDiceButton.setDisable(false);
         this.sellButton.setDisable(true);
         this.sellChoiceBox.setDisable(true);
-        this.sellChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
         this.buyButton.setDisable(true);
         this.buildChoiceBox.setDisable(true);
-        this.buildChoiceBox.setItems(FXCollections.observableArrayList(new ArrayList<>()));
         this.passButton.setDisable(true);
         this.buildPropertyButton.setDisable(true);
-        this.diceResultTF.setText("");
         this.payBailButton.setDisable(true);
+    }
+
+    public void reDrawToken(Token token) {
+
+        GraphicsContext gc = canvas.getGraphicsContext2D();
+
+        //Limpio la posicion anterior
+        gc.clearRect(token.getPreviousPosition().getXpos() - 15,token.getPreviousPosition().getYpos() - 15, 30, 30);
+
+        //Limpio la celda actual
+        gc.clearRect(token.getPlayer().getCurrentCell().getPosition().getXpos() - 75,token.getPlayer().getCurrentCell().getPosition().getYpos() - 75, 100, 100);
+
+        //Dibujo nuevamente en la celda actual
+        Map<Player,Position> newPlayersPosition = token.distributePlayersInCell();
+        for(Map.Entry<Player,Position> entry : newPlayersPosition.entrySet()){
+            gc.setFill(entry.getKey().getToken().getColor());
+            gc.fillOval(entry.getValue().getXpos()-15,entry.getValue().getYpos()-15, 30, 30);
+        }
+
+    }
+
+
+    public void setPlayerNameAndMoney(String playerName,String playerMoney) {
+        this.actualPlayerTF.setText(playerName);
+        this.actualPlayerMoneyTF.setText(playerMoney);
+    }
+
+    public void setDiceResult(String diceResult) {
+        this.diceResultTF.setText(diceResult);
+    }
+
+    public void setPlayerProperties(List<OwneableHelper> playerProperties){
+        this.playerProperties.clear();
+        this.playerProperties.addAll(playerProperties);
+        this.numHotelsTF.setText("");
+        this.numHousesTF.setText("");
+    }
+
+    public void setNumHousesAndHotels(OwneableHelper selectedOwneable) {
+        if(selectedOwneable != null && selectedOwneable.isBuildable()){
+            this.numHotelsTF.setText(selectedOwneable.getNumHotels().toString());
+            this.numHousesTF.setText(selectedOwneable.getNumHouses().toString());
+        }
+        else{
+            this.numHotelsTF.setText("-");
+            this.numHousesTF.setText("-");
+        }
+    }
+
+    public void setPlayerBuildableNeighborhoods(List<Neighborhood> playerBuildableNeighborhoods) {
+        this.playerBuildableNeighborhoods.clear();
+        this.playerBuildableNeighborhoods.addAll(playerBuildableNeighborhoods);
+        this.buildChoiceBox.getSelectionModel().clearSelection();
+    }
+
+    public void setPlayerSalableCells(List<Owneable> playerSalableCells) {
+        this.playerSalableCells.clear();
+        this.playerSalableCells.addAll(playerSalableCells);
+        this.sellChoiceBox.getSelectionModel().clearSelection();
+    }
+
+    public Neighborhood getSelectedNeighborhoodToBuild() {
+        return (Neighborhood) this.buildChoiceBox.getSelectionModel().getSelectedItem();
+    }
+
+    public Owneable getSelectedOwneableToSell() {
+        return (Owneable) this.sellChoiceBox.getSelectionModel().getSelectedItem();
     }
 }

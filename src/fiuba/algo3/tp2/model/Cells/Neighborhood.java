@@ -22,8 +22,8 @@ public class Neighborhood extends Cell implements Groupable , Owneable{
 
     private static Double commissionOfSale = Global.config.getDouble("commissionOfSale");
 
-    public Neighborhood(String name,Money landPrice,Money housePrice,Money hotelPrice, Rental rent, Long maxHouses, Board board){
-        super(name, board);
+    public Neighborhood(String name,Money landPrice,Money housePrice,Money hotelPrice, Rental rent, Long maxHouses, Board board, Position boardPosition){
+        super(name, board, boardPosition);
         this.name = name;
         this.landPrice = landPrice;
         this.hotelPrice = hotelPrice;
@@ -34,6 +34,8 @@ public class Neighborhood extends Cell implements Groupable , Owneable{
 
     @Override
     public void playerLandsOnCell(Player player, Turn actualTurn) {
+        player.getCurrentCell().removePlayerFromCell(player);
+        super.addPlayerToCell(player);
         player.landsOnNeighborhood(this);
         if(this.hasOwner() && !this.owner.equals(player)){
             AlgoPoly.getInstance().logEvent("La propiedad le pertenece a " + this.owner.getName());
@@ -42,7 +44,7 @@ public class Neighborhood extends Cell implements Groupable , Owneable{
 
                 if(player.sellingPropertiesHasEnoughMoney(this.getRentalPrice())){
                     AlgoPoly.getInstance().logEvent("El jugador " + player.getName() + " no posee dinero suficiente para pagar el precio de alquiler. Para poder avanzar primero debe saldar su deuda de " + this.getRentalPrice().toString());
-                    player.createDeb(new Debt(player,this.owner,this.getRentalPrice()));
+                    player.createDebt(new Debt(player,this.owner,this.getRentalPrice()));
                 }
                 else{
                     AlgoPoly.getInstance().logEvent("El jugador " + player.getName() + " no posee suficiente propiedades para saldar su deuda de " + this.getRentalPrice().toString() + ". El jugador ha si derrotado. ");
@@ -188,4 +190,11 @@ public class Neighborhood extends Cell implements Groupable , Owneable{
         return true;
     }
 
+    public Integer getNumberOfBuiltHouses() {
+        return Math.toIntExact(this.rent.getNumberOfBuiltHouses());
+    }
+
+    public Integer getNumberOfBuiltHotels() {
+        return Math.toIntExact(this.rent.getNumberOfBuiltHotels());
+    }
 }

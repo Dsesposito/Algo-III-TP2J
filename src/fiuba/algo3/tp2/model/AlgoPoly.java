@@ -5,13 +5,20 @@ import fiuba.algo3.tp2.model.Cells.*;
 import fiuba.algo3.tp2.model.Exceptions.AlgoPolyNoActualTurnException;
 import fiuba.algo3.tp2.model.Exceptions.AlgoPolyPlayerQuantityException;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.util.*;
 
 public class AlgoPoly {
 
     private static AlgoPoly instance = null;
+
+    public enum ListenerTurnProperty {
+        PLAYER,
+        DICE
+    }
+
+    private Map<ListenerTurnProperty,List<PropertyChangeListener>> turnListeners;
 
     List<Player> players;
     Board board;
@@ -28,6 +35,7 @@ public class AlgoPoly {
         die1 = new Die();
         die2 = new Die();
         console = new Console();
+        turnListeners = new HashMap<>();
     }
 
     public static AlgoPoly getInstance() {
@@ -46,11 +54,19 @@ public class AlgoPoly {
         return players.size();
     }
 
+    public void addPlayerToGame(String name, Token token){
+        if(!isAbleToAddPlayer()){
+            throw new AlgoPolyPlayerQuantityException("The maximium of three players have already been reached");
+        }
+        players.add(new Player(name,board.getStartCell(),token));
+
+    }
+
     public void addPlayerToGame(String name){
         if(!isAbleToAddPlayer()){
             throw new AlgoPolyPlayerQuantityException("The maximium of three players have already been reached");
         }
-        players.add(new Player(name,board.getStartCell()));
+        players.add(new Player(name,board.getStartCell(),new Token(this.board.getStartCell().getPosition())));
 
     }
 
@@ -64,7 +80,7 @@ public class AlgoPoly {
         Player firstPlayer = players.get(0);
 
         this.logEvent("El primer jugador en mover será " + firstPlayer.getName());
-
+        firePlayerChangeEvent(null,firstPlayer);
         this.actualTurn = new Turn(firstPlayer);
     }
 
@@ -79,12 +95,21 @@ public class AlgoPoly {
         if(nextPlayerIndex + 1 > players.size()){
             nextPlayerIndex = ((nextPlayerIndex + 1) % players.size()) - 1;
         }
-        this.actualTurn = new Turn(players.get(nextPlayerIndex));
+
+        Player newPlayer = players.get(nextPlayerIndex);
+        firePlayerChangeEvent(actualPlayer,newPlayer);
+
+        this.actualTurn = new Turn(newPlayer);
+
+        this.fireDiceThrownEvent("");
+
         this.logEvent("Turno del jugador " + this.getActualPlayer().getName());
     }
 
     public void throwDice(){
         actualTurn.setDiceResult(Long.valueOf(die1.throwDie()), Long.valueOf(die2.throwDie()));
+        String value = actualTurn.getDiceResult().toString();
+        this.fireDiceThrownEvent(value);
     }
 
     public Board getBoard(){
@@ -130,5 +155,31 @@ public class AlgoPoly {
 
     public void playerPayBail() {
         this.board.getJail().playerPayBail(this.getActualPlayer());
+    }
+
+    public List<Player> getPlayers() {
+        return players;
+    }
+
+    public void addPropertyChangeListener(ListenerTurnProperty type , PropertyChangeListener listener) {
+        if(this.turnListeners.containsKey(type)){
+            this.turnListeners.get(type).add(listener);
+        }
+        else{
+            this.turnListeners.put(type,new ArrayList<>(Arrays.asList(listener)));
+        }
+    }
+
+    private void firePlayerChangeEvent(Player oldPlayer,Player newPlayer){
+        for(PropertyChangeListener listener : this.turnListeners.get(ListenerTurnProperty.PLAYER)){
+            listener.propertyChange(new PropertyChangeEvent(this,ListenerTurnProperty.PLAYER.toString(),oldPlayer,newPlayer));
+        }
+    }
+
+
+    private void fireDiceThrownEvent(String newValue) {
+        for(PropertyChangeListener listener : this.turnListeners.get(ListenerTurnProperty.DICE)){
+            listener.propertyChange(new PropertyChangeEvent(this,ListenerTurnProperty.PLAYER.toString(),"",newValue));
+        }
     }
 }

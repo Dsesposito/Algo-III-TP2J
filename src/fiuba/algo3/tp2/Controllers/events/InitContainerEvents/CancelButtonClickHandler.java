@@ -1,4 +1,4 @@
-package fiuba.algo3.tp2.view.events.InitContainerEvents;
+package fiuba.algo3.tp2.Controllers.events.InitContainerEvents;
 
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;

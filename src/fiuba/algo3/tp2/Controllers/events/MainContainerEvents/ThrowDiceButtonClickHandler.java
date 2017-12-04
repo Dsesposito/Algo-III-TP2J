@@ -1,17 +1,12 @@
-package fiuba.algo3.tp2.view.events.MainContainerEvents;
+package fiuba.algo3.tp2.Controllers.events.MainContainerEvents;
 
 import fiuba.algo3.tp2.model.AlgoPoly;
 import fiuba.algo3.tp2.model.Cells.Cell;
-import fiuba.algo3.tp2.model.Cells.Groupable;
 import fiuba.algo3.tp2.model.Cells.Owneable;
-import fiuba.algo3.tp2.model.Exceptions.InsufficientFundsException;
-import fiuba.algo3.tp2.model.Money;
 import fiuba.algo3.tp2.model.Player;
-import fiuba.algo3.tp2.model.Turn;
 import fiuba.algo3.tp2.view.MainContainer;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.stage.Stage;
 
 public class ThrowDiceButtonClickHandler implements EventHandler<ActionEvent> {
 
@@ -43,7 +38,7 @@ public class ThrowDiceButtonClickHandler implements EventHandler<ActionEvent> {
         //Comprueba que el jugador no este en quiebra.
         if(currentPlayer.isStoppedByBankruptcy()){
             // Si lo esta y puede vender se habilita la posibilidad de vender
-            if(currentPlayer.hasPropertiesToSell() && !currentPlayer.isDefeted()){
+            if(currentPlayer.hasPropertiesToSell() && !currentPlayer.isDefeated()){
                 mainView.setPlayerInBankruptcyState();
                 return;
             }

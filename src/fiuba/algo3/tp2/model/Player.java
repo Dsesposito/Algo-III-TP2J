@@ -2,7 +2,6 @@ package fiuba.algo3.tp2.model;
 
 import fiuba.algo3.tp2.Global;
 import fiuba.algo3.tp2.model.Cells.*;
-import fiuba.algo3.tp2.model.Exceptions.InsufficientFundsException;
 import fiuba.algo3.tp2.model.MotionAlgorithm.*;
 
 import java.util.ArrayList;
@@ -16,18 +15,31 @@ public class Player {
     private Money money;
     private MotionAlgorithm motionAlgorithm;
     private List<Owneable> ownedCells;
-    private boolean isDefeated;
+    private Token token;
 
     private static Double initMoney = Global.config.getDouble("initPlayerMoney");
     private Debt debt;
 
+    public Player(String name,Cell startCell,Token token){
+        this.name = name;
+        this.money = new Money(initMoney);
+        this.token = token;
+        this.token.setPlayer(this);
+        startCell.addPlayerToCell(this);
+        this.setCurrentCellAndLog(startCell);
+        this.motionAlgorithm = new NormalForward();
+        this.ownedCells = new ArrayList<>();
+    }
+
     public Player(String name,Cell startCell){
         this.name = name;
         this.money = new Money(initMoney);
-        this.currentCell = startCell;
+        this.token = new Token(startCell.getPosition());
+        this.token.setPlayer(this);
+        this.setCurrentCellAndLog(startCell);
+        startCell.addPlayerToCell(this);
         this.motionAlgorithm = new NormalForward();
         this.ownedCells = new ArrayList<>();
-        isDefeated = false;
     }
 
     public String getName(){
@@ -121,7 +133,6 @@ public class Player {
     public void landsOnPolice(Police police,Jail jail) {
         this.setCurrentCellAndLog(police);
         this.motionAlgorithm = new StoppedInJail(jail);
-        this.setCurrentCellAndLog(jail);
     }
 
     public void landsOnQuini6(Quini6 quini6) {
@@ -142,6 +153,7 @@ public class Player {
 
     private void setCurrentCellAndLog(Cell currentCell){
         this.currentCell = currentCell;
+        this.token.updatePlayersOnCellPosition();
         AlgoPoly.getInstance().logEvent("El jugador " + this.name + " cayó en " + currentCell.getName());
     }
 
@@ -174,7 +186,7 @@ public class Player {
         return !this.money.isNegative(money);
     }
 
-    public void createDeb(Debt debt) {
+    public void createDebt(Debt debt) {
         this.motionAlgorithm = new StoppedInBankruptcy(debt);
         this.debt = debt;
     }
@@ -183,9 +195,6 @@ public class Player {
         return (this.motionAlgorithm instanceof StoppedInBankruptcy);
     }
 
-    public Boolean isDefeted(){
-        return (this.motionAlgorithm instanceof Defeted);
-    }
 
     public Boolean hasPropertiesToSell() {
         return this.getNumberOfProperties() > 0;
@@ -193,12 +202,11 @@ public class Player {
 
 
     public void setDefeated() {
-        this.motionAlgorithm = new Defeted();
-        isDefeated = true;
+        this.motionAlgorithm = new Defeated();
     }
 
     public boolean isDefeated(){
-        return isDefeated;
+        return (this.motionAlgorithm instanceof Defeated);
     }
 
     public Boolean sellingPropertiesHasEnoughMoney(Money rentalPrice) {
@@ -214,5 +222,9 @@ public class Player {
 
     public Boolean hasEnoughMoneyToSolveDebt() {
         return this.hasEnoughMoney(this.debt.getDebtMoney());
+    }
+
+    public Token getToken() {
+        return token;
     }
 }

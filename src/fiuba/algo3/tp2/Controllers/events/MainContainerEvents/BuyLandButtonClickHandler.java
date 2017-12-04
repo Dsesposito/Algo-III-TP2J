@@ -1,7 +1,6 @@
-package fiuba.algo3.tp2.view.events.MainContainerEvents;
+package fiuba.algo3.tp2.Controllers.events.MainContainerEvents;
 
 import fiuba.algo3.tp2.model.AlgoPoly;
-import fiuba.algo3.tp2.model.Cells.Cell;
 import fiuba.algo3.tp2.model.Cells.Owneable;
 import fiuba.algo3.tp2.model.Exceptions.InsufficientFundsException;
 import fiuba.algo3.tp2.model.Player;
