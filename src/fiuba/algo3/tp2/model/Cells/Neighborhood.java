@@ -190,4 +190,11 @@ public class Neighborhood extends Cell implements Groupable , Owneable{
         return true;
     }
 
+    public Integer getNumberOfBuiltHouses() {
+        return Math.toIntExact(this.rent.getNumberOfBuiltHouses());
+    }
+
+    public Integer getNumberOfBuiltHotels() {
+        return Math.toIntExact(this.rent.getNumberOfBuiltHotels());
+    }
 }

@@ -90,4 +90,9 @@ public abstract class Cell{
     public List<Player> getPlayersOnCell() {
         return this.playersOnCell;
     }
+
+    @Override
+    public String toString(){
+        return this.getName();
+    }
 }

@@ -5,6 +5,7 @@ import fiuba.algo3.tp2.model.Cells.*;
 import fiuba.algo3.tp2.model.Exceptions.AlgoPolyNoActualTurnException;
 import fiuba.algo3.tp2.model.Exceptions.AlgoPolyPlayerQuantityException;
 
+import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.util.*;
 
@@ -13,7 +14,7 @@ public class AlgoPoly {
     private static AlgoPoly instance = null;
 
     public enum ListenerTurnProperty {
-        PLAYER_NAME,
+        PLAYER,
         DICE
     }
 
@@ -34,6 +35,7 @@ public class AlgoPoly {
         die1 = new Die();
         die2 = new Die();
         console = new Console();
+        turnListeners = new HashMap<>();
     }
 
     public static AlgoPoly getInstance() {
@@ -78,7 +80,7 @@ public class AlgoPoly {
         Player firstPlayer = players.get(0);
 
         this.logEvent("El primer jugador en mover será " + firstPlayer.getName());
-
+        firePlayerChangeEvent(null,firstPlayer);
         this.actualTurn = new Turn(firstPlayer);
     }
 
@@ -93,12 +95,21 @@ public class AlgoPoly {
         if(nextPlayerIndex + 1 > players.size()){
             nextPlayerIndex = ((nextPlayerIndex + 1) % players.size()) - 1;
         }
-        this.actualTurn = new Turn(players.get(nextPlayerIndex));
+
+        Player newPlayer = players.get(nextPlayerIndex);
+        firePlayerChangeEvent(actualPlayer,newPlayer);
+
+        this.actualTurn = new Turn(newPlayer);
+
+        this.fireDiceThrownEvent("");
+
         this.logEvent("Turno del jugador " + this.getActualPlayer().getName());
     }
 
     public void throwDice(){
         actualTurn.setDiceResult(Long.valueOf(die1.throwDie()), Long.valueOf(die2.throwDie()));
+        String value = actualTurn.getDiceResult().toString();
+        this.fireDiceThrownEvent(value);
     }
 
     public Board getBoard(){
@@ -156,6 +167,19 @@ public class AlgoPoly {
         }
         else{
             this.turnListeners.put(type,new ArrayList<>(Arrays.asList(listener)));
+        }
+    }
+
+    private void firePlayerChangeEvent(Player oldPlayer,Player newPlayer){
+        for(PropertyChangeListener listener : this.turnListeners.get(ListenerTurnProperty.PLAYER)){
+            listener.propertyChange(new PropertyChangeEvent(this,ListenerTurnProperty.PLAYER.toString(),oldPlayer,newPlayer));
+        }
+    }
+
+
+    private void fireDiceThrownEvent(String newValue) {
+        for(PropertyChangeListener listener : this.turnListeners.get(ListenerTurnProperty.DICE)){
+            listener.propertyChange(new PropertyChangeEvent(this,ListenerTurnProperty.PLAYER.toString(),"",newValue));
         }
     }
 }

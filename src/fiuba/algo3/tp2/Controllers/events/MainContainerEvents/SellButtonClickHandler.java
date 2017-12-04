@@ -1,5 +1,6 @@
 package fiuba.algo3.tp2.Controllers.events.MainContainerEvents;
 
+import fiuba.algo3.tp2.Controllers.MainViewController;
 import fiuba.algo3.tp2.model.AlgoPoly;
 import fiuba.algo3.tp2.model.Cells.Owneable;
 import fiuba.algo3.tp2.view.MainContainer;
@@ -8,10 +9,11 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 
 public class SellButtonClickHandler implements EventHandler<ActionEvent> {
-    private final MainContainer mainView;
 
-    public SellButtonClickHandler(MainContainer mainContainer) {
-        this.mainView = mainContainer;
+    private final MainViewController controller;
+
+    public SellButtonClickHandler(MainViewController controller) {
+        this.controller = controller;
     }
 
     @Override
@@ -19,26 +21,25 @@ public class SellButtonClickHandler implements EventHandler<ActionEvent> {
 
         AlgoPoly algoPoly = AlgoPoly.getInstance();
         Boolean wasStoppedByBankruptcy = algoPoly.getActualPlayer().isStoppedByBankruptcy();
-        Owneable owneableToSell;
-        try{
-            owneableToSell = (Owneable) algoPoly.getBoard().getCellByName(mainView.getSelectedSellOwneableCellName());
-        }
-        catch (SellChoiceBoxEmptyException e){
+
+        Owneable selectedOwneable = controller.getSelectedOwneableToSell();
+
+        if(selectedOwneable == null || !selectedOwneable.hasOwner()){
             algoPoly.logEvent("Para poder vender primero debe seleccionar una propiedad.");
             return;
         }
 
-        owneableToSell.sell();
+        selectedOwneable.sell();
         // Si el jugador estaba en bancarrota y ya posee dinero para saldar la deuda, entonces
         // la salda y se pasa de turno.
         if(wasStoppedByBankruptcy && algoPoly.getActualPlayer().hasEnoughMoneyToSolveDebt()){
             algoPoly.getActualPlayer().solveDebt();
             algoPoly.nextTurn();
-            mainView.setNewTurnState();
+            controller.setNewTurnState();
         }
         // De lo contrario debe seguir vendiendo.
         else{
-            mainView.updatePlayerInfo();
+            controller.updatePlayerInfo();
         }
 
 

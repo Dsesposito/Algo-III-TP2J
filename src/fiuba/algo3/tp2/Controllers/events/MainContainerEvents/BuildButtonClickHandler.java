@@ -1,5 +1,6 @@
 package fiuba.algo3.tp2.Controllers.events.MainContainerEvents;
 
+import fiuba.algo3.tp2.Controllers.MainViewController;
 import fiuba.algo3.tp2.model.AlgoPoly;
 import fiuba.algo3.tp2.model.Cells.Neighborhood;
 import fiuba.algo3.tp2.model.Exceptions.InsufficientFundsException;
@@ -10,10 +11,10 @@ import javafx.event.EventHandler;
 
 public class BuildButtonClickHandler implements EventHandler<ActionEvent> {
 
-    private final MainContainer mainView;
+    private final MainViewController controller;
 
-    public BuildButtonClickHandler(MainContainer mainContainer) {
-        this.mainView = mainContainer;
+    public BuildButtonClickHandler(MainViewController controller) {
+        this.controller = controller;
     }
 
     @Override
@@ -21,31 +22,28 @@ public class BuildButtonClickHandler implements EventHandler<ActionEvent> {
 
         AlgoPoly algoPoly = AlgoPoly.getInstance();
 
-        Neighborhood neighborhood;
+        Neighborhood selectedNeighborhood = controller.getSelectedNeighborhoodToBuild();
 
-        try{
-            neighborhood = algoPoly.getBoard().getNeighborhoodByName(mainView.getSelectedBuildNeighborhoodName());
-        }
-        catch (BuildChoiceBoxEmptyException e){
+        if(selectedNeighborhood == null){
             algoPoly.logEvent("Para poder construir primero debe seleccionar una propiedad.");
             return;
         }
 
         try{
-            if(neighborhood.hasAllHousesBuilt()){
-                if(!neighborhood.hasHotelBuilt()){
-                    neighborhood.buyHotel();
+            if(selectedNeighborhood.hasAllHousesBuilt()){
+                if(!selectedNeighborhood.hasHotelBuilt()){
+                    selectedNeighborhood.buyHotel();
                 }
                 else{
-                    algoPoly.logEvent("El jugador " + algoPoly.getActualPlayer().getName() + " ya no puede construir mas en el barrio " + neighborhood.getName());
+                    algoPoly.logEvent("El jugador " + algoPoly.getActualPlayer().getName() + " ya no puede construir mas en el barrio " + selectedNeighborhood.getName());
                 }
             }
             else{
-                neighborhood.buyHouse();
+                selectedNeighborhood.buyHouse();
             }
         }
         catch(InsufficientFundsException e){
-            algoPoly.logEvent("El jugador " + algoPoly.getActualPlayer().getName() + " no posee los fondos suficientes para construir en " + neighborhood.getName());
+            algoPoly.logEvent("El jugador " + algoPoly.getActualPlayer().getName() + " no posee los fondos suficientes para construir en " + selectedNeighborhood.getName());
         }
     }
 }
