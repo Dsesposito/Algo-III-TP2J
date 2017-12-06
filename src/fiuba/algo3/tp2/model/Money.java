@@ -14,32 +14,20 @@ public class Money {
         return new Money(value);
     }
 
-    public Money copy(){
-        return new Money(this.value);
-    }
-
-    public void subtract(Money money){
+    public Money subtract(Money money){
         Double diff = this.value - money.value;
         if(diff < 0){
             throw new InsufficientFundsException("Insufficient funds by " + diff);
         }
-        this.value = diff;
+        return Money.withValue(diff);
     }
 
     public Money multiply(Double value){
         return Money.withValue(this.value*value);
     }
 
-    public void subtract(Double value){
-        this.subtract(new Money(value));
-    }
-
-    public void add(Money money){
-        this.value = this.value + money.value;
-    }
-
-    public void add(Double value){
-        this.add(new Money(value));
+    public Money add(Money money){
+        return Money.withValue(this.value + money.value);
     }
 
     public Double modulus(Long divisor){
@@ -50,5 +38,16 @@ public class Money {
         return this.value;
     }
 
+    public boolean isNegative(Money money) {
+        Double diff = this.value - money.value;
+        if(diff < 0){
+            return true;
+        }
+        return false;
+    }
 
+    @Override
+    public String toString() {
+        return "$ " + this.value;
+    }
 }

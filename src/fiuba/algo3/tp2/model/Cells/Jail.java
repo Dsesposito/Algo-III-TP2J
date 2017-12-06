@@ -2,6 +2,7 @@ package fiuba.algo3.tp2.model.Cells;
 
 import fiuba.algo3.tp2.Global;
 import fiuba.algo3.tp2.model.*;
+import fiuba.algo3.tp2.model.Exceptions.PlayerExceptions.PlayerNotAbleToBeReleasedException;
 import fiuba.algo3.tp2.model.Exceptions.PlayerExceptions.PlayerNotAbleToPayBailException;
 
 import java.util.ArrayList;
@@ -14,13 +15,15 @@ public class Jail extends Cell {
 
     private static Double bailCost = Global.config.getDouble("bailCost");
 
-    public Jail(String name, Board board){
-        super(name,board);
+    public Jail(String name, Board board, Position position){
+        super(name, board, position );
         prisioners = new ArrayList<>();
     }
 
     @Override
     public void playerLandsOnCell(Player player, Turn actualTurn) {
+        player.getCurrentCell().removePlayerFromCell(player);
+        super.addPlayerToCell(player);
         player.landsOnJail(this);
     }
 
@@ -53,7 +56,7 @@ public class Jail extends Cell {
             throw new PlayerNotAbleToPayBailException("The player " + player.getName() + " is not able to pay bail, he must wait");
         }
 
-        player.payToBank(new Money(bailCost));
+        player.decrementMoney(new Money(bailCost));
 
         prisioners.remove(prisoner);
 
@@ -61,8 +64,12 @@ public class Jail extends Cell {
 
     }
 
-    public void addPrisioner(Player player){
+    public void addPrisoner(Player player){
         this.prisioners.add(new Prisoner(player));
+    }
+
+    public Boolean isPrisoner(Player player){
+        return !(this.findPlayerInPrisoners(player) == null);
     }
 
     private Prisoner findPlayerInPrisoners(Player player){
@@ -77,4 +84,17 @@ public class Jail extends Cell {
         }
     }
 
+    public void releasePrisoner(Player player) {
+        this.playerMustBeInJail(player);
+
+        Prisoner prisoner = this.findPlayerInPrisoners(player);
+
+        if(!prisoner.isFreeToGo()){
+            throw new PlayerNotAbleToBeReleasedException("The player " + player.getName() + " is not able to be released from jail");
+        }
+
+        prisioners.remove(prisoner);
+
+        player.releasedFromJail();
+    }
 }

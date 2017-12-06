@@ -6,6 +6,7 @@ import fiuba.algo3.tp2.model.MotionAlgorithm.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class Player {
 
@@ -13,16 +14,32 @@ public class Player {
     private Cell currentCell;
     private Money money;
     private MotionAlgorithm motionAlgorithm;
-    private List<Neighborhood> neighborhoods;
+    private List<Owneable> ownedCells;
+    private Token token;
 
     private static Double initMoney = Global.config.getDouble("initPlayerMoney");
+    private Debt debt;
+
+    public Player(String name,Cell startCell,Token token){
+        this.name = name;
+        this.money = new Money(initMoney);
+        this.token = token;
+        this.token.setPlayer(this);
+        startCell.addPlayerToCell(this);
+        this.setCurrentCellAndLog(startCell);
+        this.motionAlgorithm = new NormalForward();
+        this.ownedCells = new ArrayList<>();
+    }
 
     public Player(String name,Cell startCell){
         this.name = name;
         this.money = new Money(initMoney);
-        this.currentCell = startCell;
+        this.token = new Token(startCell.getPosition());
+        this.token.setPlayer(this);
+        this.setCurrentCellAndLog(startCell);
+        startCell.addPlayerToCell(this);
         this.motionAlgorithm = new NormalForward();
-        this.neighborhoods = new ArrayList<>();
+        this.ownedCells = new ArrayList<>();
     }
 
     public String getName(){
@@ -33,16 +50,14 @@ public class Player {
         return this.money;
     }
 
-    public void payToBank(Money money){
-        this.money.subtract(money);
-    }
-
     public void incrementMoney(Money money){
-        this.money.add(money);
+        this.money = this.money.add(money);
+        AlgoPoly.getInstance().logEvent("El dinero del jugador " + this.name + " se incremento en " + money.getValue());
     }
 
     public void decrementMoney(Money money){
-        this.money.subtract(money);
+        this.money = this.money.subtract(money);
+        AlgoPoly.getInstance().logEvent("El dinero del jugador " + this.name + " se redujo en " + money.getValue());
     }
 
     public Cell getCurrentCell(){
@@ -53,32 +68,40 @@ public class Player {
         return cell.equals(this.currentCell);
     }
 
-    public void move(Turn turn){
-        this.motionAlgorithm.move(this,turn);
+    public void move(Turn turn) {
+        this.motionAlgorithm.move(this, turn);
     }
 
     public void releasedFromJail(){
         this.motionAlgorithm = new NormalForward();
     }
 
-    public void addNeighborhood(Neighborhood neighborhood){
-        this.neighborhoods.add(neighborhood);
+    public void addOwneable(Owneable owneable){
+        this.ownedCells.add(owneable);
     }
 
-    public void dropNeighborhood(Neighborhood neighborhood){
-        this.neighborhoods.remove(neighborhood);
+    public void dropOwneable(Owneable owneable){
+        this.ownedCells.remove(owneable);
     }
 
 
     public Long getNumberOfProperties(){
-        Long numHousesAndHotels = this.neighborhoods.stream().mapToLong(neighborhoodItem -> (neighborhoodItem.getNumberOfHotelAndHouses())).sum();
-        return (numHousesAndHotels + this.neighborhoods.size());
+        List<Owneable> neighborhoods = this.ownedCells.stream()
+                .filter(owneable -> owneable.isNeighborhood()).collect(Collectors.toList());
+        Long numHousesAndHotels = neighborhoods.stream()
+                .mapToLong(neighborhoodItem -> ((Neighborhood)neighborhoodItem).getNumberOfHotelAndHouses())
+                .sum();
+        return (numHousesAndHotels + neighborhoods.size());
+    }
+
+    public Boolean hasOwneableCells(){
+        return !this.ownedCells.isEmpty();
     }
 
     public void landsOnDynamicBackward(DynamicBackward dynamicBackward,Turn turn) {
         //Configuro el nuevo algoritmo de avance
         this.motionAlgorithm = DynamicBackwardAlgorithmFactory.getAlgorithm(turn.getDiceResult());
-        this.currentCell = dynamicBackward;
+        this.setCurrentCellAndLog(dynamicBackward);
         //Vuelvo a mover
         this.move(turn);
         //Restablezco algoritmo de avance
@@ -88,7 +111,7 @@ public class Player {
     public void landsOnDynamicForward(DynamicForward dynamicForward, Turn turn){
         //Configuro el nuevo algoritmo de avance
         this.motionAlgorithm = DynamicForwardAlgorithmFactory.getAlgorithm(turn.getDiceResult());
-        this.currentCell = dynamicForward;
+        this.setCurrentCellAndLog(dynamicForward);
         //Vuelvo a mover
         this.move(turn);
         //Restablezco algoritmo de avance
@@ -96,38 +119,42 @@ public class Player {
     }
 
     public void landsOnJail(Jail jail) {
-        this.currentCell = jail;
+        this.setCurrentCellAndLog(jail);
     }
 
     public void landsOnLuxuryTax(LuxuryTax luxuryTax) {
-        double tax = 0.15;
-        this.currentCell = luxuryTax;
-        money.subtract(money.getValue()*tax);
+        this.setCurrentCellAndLog(luxuryTax);
     }
 
     public void landsOnNeighborhood(Neighborhood neighborhood) {
-        this.currentCell = neighborhood;
+        this.setCurrentCellAndLog(neighborhood);
     }
 
     public void landsOnPolice(Police police,Jail jail) {
-        this.motionAlgorithm = new Stopped(jail);
-        this.currentCell = jail;
+        this.setCurrentCellAndLog(police);
+        this.motionAlgorithm = new StoppedInJail(jail);
     }
 
     public void landsOnQuini6(Quini6 quini6) {
-        this.currentCell = quini6;
+        this.setCurrentCellAndLog(quini6);
     }
 
     public void landsOnRailWay(Railway railway) {
-        this.currentCell = railway;
+        this.setCurrentCellAndLog(railway);
     }
 
     public void landsOnService(Service service) {
-        this.currentCell = service;
+        this.setCurrentCellAndLog(service);
     }
 
     public void landsOnStartPoint(StartPoint startPoint) {
-        this.currentCell = startPoint;
+        this.setCurrentCellAndLog(startPoint);
+    }
+
+    private void setCurrentCellAndLog(Cell currentCell){
+        this.currentCell = currentCell;
+        this.token.updatePlayersOnCellPosition();
+        AlgoPoly.getInstance().logEvent("El jugador " + this.name + " cayó en " + currentCell.getName());
     }
 
     @Override
@@ -143,5 +170,61 @@ public class Player {
     @Override
     public int hashCode() {
         return name != null ? name.hashCode() : 0;
+    }
+
+    public List<Owneable> getOwneableCells() {
+        return this.ownedCells;
+    }
+
+    public void solveDebt() {
+        this.motionAlgorithm = new NormalForward();
+        this.debt.solve();
+        this.debt = null;
+    }
+
+    public boolean hasEnoughMoney(Money money) {
+        return !this.money.isNegative(money);
+    }
+
+    public void createDebt(Debt debt) {
+        this.motionAlgorithm = new StoppedInBankruptcy(debt);
+        this.debt = debt;
+    }
+
+    public Boolean isStoppedByBankruptcy() {
+        return (this.motionAlgorithm instanceof StoppedInBankruptcy);
+    }
+
+
+    public Boolean hasPropertiesToSell() {
+        return this.getNumberOfProperties() > 0;
+    }
+
+
+    public void setDefeated() {
+        this.motionAlgorithm = new Defeated();
+    }
+
+    public boolean isDefeated(){
+        return (this.motionAlgorithm instanceof Defeated);
+    }
+
+    public Boolean sellingPropertiesHasEnoughMoney(Money rentalPrice) {
+
+        Money saleValue = Money.withValue(0.0);
+
+        for(Owneable owneable : this.ownedCells){
+            saleValue = saleValue.add(owneable.getSaleValue());
+        }
+
+        return !saleValue.isNegative(rentalPrice);
+    }
+
+    public Boolean hasEnoughMoneyToSolveDebt() {
+        return this.hasEnoughMoney(this.debt.getDebtMoney());
+    }
+
+    public Token getToken() {
+        return token;
     }
 }

@@ -1,9 +1,6 @@
 package fiuba.algo3.tp2.model.Cells;
 import fiuba.algo3.tp2.Global;
-import fiuba.algo3.tp2.model.Board;
-import fiuba.algo3.tp2.model.Money;
-import fiuba.algo3.tp2.model.Player;
-import fiuba.algo3.tp2.model.Turn;
+import fiuba.algo3.tp2.model.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -17,15 +14,17 @@ public class Quini6 extends Cell {
     private static Double firstQuini6Increment = Global.config.getDouble("firstQuini6Increment");
     private static Double secondQuini6Increment = Global.config.getDouble("secondQuini6Increment");
 
-    public Quini6(String name,Board board){
-        super(name,board);
+    public Quini6(String name, Board board, Position boardPosition){
+        super(name,board, boardPosition );
         this.winners = new HashMap<>();
     }
 
     @Override
     public void playerLandsOnCell(Player player, Turn actualTurn) {
-        newWinner(player);
+        player.getCurrentCell().removePlayerFromCell(player);
+        super.addPlayerToCell(player);
         player.landsOnQuini6(this);
+        newWinner(player);
     }
 
     public Integer getVictories(Player player){

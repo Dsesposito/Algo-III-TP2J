@@ -44,19 +44,7 @@ public class Rental {
     }
 
     public Money getRentalPrice(){
-
         return rentalPrice;
-        /*
-        if(this.getNumberOfBuiltHotels() == 0 && this.getNumberOfBuiltHouses() == 0){
-            return this.rentalPriceWithoutBuildings;
-        }
-        else if(this.getNumberOfBuiltHotels() == 0){
-            return this.rentalPricesDueHouses.get(Math.toIntExact(this.getNumberOfBuiltHouses()) - 1);
-        }
-        else{
-            return this.rentalPricesDueHotels.get(Math.toIntExact(this.getNumberOfBuiltHotels()) - 1);
-        }
-        */
     }
 
 
